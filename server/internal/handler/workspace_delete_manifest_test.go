@@ -39,6 +39,7 @@ var workspaceDeletionManifest = map[string]workspaceDeleteAction{
 	"channel_binding_token":              workspaceDelete,
 	"channel_chat_context_generation":    workspaceDelete,
 	"channel_chat_session_binding":       workspaceDelete,
+	"channel_extension_outbox":           workspaceDelete,
 	"channel_inbound_audit":              workspaceDelete,
 	"channel_inbound_message_dedup":      workspaceDelete,
 	"channel_installation":               workspaceDelete,

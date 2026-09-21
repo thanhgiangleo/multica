@@ -582,6 +582,38 @@ describe("ApiClient schema fallback", () => {
     });
   });
 
+  describe("external task-channel integrations", () => {
+    it("parses provider-neutral installation metadata", async () => {
+      stubFetchJson({
+        installations: [
+          {
+            id: "channel-1",
+            workspace_id: "ws-1",
+            agent_id: "agent-1",
+            provider: "zalo",
+            account_id: "bot-1",
+            display_name: "Bot ZBS support",
+            status: "active",
+          },
+        ],
+      });
+      const client = new ApiClient("https://api.example.test");
+      await expect(client.listTaskChannelInstallations("ws-1")).resolves.toEqual({
+        installations: [
+          expect.objectContaining({ provider: "zalo", status: "active" }),
+        ],
+      });
+    });
+
+    it("falls back to an empty list when the response is malformed", async () => {
+      stubFetchJson({ installations: "not-an-array" });
+      const client = new ApiClient("https://api.example.test");
+      await expect(client.listTaskChannelInstallations("ws-1")).resolves.toEqual({
+        installations: [],
+      });
+    });
+  });
+
   describe("listDingTalkGroups", () => {
     it("preserves bot activity metadata for each group relationship", async () => {
       stubFetchJson({

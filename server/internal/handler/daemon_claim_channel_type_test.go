@@ -36,7 +36,7 @@ func seedChannelBinding(t *testing.T, ctx context.Context, agentID, sessionID, c
 // seedChannelBindingOfChatType is seedChannelBinding with the room shape
 // (p2p / group) chosen by the caller — the column the claim must report so the
 // per-turn prompt can tell the agent whether anyone else is reading.
-func seedChannelBindingOfChatType(t *testing.T, ctx context.Context, agentID, sessionID, channelType, chatType, lastMessageID, lastThreadID string) {
+func seedChannelBindingOfChatType(t *testing.T, ctx context.Context, agentID, sessionID, channelType, chatType, lastMessageID, lastThreadID string) string {
 	t.Helper()
 	var installationID string
 	if err := testPool.QueryRow(ctx, `
@@ -69,6 +69,7 @@ func seedChannelBindingOfChatType(t *testing.T, ctx context.Context, agentID, se
 		testPool.Exec(ctx, `DELETE FROM channel_chat_session_binding WHERE chat_session_id = $1`, sessionID)
 		testPool.Exec(ctx, `DELETE FROM channel_installation WHERE id = $1`, installationID)
 	})
+	return installationID
 }
 
 func seedChannelTaskDelivery(t *testing.T, ctx context.Context, taskID, sessionID string) {
@@ -95,6 +96,7 @@ type claimedChatChannel struct {
 	ChatType      string `json:"chat_type"`
 	InThread      bool   `json:"chat_in_thread"`
 	DeliversFiles bool   `json:"chat_channel_delivers_files"`
+	ReportOnly    bool   `json:"channel_report_only"`
 }
 
 // claimChatChannelFields claims the queued task for runtimeID and returns the
@@ -190,6 +192,89 @@ func TestClaim_UnlistedChannelBoundSessionReportsChannelType(t *testing.T) {
 	}
 	if claimed.InThread {
 		t.Error("chat_in_thread must stay false off Slack: it selects between two Slack-only read commands")
+	}
+}
+
+func TestClaim_ExternalZaloIsReportOnlyWithoutChangingOtherProviders(t *testing.T) {
+	if testHandler == nil {
+		t.Skip("database not available")
+	}
+	ctx := context.Background()
+
+	for _, tc := range []struct {
+		provider   string
+		reportOnly bool
+	}{
+		{provider: "zalo", reportOnly: true},
+		{provider: "mattermost", reportOnly: false},
+	} {
+		t.Run(tc.provider, func(t *testing.T) {
+			agentID, sessionID, runtimeID, _ := setupDirectChatSession(t, ctx, tc.provider+" external task")
+			installationID := seedChannelBindingOfChatType(
+				t, ctx, agentID, sessionID, "external", "p2p", "msg-1", "msg-1",
+			)
+			if _, err := testPool.Exec(ctx, `
+				UPDATE channel_installation
+				SET config = jsonb_build_object(
+					'app_id', id::text,
+					'provider', $2::text,
+					'account_id', 'bot-account',
+					'display_name', 'Task Bot'
+				)
+				WHERE id = $1
+			`, installationID, tc.provider); err != nil {
+				t.Fatalf("configure %s task channel: %v", tc.provider, err)
+			}
+			taskID := insertChannelChatTask(t, ctx, agentID, runtimeID, sessionID)
+			seedChannelTaskDelivery(t, ctx, taskID, sessionID)
+			requeueTaskForClaim(t, ctx, sessionID)
+
+			claimed := claimChatChannelFields(t, runtimeID)
+			if claimed.ChannelType != "external" {
+				t.Fatalf("chat_channel_type = %q, want external", claimed.ChannelType)
+			}
+			if claimed.ReportOnly != tc.reportOnly {
+				t.Errorf("channel_report_only = %v, want %v for %s", claimed.ReportOnly, tc.reportOnly, tc.provider)
+			}
+		})
+	}
+}
+
+func TestClaim_ExternalZaloIssueTaskIsReportOnly(t *testing.T) {
+	if testHandler == nil {
+		t.Skip("database not available")
+	}
+	ctx := context.Background()
+	agentID, sessionID, runtimeID, _ := setupDirectChatSession(t, ctx, "zalo issue task")
+	installationID := seedChannelBindingOfChatType(
+		t, ctx, agentID, sessionID, "external", "p2p", "msg-1", "msg-1",
+	)
+	if _, err := testPool.Exec(ctx, `
+		UPDATE channel_installation
+		SET config = jsonb_build_object(
+			'app_id', id::text,
+			'provider', 'zalo',
+			'account_id', 'bot-account',
+			'display_name', 'Task Bot'
+		)
+		WHERE id = $1
+	`, installationID); err != nil {
+		t.Fatalf("configure Zalo task channel: %v", err)
+	}
+
+	issueID := createTestIssue(t, "Zalo report-only task", "todo", "medium")
+	t.Cleanup(func() { deleteTestIssue(t, issueID) })
+	if _, err := testPool.Exec(ctx, `
+		UPDATE issue SET origin_type = 'external_chat' WHERE id = $1
+	`, issueID); err != nil {
+		t.Fatalf("mark Zalo issue origin: %v", err)
+	}
+	taskID := seedQueuedIssueTask(t, ctx, agentID, runtimeID, issueID)
+	seedChannelTaskDelivery(t, ctx, taskID, sessionID)
+
+	claimed := claimChatChannelFields(t, runtimeID)
+	if !claimed.ReportOnly {
+		t.Error("Zalo-created issue task did not carry channel_report_only to the daemon")
 	}
 }
 

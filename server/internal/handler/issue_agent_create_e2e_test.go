@@ -33,6 +33,79 @@ func createPrivateAgentOwnedBy(t *testing.T, name, ownerID string) string {
 	return agentID
 }
 
+func TestCreateIssue_AgentChannelDelegationCopiesDelivery(t *testing.T) {
+	if testHandler == nil || testPool == nil {
+		t.Skip("database not available")
+	}
+	ctx := context.Background()
+
+	creatorAgentID, sessionID, runtimeID, _ := setupDirectChatSession(t, ctx, "delegated Zalo task")
+	seedChannelBindingOfChatType(t, ctx, creatorAgentID, sessionID, "external", "p2p", "zalo-message", "zalo-message")
+	parentTaskID := insertChannelChatTask(t, ctx, creatorAgentID, runtimeID, sessionID)
+	if _, err := testPool.Exec(ctx, `
+		UPDATE agent_task_queue
+		SET originator_user_id = $2, accountable_user_id = $2
+		WHERE id = $1
+	`, parentTaskID, testUserID); err != nil {
+		t.Fatalf("set channel task originator: %v", err)
+	}
+	seedChannelTaskDelivery(t, ctx, parentTaskID, sessionID)
+
+	workerID := createPrivateAgentOwnedBy(t, "channel-delegation-worker", testUserID)
+	w := httptest.NewRecorder()
+	r := newRequest("POST", "/api/issues?workspace_id="+testWorkspaceID, map[string]any{
+		"title":         "Provision delegated key",
+		"assignee_type": "agent",
+		"assignee_id":   workerID,
+	})
+	r.Header.Set("X-Agent-ID", creatorAgentID)
+	r.Header.Set("X-Task-ID", parentTaskID)
+	testHandler.CreateIssue(w, r)
+	if w.Code != http.StatusCreated {
+		t.Fatalf("CreateIssue: expected 201, got %d: %s", w.Code, w.Body.String())
+	}
+
+	var created IssueResponse
+	if err := json.NewDecoder(w.Body).Decode(&created); err != nil {
+		t.Fatalf("decode issue: %v", err)
+	}
+	t.Cleanup(func() {
+		testPool.Exec(context.Background(), `
+			DELETE FROM channel_task_delivery
+			WHERE task_id IN (SELECT id FROM agent_task_queue WHERE issue_id = $1)
+		`, created.ID)
+		testPool.Exec(context.Background(), `DELETE FROM agent_task_queue WHERE issue_id = $1`, created.ID)
+		testPool.Exec(context.Background(), `DELETE FROM issue WHERE id = $1`, created.ID)
+	})
+
+	var childStatus, delegatedFrom string
+	var routeMatches, fireAtCleared bool
+	if err := testPool.QueryRow(ctx, `
+		SELECT child.status,
+		       COALESCE(child.delegated_from_task_id::text, ''),
+		       child.fire_at IS NULL,
+		       child_delivery.installation_id = parent_delivery.installation_id
+		       AND child_delivery.channel_type = parent_delivery.channel_type
+		       AND child_delivery.channel_chat_id = parent_delivery.channel_chat_id
+		       AND child_delivery.route_revision = parent_delivery.route_revision
+		FROM agent_task_queue AS child
+		JOIN channel_task_delivery AS child_delivery ON child_delivery.task_id = child.id
+		JOIN channel_task_delivery AS parent_delivery ON parent_delivery.task_id = $2
+		WHERE child.issue_id = $1 AND child.agent_id = $3
+	`, created.ID, parentTaskID, workerID).Scan(&childStatus, &delegatedFrom, &fireAtCleared, &routeMatches); err != nil {
+		t.Fatalf("load delegated task delivery: %v", err)
+	}
+	if childStatus != "queued" || !fireAtCleared {
+		t.Fatalf("delegated task = status %q fire_at_cleared=%v, want queued/true", childStatus, fireAtCleared)
+	}
+	if delegatedFrom != parentTaskID {
+		t.Fatalf("delegated_from_task_id = %q, want %q", delegatedFrom, parentTaskID)
+	}
+	if !routeMatches {
+		t.Fatal("delegated task did not inherit the parent channel delivery route")
+	}
+}
+
 // TestAgentCreateOriginator_E2E_CreateAssignSquad_PrivateWorkerTriggered walks
 // the exact line failure shape from MUL-4305 end to end, deliberately NOT
 // re-testing the resolver in isolation but locking the real wiring between the

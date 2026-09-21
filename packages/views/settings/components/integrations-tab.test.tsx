@@ -42,12 +42,26 @@ vi.mock("@tanstack/react-query", () => ({
     const data =
       opts.queryKey[0] === "composio"
         ? [{ status: "active" }]
-        : {
-            installations: [{ id: "one", status: state.installationStatus }],
-            connections: [],
-          };
+        : opts.queryKey[0] === "task-channel"
+          ? {
+              installations: [
+                {
+                  id: "external-one",
+                  workspace_id: "ws-1",
+                  agent_id: "agent-1",
+                  provider: "zalo",
+                  account_id: "bot-1",
+                  display_name: "Bot ZBS support",
+                  status: "active",
+                },
+              ],
+            }
+          : {
+              installations: [{ id: "one", status: state.installationStatus }],
+              connections: [],
+            };
     return {
-      data: opts.select?.(data),
+      data: opts.select ? opts.select(data) : data,
       isPending: state.pending,
       isError: state.connectionError,
     };
@@ -96,6 +110,11 @@ describe("Integration directory", () => {
         screen.getByTestId(`integration-channel-icon-${channel}`).innerHTML,
     );
     expect(new Set(shapes).size).toBe(5);
+    const zaloLink = screen.getByRole("link", { name: /Zalo Connected/ });
+    expect(zaloLink).toBeInTheDocument();
+    expect(zaloLink).toHaveTextContent(
+      "Submit work from Zalo and receive the final report when it finishes.",
+    );
     fireEvent.click(screen.getByRole("link", { name: /GitHub Connected/ }));
     expect(state.push).toHaveBeenCalledWith(
       "/acme/settings?tab=integrations&integration=github",

@@ -567,6 +567,7 @@ func TestBuildChatPromptChannelAwareness(t *testing.T) {
 		execenv.ChannelTypeFeishu,
 		execenv.ChannelTypeWecom,
 		execenv.ChannelTypeDingtalk,
+		execenv.ChannelTypeExternal,
 	} {
 		t.Run(channelType+" transcript prompt does not contradict itself", func(t *testing.T) {
 			out := buildChatPrompt(Task{
@@ -586,6 +587,59 @@ func TestBuildChatPromptChannelAwareness(t *testing.T) {
 				t.Errorf("lost the issues/comments prohibition\n--- output ---\n%s", out)
 			}
 		})
+	}
+}
+
+func TestBuildChatPromptReportOnlyChannelForbidsFollowUp(t *testing.T) {
+	out := buildChatPrompt(Task{
+		ChatSessionID:     "sess-1",
+		ChatChannelType:   "external",
+		ChannelReportOnly: true,
+		ChatMessage:       "Triển khai bản mới lên staging",
+	})
+
+	for _, want := range []string{
+		"one-way task handoff",
+		"Do NOT ask questions",
+		"request clarification",
+		"wait for confirmation",
+		"reasonable assumptions",
+		"exact blocker",
+		"final outcome only",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("report-only prompt missing %q\n--- output ---\n%s", want, out)
+		}
+	}
+	if strings.Contains(out, "ask the user for it") {
+		t.Errorf("report-only prompt contains contradictory follow-up guidance\n--- output ---\n%s", out)
+	}
+	if !strings.Contains(out, "multica chat history") {
+		t.Errorf("report-only transcript surface lost its read-back command\n--- output ---\n%s", out)
+	}
+	if strings.Contains(out, "no history reader") {
+		t.Errorf("report-only transcript surface says its stored history is unreadable\n--- output ---\n%s", out)
+	}
+}
+
+func TestBuildIssuePromptReportOnlyChannelForbidsFollowUp(t *testing.T) {
+	out := BuildPrompt(Task{
+		IssueID:           "issue-zalo-1",
+		ChannelReportOnly: true,
+	}, "codex")
+
+	for _, want := range []string{
+		"one-way task handoff",
+		"Do NOT ask questions",
+		"request clarification",
+		"wait for confirmation",
+		"reasonable assumptions",
+		"exact blocker",
+		"final outcome",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("report-only issue prompt missing %q\n--- output ---\n%s", want, out)
+		}
 	}
 }
 

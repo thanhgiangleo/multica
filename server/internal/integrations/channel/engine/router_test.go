@@ -1409,9 +1409,10 @@ func TestRouter_IssueCommand_MediaTargetsCreatedIssue(t *testing.T) {
 	}
 }
 
-func TestRouter_IssueCommand_WithoutMediaKeepsImmediateAssignedTask(t *testing.T) {
+func TestRouter_IssueCommand_WithoutMediaSnapshotsRouteBeforePromotingAssignedTask(t *testing.T) {
 	h := newHarness(t)
 	h.media.noMedia = true
+	issueTaskID := uuidFromString(t, "88888888-8888-4888-8888-888888888888")
 	h.binder.appendResult = AppendResult{
 		DedupMarked: true,
 		IssueCommand: &IssueCommand{
@@ -1419,20 +1420,24 @@ func TestRouter_IssueCommand_WithoutMediaKeepsImmediateAssignedTask(t *testing.T
 		},
 	}
 	h.issues.result = service.IssueCreateResult{
-		Issue: db.Issue{ID: uuidFromString(t, "77777777-7777-7777-7777-777777777777"), Number: 42, Title: "Fix broken layout"},
+		Issue:          db.Issue{ID: uuidFromString(t, "77777777-7777-7777-7777-777777777777"), Number: 42, Title: "Fix broken layout"},
+		AssignedTaskID: issueTaskID,
 	}
 
 	if err := h.router.Handle(context.Background(), p2pMessage(t)); err != nil {
 		t.Fatalf("Handle: %v", err)
 	}
-	if !h.issues.opts.AssignedAgentRunFireAt.IsZero() {
-		t.Fatalf("text-only /issue unexpectedly deferred its assigned task until %v", h.issues.opts.AssignedAgentRunFireAt)
+	if h.issues.opts.AssignedAgentRunFireAt.IsZero() {
+		t.Fatal("text-only /issue must defer its assigned task until the delivery route is durable")
+	}
+	if h.issues.opts.AssignedTaskChannelSessionID != h.binder.ensureID {
+		t.Fatalf("delivery session = %v, want %v", h.issues.opts.AssignedTaskChannelSessionID, h.binder.ensureID)
 	}
 	h.tasks.mu.Lock()
-	promotions := len(h.tasks.issueTaskPromotions)
+	promotions := append([]pgtype.UUID(nil), h.tasks.issueTaskPromotions...)
 	h.tasks.mu.Unlock()
-	if promotions != 0 {
-		t.Fatalf("text-only /issue task promotions = %d, want 0", promotions)
+	if len(promotions) != 1 || promotions[0] != issueTaskID {
+		t.Fatalf("text-only /issue task promotions = %v, want [%v]", promotions, issueTaskID)
 	}
 }
 
