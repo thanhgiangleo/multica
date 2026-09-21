@@ -119,6 +119,11 @@ func NewRouter(issues IssueCreator, tasks TaskEnqueuer, reader SessionReader, cf
 // delay dwarfs every pipeline budget.
 const DefaultMediaTimeout = 45 * time.Second
 
+// A channel Issue task is first committed as deferred together with its
+// delivery snapshot. The Router normally promotes it immediately (text) or
+// after attachment binding (media); this deadline is the crash-safe fallback.
+const channelIssuePromotionFallback = time.Minute
+
 // maxRouteChangeRetries bounds an in-process retry loop when a connector keeps
 // reporting a stale route. A healthy conflict converges after re-resolving the
 // current route; a persistent schema or database fault must surface instead of
@@ -370,6 +375,13 @@ func (r *Router) processClaimed(ctx context.Context, set ResolverSet, msg channe
 			return Result{}, finalizeRelease, fmt.Errorf("resolve sender: %w", err)
 		}
 	}
+	if set.AgentRouter != nil {
+		agentID, routeErr := set.AgentRouter.RouteAgent(ctx, inst, identity, msg)
+		if routeErr != nil {
+			return Result{}, finalizeRelease, fmt.Errorf("route task agent: %w", routeErr)
+		}
+		inst.AgentID = agentID
+	}
 
 	// 5-6. Resolve the current Chat route, then either append normally or
 	// atomically create the next Chat route with its optional first turn.
@@ -502,6 +514,7 @@ func (r *Router) processClaimed(ctx context.Context, set ResolverSet, msg channe
 		}
 
 		appendRes, err = set.Session.AppendMessage(ctx, AppendParams{
+			Installation:        inst,
 			SessionID:           sessionID,
 			Sender:              identity.UserID,
 			InstallationID:      inst.ID,
@@ -578,7 +591,7 @@ func (r *Router) processClaimed(ctx context.Context, set ResolverSet, msg channe
 		// One lookup feeds both the broadcast payload's identifier and the
 		// chat reply's deep link.
 		prefix, workspaceSlug := r.issueWorkspaceIdentity(ctx, inst.WorkspaceID)
-		var assignedRunFireAt time.Time
+		assignedRunFireAt := time.Now().Add(channelIssuePromotionFallback)
 		if resolveMedia {
 			// The generic deferred-task sweeper is the crash fallback. Leave room
 			// after the media deadline for the bounded attachment finalizer so it
@@ -624,6 +637,19 @@ func (r *Router) processClaimed(ctx context.Context, set ResolverSet, msg channe
 				String: appendRes.IssueCommand.Description,
 				Valid:  true,
 			}, msg.CommandText, deferredIssueTaskID, localMediaDeadline)
+		} else if deferredIssueTaskID.Valid {
+			// The Issue, deferred task and external delivery route are committed
+			// atomically. Only now may the daemon claim the task.
+			if err := r.tasks.PromoteDeferredChannelIssueTask(ctx, deferredIssueTaskID); err != nil {
+				// The durable fire_at fallback will retry promotion if this process
+				// dies or the immediate update suffers a transient failure.
+				r.logger.Warn("channel router: issue task promotion failed",
+					"channel_type", string(msg.Source.ChannelType),
+					"event_id", msg.EventID,
+					"message_id", msg.MessageID,
+					"task_id", util.UUIDToString(deferredIssueTaskID),
+					"err", err)
+			}
 		}
 		return res, postAppendFinalize, nil
 	}
@@ -1093,7 +1119,8 @@ func (r *Router) createIssue(ctx context.Context, inst ResolvedInstallation, ori
 	// IssueResponse that handler path broadcasts, so clients see one issue
 	// shape regardless of which entry point created the issue.
 	opts := service.IssueCreateOpts{
-		AssignedAgentRunFireAt: assignedRunFireAt,
+		AssignedAgentRunFireAt:       assignedRunFireAt,
+		AssignedTaskChannelSessionID: sessionID,
 		BroadcastPayload: func(issue db.Issue, _ []db.Attachment, _ []db.IssueLabel) map[string]any {
 			// Plain IssueToMap is authoritative here: this path always creates
 			// with the built-in "todo" above, and a built-in status IS its own

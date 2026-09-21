@@ -87,6 +87,16 @@
     "error_not_member": "You're signed in to a Multica account that isn't a member of this workspace.",
     "error_unknown": "Something went wrong. Try again, and if the problem persists, contact the workspace admin."
   },
+  "channel_bind": {
+    "page_title": "Link your messaging account",
+    "redeeming": "Linking your account…",
+    "needs_auth": "Sign in to Multica to finish linking this messaging account.",
+    "sign_in": "Sign in",
+    "done": "Your messaging account is linked. You can close this tab.",
+    "error_title": "Couldn't complete the link",
+    "expired": "This link is invalid or expired. Message the bot again for a new link.",
+    "error": "Something went wrong. Message the bot again or contact the workspace admin."
+  },
   "telegram_bind": {
     "page_title": "Link your Telegram account",
     "redeeming": "Linking your account…",

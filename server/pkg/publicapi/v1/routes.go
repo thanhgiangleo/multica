@@ -11,11 +11,16 @@ import "net/http"
 const BasePath = "/v1"
 
 const (
-	PathContext       = "/context"
-	PathIssue         = "/issues/{issue_ref}"
-	PathIssueComments = "/issues/{issue_ref}/comments"
-	PathStorageScope  = "/storage/{scope}"
-	PathStorageValue  = "/storage/{scope}/{key}"
+	PathContext                 = "/context"
+	PathIssue                   = "/issues/{issue_ref}"
+	PathIssueComments           = "/issues/{issue_ref}/comments"
+	PathStorageScope            = "/storage/{scope}"
+	PathStorageValue            = "/storage/{scope}/{key}"
+	PathTaskChannelInstallation = "/task-channel/installation"
+	PathTaskChannelMessages     = "/task-channel/messages"
+	PathTaskChannelOutboxClaim  = "/task-channel/outbox/claim"
+	PathTaskChannelOutboxAck    = "/task-channel/outbox/{outbox_id}/ack"
+	PathTaskChannelOutboxRetry  = "/task-channel/outbox/{outbox_id}/retry"
 )
 
 type ContractKind string
@@ -64,4 +69,9 @@ var Operations = []Operation{
 	{Method: http.MethodGet, Path: PathStorageValue, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Risk: RiskRead, Audit: AuditNotRequired, RateLimits: pluginRateLimits}},
 	{Method: http.MethodPut, Path: PathStorageValue, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
 	{Method: http.MethodDelete, Path: PathStorageValue, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
+	{Method: http.MethodPut, Path: PathTaskChannelInstallation, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Scope: "tasks:write", Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
+	{Method: http.MethodPost, Path: PathTaskChannelMessages, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Scope: "tasks:write", Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
+	{Method: http.MethodPost, Path: PathTaskChannelOutboxClaim, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Scope: "tasks:read", Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
+	{Method: http.MethodPost, Path: PathTaskChannelOutboxAck, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Scope: "tasks:read", Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
+	{Method: http.MethodPost, Path: PathTaskChannelOutboxRetry, Contract: ContractPluginExtension, Policy: OperationPolicy{Credentials: pluginCredentials, Scope: "tasks:read", Risk: RiskContentWrite, Audit: AuditPlanned, RateLimits: pluginRateLimits}},
 }

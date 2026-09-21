@@ -1335,6 +1335,17 @@
     "byo_install_failed": "봇을 저장하지 못했어요. 저희 쪽 문제입니다. 인증 정보는 변경되지 않았어요. 다시 시도해 보시고, 계속 실패하면 지원팀에 문의해 주세요.",
     "byo_failed_toast": "WeCom 봇을 연결하지 못했어요"
   },
+  "task_channel": {
+    "managed_by_extension": "이 메시지 채널은 외부 확장 프로그램에서 관리합니다. 확장 프로그램은 메시지를 받고 결과를 전달하며, 할당된 Multica 에이전트가 작업을 수행합니다.",
+    "managed_by_extension_report_only": "Zalo Bot은 작업을 일회성 태스크로 받습니다. 추가 질문이나 진행 상황 업데이트 없이, 할당된 Multica 에이전트가 완료한 뒤 최종 보고서를 한 번만 전달합니다.",
+    "connected_accounts": "연결된 계정",
+    "account_id": "계정 ID: {{id}}",
+    "assigned_agent": "할당된 에이전트: {{agent}}",
+    "active_badge": "활성",
+    "inactive_badge": "비활성",
+    "loading": "확장 프로그램 상태를 불러오는 중...",
+    "load_failed": "메시지 확장 프로그램 상태를 불러오지 못했습니다."
+  },
   "integrations": {
     "code_title": "코드 및 저장소",
     "messaging_title": "메시지 채널",
@@ -1348,6 +1359,7 @@
     "status_not_connected": "연결되지 않음",
     "status_loading": "확인 중...",
     "status_unknown": "상태를 확인할 수 없음",
-    "channel_hint": "{{channel}}에서 에이전트와 대화하고 태스크를 생성합니다."
+    "channel_hint": "{{channel}}에서 에이전트와 대화하고 태스크를 생성합니다.",
+    "channel_report_only_hint": "{{channel}}에서 작업을 제출하고 완료 후 최종 보고서를 받습니다."
   }
 }

@@ -1335,6 +1335,17 @@
     "expiry_30d": "30 天",
     "expiry_never": "永久有效"
   },
+  "task_channel": {
+    "managed_by_extension": "此消息渠道由外部扩展管理。扩展负责接收消息和回传结果，实际工作由已分配的 Multica 智能体执行。",
+    "managed_by_extension_report_only": "Zalo Bot 以单次任务方式接收工作。它不会追问或发送进度更新；已分配的 Multica 智能体完成后，仅回传一次最终报告。",
+    "connected_accounts": "已连接账号",
+    "account_id": "账号 ID：{{id}}",
+    "assigned_agent": "已分配智能体：{{agent}}",
+    "active_badge": "启用",
+    "inactive_badge": "停用",
+    "loading": "正在加载扩展状态...",
+    "load_failed": "无法加载消息扩展状态。"
+  },
   "integrations": {
     "code_title": "代码与仓库",
     "messaging_title": "消息渠道",
@@ -1348,6 +1359,7 @@
     "status_not_connected": "未连接",
     "status_loading": "正在检查...",
     "status_unknown": "状态暂不可用",
-    "channel_hint": "在 {{channel}} 中与智能体对话、创建任务。"
+    "channel_hint": "在 {{channel}} 中与智能体对话、创建任务。",
+    "channel_report_only_hint": "通过 {{channel}} 提交任务，并在任务完成后接收最终报告。"
   }
 }

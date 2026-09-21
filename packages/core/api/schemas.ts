@@ -44,6 +44,9 @@ import type {
   TelegramInstallation,
   ListTelegramInstallationsResponse,
   RedeemTelegramBindingTokenResponse,
+  TaskChannelInstallation,
+  ListTaskChannelInstallationsResponse,
+  RedeemTaskChannelBindingTokenResponse,
   GroupedIssuesResponse,
   GitHubConnectResponse,
   GitHubPullRequest,
@@ -3275,6 +3278,44 @@ export const ListTelegramInstallationsResponseSchema = z.object({
 export const EMPTY_LIST_TELEGRAM_INSTALLATIONS_RESPONSE: ListTelegramInstallationsResponse = {
   installations: [],
   configured: false,
+};
+
+export const TaskChannelInstallationSchema = z.object({
+  id: z.string().default(""),
+  workspace_id: z.string().default(""),
+  agent_id: z.string().default(""),
+  provider: z.string().default(""),
+  account_id: z.string().default(""),
+  display_name: z.string().default(""),
+  status: z.string().default(""),
+}).loose();
+
+export const EMPTY_TASK_CHANNEL_INSTALLATION: TaskChannelInstallation = {
+  id: "",
+  workspace_id: "",
+  agent_id: "",
+  provider: "",
+  account_id: "",
+  display_name: "",
+  status: "",
+};
+
+export const ListTaskChannelInstallationsResponseSchema = z.object({
+  installations: z.array(TaskChannelInstallationSchema).default([]),
+}).loose();
+
+export const EMPTY_LIST_TASK_CHANNEL_INSTALLATIONS_RESPONSE: ListTaskChannelInstallationsResponse = {
+  installations: [],
+};
+
+export const RedeemTaskChannelBindingTokenResponseSchema = z.object({
+  workspace_id: z.string().default(""),
+  installation_id: z.string().default(""),
+  channel_user_id: z.string().default(""),
+}).loose();
+
+export const EMPTY_REDEEM_TASK_CHANNEL_BINDING_TOKEN_RESPONSE: RedeemTaskChannelBindingTokenResponse = {
+  workspace_id: "", installation_id: "", channel_user_id: "",
 };
 
 export const RedeemTelegramBindingTokenResponseSchema = z.object({

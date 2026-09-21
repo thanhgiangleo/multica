@@ -87,6 +87,16 @@
     "error_not_member": "你登录的 Multica 账号不是当前工作区成员。",
     "error_unknown": "出现未知错误。请稍后再试，如反复失败请联系工作区管理员。"
   },
+  "channel_bind": {
+    "page_title": "关联消息账号",
+    "redeeming": "正在关联账号...",
+    "needs_auth": "请登录 Multica 以完成消息账号关联。",
+    "sign_in": "登录",
+    "done": "消息账号已关联，可以关闭此页面。",
+    "error_title": "无法完成关联",
+    "expired": "链接无效或已过期。请再次向 Bot 发送消息获取新链接。",
+    "error": "发生错误。请再次向 Bot 发送消息或联系工作区管理员。"
+  },
   "telegram_bind": {
     "page_title": "绑定你的 Telegram 账号",
     "redeeming": "正在绑定…",

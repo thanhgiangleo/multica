@@ -87,6 +87,16 @@
     "error_not_member": "로그인한 Multica 계정이 이 워크스페이스의 멤버가 아니에요.",
     "error_unknown": "문제가 발생했어요. 다시 시도해 보고, 계속되면 워크스페이스 관리자에게 문의하세요."
   },
+  "channel_bind": {
+    "page_title": "메시징 계정 연결",
+    "redeeming": "계정을 연결하는 중…",
+    "needs_auth": "메시징 계정 연결을 완료하려면 Multica에 로그인하세요.",
+    "sign_in": "로그인",
+    "done": "메시징 계정이 연결되었습니다. 이 탭을 닫아도 됩니다.",
+    "error_title": "연결을 완료하지 못했습니다",
+    "expired": "링크가 잘못되었거나 만료되었습니다. Bot에 다시 메시지를 보내세요.",
+    "error": "문제가 발생했습니다. Bot에 다시 메시지를 보내거나 워크스페이스 관리자에게 문의하세요."
+  },
   "telegram_bind": {
     "page_title": "Telegram 계정 연결",
     "redeeming": "계정을 연결하는 중…",

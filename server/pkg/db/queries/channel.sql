@@ -222,6 +222,9 @@ cleared_outbound_messages AS (
 cleared_reply_deliveries AS (
     DELETE FROM channel_reply_delivery WHERE installation_id IN (SELECT id FROM dead)
 ),
+cleared_extension_outbox AS (
+    DELETE FROM channel_extension_outbox WHERE installation_id IN (SELECT id FROM dead)
+),
 cleared_chat_sessions AS (
     DELETE FROM channel_chat_session_binding
     WHERE installation_id IN (SELECT id FROM dead)
@@ -384,6 +387,9 @@ cleared_task_deliveries AS (
 ),
 cleared_outbound_messages AS (
     DELETE FROM channel_outbound_message WHERE installation_id IN (SELECT id FROM doomed)
+),
+cleared_extension_outbox AS (
+    DELETE FROM channel_extension_outbox WHERE installation_id IN (SELECT id FROM doomed)
 ),
 cleared_chat_sessions AS (
     DELETE FROM channel_chat_session_binding WHERE installation_id IN (SELECT id FROM doomed)
@@ -1227,6 +1233,86 @@ WHERE expires_at < $1;
 -- installation — a link that never actually reaches the live bot.
 DELETE FROM channel_binding_token
 WHERE installation_id = $1;
+
+-- =====================
+-- channel_extension_outbox
+-- =====================
+
+-- name: EnqueueChannelExtensionOutbound :one
+-- The dedupe key is chosen by the caller from the source event/message. A
+-- replay returns no row rather than creating a second externally visible send.
+INSERT INTO channel_extension_outbox (
+    installation_id, channel_chat_id, text, dedupe_key
+) VALUES ($1, $2, $3, $4)
+ON CONFLICT (installation_id, dedupe_key) DO NOTHING
+RETURNING *;
+
+-- name: ClaimChannelExtensionOutbound :many
+-- One Plugin installation owns one external channel installation (app_id is
+-- its immutable Plugin installation id). A short lease allows crash recovery;
+-- SKIP LOCKED permits more than one sidecar replica without duplicate claims.
+WITH candidates AS (
+    SELECT outbound.id
+    FROM channel_extension_outbox AS outbound
+    JOIN channel_installation AS installation
+      ON installation.id = outbound.installation_id
+    WHERE installation.channel_type = 'external'
+      AND installation.status = 'active'
+      AND installation.config ->> 'app_id' = sqlc.arg('plugin_installation_id')::text
+      AND outbound.delivered_at IS NULL
+      AND outbound.available_at <= now()
+      AND (outbound.claimed_until IS NULL OR outbound.claimed_until <= now())
+    ORDER BY outbound.created_at, outbound.id
+    FOR UPDATE OF outbound SKIP LOCKED
+    LIMIT sqlc.arg('claim_limit')
+)
+UPDATE channel_extension_outbox AS outbound
+SET claim_token = gen_random_uuid(),
+    claimed_until = now() + INTERVAL '60 seconds',
+    attempts = outbound.attempts + 1,
+    updated_at = now()
+FROM candidates
+WHERE outbound.id = candidates.id
+RETURNING outbound.*;
+
+-- name: AckChannelExtensionOutbound :one
+UPDATE channel_extension_outbox AS outbound
+SET delivered_at = now(),
+    claimed_until = NULL,
+    claim_token = NULL,
+    last_error = NULL,
+    updated_at = now()
+WHERE outbound.id = $1
+  AND outbound.claim_token = $2
+  AND outbound.installation_id IN (
+      SELECT installation.id
+      FROM channel_installation AS installation
+      WHERE installation.channel_type = 'external'
+        AND installation.config ->> 'app_id' = sqlc.arg('plugin_installation_id')::text
+  )
+  AND outbound.delivered_at IS NULL
+RETURNING outbound.*;
+
+-- name: RetryChannelExtensionOutbound :one
+UPDATE channel_extension_outbox AS outbound
+SET available_at = now() + INTERVAL '1 second' * LEAST(60, power(2, GREATEST(attempts - 1, 0))::integer),
+    claimed_until = NULL,
+    claim_token = NULL,
+    last_error = left(sqlc.arg('last_error')::text, 1000),
+    updated_at = now()
+WHERE outbound.id = sqlc.arg('id')
+  AND outbound.claim_token = sqlc.arg('claim_token')
+  AND outbound.installation_id IN (
+      SELECT installation.id
+      FROM channel_installation AS installation
+      WHERE installation.channel_type = 'external'
+        AND installation.config ->> 'app_id' = sqlc.arg('plugin_installation_id')::text
+  )
+  AND outbound.delivered_at IS NULL
+RETURNING outbound.*;
+
+-- name: DeleteChannelExtensionOutboxByInstallation :exec
+DELETE FROM channel_extension_outbox WHERE installation_id = $1;
 
 -- =====================
 -- channel_media_pending_object (media intent ledger)

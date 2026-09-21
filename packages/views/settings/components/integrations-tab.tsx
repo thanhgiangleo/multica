@@ -1,7 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { ArrowLeft, ChevronRight, FolderGit2, Blocks } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronRight,
+  FolderGit2,
+  Blocks,
+  MessageSquareMore,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ApiError, errorCode } from "@multica/core/api";
 import { useWorkspaceId } from "@multica/core/hooks";
@@ -16,6 +22,7 @@ import { slackInstallationsOptions } from "@multica/core/slack";
 import { dingtalkInstallationsOptions } from "@multica/core/dingtalk";
 import { wecomInstallationsOptions } from "@multica/core/wecom";
 import { telegramInstallationsOptions } from "@multica/core/telegram";
+import { taskChannelInstallationsOptions } from "@multica/core/task-channel";
 import { vcsConnectionsOptions } from "@multica/core/vcs";
 import { useConfigStore, useFeatureEnabled } from "@multica/core/config";
 import { COMPOSIO_MCP_APPS_FLAG } from "@multica/core/feature-flags";
@@ -33,6 +40,11 @@ import { GitHubTab } from "./github-tab";
 import { GitHubMark } from "./github-mark";
 import { SettingsCard, SettingsSection, SettingsTab } from "./settings-layout";
 import { IntegrationChannelIcon } from "./integration-channel-icon";
+import {
+  TaskChannelTab,
+  taskChannelIsReportOnly,
+  taskChannelProviderLabel,
+} from "./task-channel-tab";
 import { resolveSettingsLocation, settingsHref } from "./settings-navigation";
 
 interface ConnectionState {
@@ -107,6 +119,10 @@ export function IntegrationsTab() {
     enabled: canView,
     select: hasActiveInstallation,
   });
+  const taskChannels = useQuery({
+    ...taskChannelInstallationsOptions(wsId),
+    enabled: canView,
+  });
   const vcs = useQuery({
     ...vcsConnectionsOptions(wsId),
     enabled: canView && vcsAvailable,
@@ -117,6 +133,22 @@ export function IntegrationsTab() {
     enabled: composioAvailable,
     select: (data) => data.some((connection) => connection.status === "active"),
   });
+  const externalProviders = Array.from(
+    (taskChannels.data?.installations ?? []).reduce(
+      (providers, installation) => {
+        const provider = installation.provider.trim().toLowerCase();
+        if (!provider) return providers;
+        const current = providers.get(provider) ?? [];
+        current.push(installation);
+        providers.set(provider, current);
+        return providers;
+      },
+      new Map<
+        string,
+        NonNullable<typeof taskChannels.data>["installations"]
+      >(),
+    ),
+  );
   const groups: {
     id: string;
     label: string;
@@ -193,6 +225,33 @@ export function IntegrationsTab() {
           content: <TelegramTab />,
           state: telegram,
         },
+        ...externalProviders.map(([provider, installations]) => ({
+          id: `external-${provider}`,
+          label: taskChannelProviderLabel(provider),
+          description: taskChannelIsReportOnly(provider)
+            ? t(($) => $.integrations.channel_report_only_hint, {
+                channel: taskChannelProviderLabel(provider),
+              })
+            : t(($) => $.integrations.channel_hint, {
+                channel: taskChannelProviderLabel(provider),
+              }),
+          icon: <MessageSquareMore className="size-5" />,
+          content: (
+            <TaskChannelTab
+              provider={provider}
+              installations={installations}
+              isLoading={taskChannels.isPending}
+              isError={taskChannels.isError}
+            />
+          ),
+          state: {
+            data: installations.some(
+              (installation) => installation.status === "active",
+            ),
+            isPending: taskChannels.isPending,
+            isError: taskChannels.isError,
+          },
+        })),
       ],
     },
     ...(composioAvailable
@@ -286,7 +345,8 @@ export function IntegrationsTab() {
                     <ConnectionBadge state={item.state} />{" "}
                   </span>
                   <span className="mt-1 block text-caption leading-5 text-muted-foreground">
-                    {group.id === "messaging"
+                    {group.id === "messaging" &&
+                    !item.id.startsWith("external-")
                       ? t(($) => $.integrations.channel_hint, {
                           channel: item.label,
                         })

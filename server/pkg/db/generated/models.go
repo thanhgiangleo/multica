@@ -366,6 +366,22 @@ type ChannelChatSessionBinding struct {
 	HistoryBoundaryPending bool               `json:"history_boundary_pending"`
 }
 
+type ChannelExtensionOutbox struct {
+	ID             pgtype.UUID        `json:"id"`
+	InstallationID pgtype.UUID        `json:"installation_id"`
+	ChannelChatID  string             `json:"channel_chat_id"`
+	Text           string             `json:"text"`
+	DedupeKey      string             `json:"dedupe_key"`
+	AvailableAt    pgtype.Timestamptz `json:"available_at"`
+	ClaimedUntil   pgtype.Timestamptz `json:"claimed_until"`
+	ClaimToken     pgtype.UUID        `json:"claim_token"`
+	Attempts       int32              `json:"attempts"`
+	LastError      pgtype.Text        `json:"last_error"`
+	DeliveredAt    pgtype.Timestamptz `json:"delivered_at"`
+	CreatedAt      pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt      pgtype.Timestamptz `json:"updated_at"`
+}
+
 type ChannelInboundAudit struct {
 	ID               pgtype.UUID        `json:"id"`
 	InstallationID   pgtype.UUID        `json:"installation_id"`

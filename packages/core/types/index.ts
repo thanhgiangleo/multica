@@ -251,6 +251,11 @@ export type {
   RedeemTelegramBindingTokenResponse,
 } from "./telegram";
 export type {
+  TaskChannelInstallation,
+  ListTaskChannelInstallationsResponse,
+  RedeemTaskChannelBindingTokenResponse,
+} from "./task-channel";
+export type {
   Autopilot,
   AutopilotStatus,
   AutopilotExecutionMode,

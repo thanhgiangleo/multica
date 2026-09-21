@@ -127,9 +127,22 @@ type IssueCreateOpts struct {
 
 	// AssignedAgentRunFireAt creates the automatic assigned-agent task in a
 	// durable deferred state. Channel /issue uses this while detached media is
-	// still resolving, then promotes the returned task after attachment binding.
-	// Zero preserves the ordinary immediate enqueue path.
+	// resolving or while its delivery route is being committed, then promotes
+	// the returned task only after all channel metadata is durable. Zero
+	// preserves the ordinary immediate enqueue path.
 	AssignedAgentRunFireAt time.Time
+
+	// AssignedTaskChannelSessionID snapshots the external delivery route for the
+	// deferred assigned-agent task in the same transaction as the Issue and task.
+	// This prevents a fast agent completion from racing the route write and
+	// losing its terminal reply. It is valid only with AssignedAgentRunFireAt.
+	AssignedTaskChannelSessionID pgtype.UUID
+
+	// AssignedTaskChannelDeliveryParentTaskID copies the delivery snapshot from
+	// an already-running channel task to its delegated assigned-agent task. It
+	// is valid only with AssignedAgentRunFireAt and is mutually exclusive with
+	// AssignedTaskChannelSessionID.
+	AssignedTaskChannelDeliveryParentTaskID pgtype.UUID
 }
 
 // ErrActiveDuplicate signals that the duplicate guard found an active
@@ -211,6 +224,9 @@ type IssueCreateResult struct {
 // Caller-owned validation is limited to transport-shaped checks: title
 // required, RFC3339 date format, assignee pair sanity.
 func (s *IssueService) Create(ctx context.Context, p IssueCreateParams, opts IssueCreateOpts) (IssueCreateResult, error) {
+	if opts.AssignedTaskChannelSessionID.Valid && opts.AssignedTaskChannelDeliveryParentTaskID.Valid {
+		return IssueCreateResult{}, errors.New("channel task delivery source is ambiguous")
+	}
 	issueCountPolicy := ResolveIssueCountPolicy(ctx, s.Entitlements, p.WorkspaceID)
 	tx, err := s.TxStarter.Begin(ctx)
 	if err != nil {
@@ -464,6 +480,23 @@ func (s *IssueService) Create(ctx context.Context, p IssueCreateParams, opts Iss
 		if err != nil {
 			return IssueCreateResult{}, fmt.Errorf("create deferred channel issue task: %w", err)
 		}
+		if opts.AssignedTaskChannelSessionID.Valid && assignedTask.ID.Valid {
+			if _, err := qtx.CreateChannelTaskDeliveryFromSession(ctx, db.CreateChannelTaskDeliveryFromSessionParams{
+				TaskID:        assignedTask.ID,
+				ChatSessionID: opts.AssignedTaskChannelSessionID,
+			}); err != nil {
+				return IssueCreateResult{}, fmt.Errorf("snapshot channel issue task delivery: %w", err)
+			}
+		} else if opts.AssignedTaskChannelDeliveryParentTaskID.Valid && assignedTask.ID.Valid {
+			if _, err := qtx.GetChannelTaskDelivery(ctx, opts.AssignedTaskChannelDeliveryParentTaskID); err != nil {
+				return IssueCreateResult{}, fmt.Errorf("load delegated channel task delivery: %w", err)
+			}
+			if err := qtx.CopyChannelTaskDelivery(ctx, db.CopyChannelTaskDeliveryParams{
+				ChildTaskID: assignedTask.ID, ParentTaskID: opts.AssignedTaskChannelDeliveryParentTaskID,
+			}); err != nil {
+				return IssueCreateResult{}, fmt.Errorf("copy delegated channel task delivery: %w", err)
+			}
+		}
 	}
 
 	if err := tx.Commit(ctx); err != nil {
@@ -492,6 +525,15 @@ func (s *IssueService) Create(ctx context.Context, p IssueCreateParams, opts Iss
 					"issue_id", util.UUIDToString(issue.ID),
 					"task_id", util.UUIDToString(assignedTask.ID),
 					"error", err)
+			}
+			if opts.AssignedTaskChannelDeliveryParentTaskID.Valid {
+				if err := s.TaskService.PromoteDeferredChannelIssueTask(ctx, assignedTaskID); err != nil {
+					slog.Warn("promote delegated channel issue task failed",
+						"issue_id", util.UUIDToString(issue.ID),
+						"task_id", util.UUIDToString(assignedTaskID),
+						"error", err,
+					)
+				}
 			}
 		} else if s.shouldEnqueueSquadLeaderOnAssign(ctx, issue) {
 			// AssignedAgentRunFireAt currently belongs to channel /issue, which
@@ -712,6 +754,11 @@ func classifyOrigin(issue db.Issue, opts IssueCreateOpts) (source, taskID, autop
 		// (agent_create is the ordinary agent `issue create` path, MUL-4305);
 		// surface that task id and keep the manual source label.
 		return analytics.SourceManual, originID, ""
+	case "external_chat":
+		// Plugin-backed chat providers use the generic external_chat origin.
+		// It is user-created work, so it retains the manual analytics source;
+		// origin_id points to a channel session rather than an agent task.
+		return analytics.SourceManual, "", ""
 	case "autopilot":
 		return analytics.SourceAutopilot, "", originID
 	default:

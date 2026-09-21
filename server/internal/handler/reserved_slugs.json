@@ -104,6 +104,13 @@
       ]
     },
     {
+      "label": "External task-channel account-bind route",
+      "description": "`/channel/bind` is a provider-neutral global route where a member links an external messaging identity. Reserve the prefix so a workspace slug cannot shadow it.",
+      "slugs": [
+        "channel"
+      ]
+    },
+    {
       "label": "Backend ops / observability",
       "description": "`/health`, `/readyz`, `/healthz`, and `/ws` exist on the backend host; reserving them on the workspace slug space prevents naming confusion if/when these paths are ever proxied through the web origin.",
       "slugs": [

@@ -108,6 +108,104 @@ paths:
                 $ref: "#/components/schemas/Comment"
         default:
           $ref: "#/components/responses/Problem"
+  /task-channel/installation:
+    put:
+      operationId: registerTaskChannel
+      summary: Register or refresh an out-of-process task-channel extension
+      x-multica-contract: plugin_extension
+      x-multica-scope: tasks:write
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterTaskChannelRequest"
+      responses:
+        "200":
+          description: Registered task channel
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskChannelInstallation"
+        default:
+          $ref: "#/components/responses/Problem"
+  /task-channel/messages:
+    post:
+      operationId: ingestTaskChannelMessage
+      summary: Submit one normalized inbound message for the configured agent
+      x-multica-contract: plugin_extension
+      x-multica-scope: tasks:write
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskChannelInboundMessage"
+      responses:
+        "202":
+          description: Message accepted for classification and task dispatch
+        default:
+          $ref: "#/components/responses/Problem"
+  /task-channel/outbox/claim:
+    post:
+      operationId: claimTaskChannelOutbox
+      summary: Lease pending replies for delivery by the extension
+      x-multica-contract: plugin_extension
+      x-multica-scope: tasks:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                limit: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        "200":
+          description: Claimed outbound messages
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [messages]
+                properties:
+                  messages:
+                    type: array
+                    items: { $ref: "#/components/schemas/TaskChannelOutboxMessage" }
+        default:
+          $ref: "#/components/responses/Problem"
+  /task-channel/outbox/{outbox_id}/ack:
+    parameters:
+      - $ref: "#/components/parameters/OutboxID"
+    post:
+      operationId: ackTaskChannelOutbox
+      summary: Confirm successful delivery of a claimed reply
+      x-multica-contract: plugin_extension
+      x-multica-scope: tasks:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TaskChannelClaimRequest" }
+      responses:
+        "204": { description: Delivery confirmed }
+        default: { $ref: "#/components/responses/Problem" }
+  /task-channel/outbox/{outbox_id}/retry:
+    parameters:
+      - $ref: "#/components/parameters/OutboxID"
+    post:
+      operationId: retryTaskChannelOutbox
+      summary: Release a failed delivery with bounded backoff
+      x-multica-contract: plugin_extension
+      x-multica-scope: tasks:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TaskChannelClaimRequest" }
+      responses:
+        "204": { description: Delivery released for retry }
+        default: { $ref: "#/components/responses/Problem" }
   /storage/{scope}:
     get:
       operationId: listPluginStorageKeys
@@ -193,6 +291,11 @@ components:
       schema:
         type: string
         maxLength: 1024
+    OutboxID:
+      name: outbox_id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
     IfMatch:
       name: If-Match
       in: header
@@ -226,6 +329,55 @@ components:
           schema:
             $ref: "#/components/schemas/Problem"
   schemas:
+    RegisterTaskChannelRequest:
+      type: object
+      required: [agent_id, provider, account_id, display_name]
+      properties:
+        agent_id: { type: string, format: uuid }
+        provider: { type: string, minLength: 1, maxLength: 64 }
+        account_id: { type: string, minLength: 1, maxLength: 255 }
+        display_name: { type: string, minLength: 1, maxLength: 255 }
+    TaskChannelInstallation:
+      type: object
+      required: [id, workspace_id, agent_id, provider, account_id, display_name, status]
+      properties:
+        id: { type: string, format: uuid }
+        workspace_id: { type: string, format: uuid }
+        agent_id: { type: string, format: uuid }
+        provider: { type: string }
+        account_id: { type: string }
+        display_name: { type: string }
+        status: { type: string, enum: [active, revoked] }
+    TaskChannelInboundMessage:
+      type: object
+      required: [event_id, message_id, chat_id, chat_type, sender_id, text, addressed_to_bot]
+      properties:
+        event_id: { type: string, minLength: 1, maxLength: 512 }
+        message_id: { type: string, minLength: 1, maxLength: 512 }
+        chat_id: { type: string, minLength: 1, maxLength: 512 }
+        chat_type: { type: string, enum: [p2p, group] }
+        sender_id: { type: string, minLength: 1, maxLength: 512 }
+        sender_stable_id: { type: string, maxLength: 512 }
+        sender_name: { type: string, maxLength: 255 }
+        text: { type: string, minLength: 1 }
+        command_text: { type: string }
+        addressed_to_bot: { type: boolean }
+        force_fresh: { type: boolean, default: false }
+    TaskChannelOutboxMessage:
+      type: object
+      required: [id, chat_id, text, claim_token, attempts]
+      properties:
+        id: { type: string, format: uuid }
+        chat_id: { type: string }
+        text: { type: string }
+        claim_token: { type: string, format: uuid }
+        attempts: { type: integer, minimum: 1 }
+    TaskChannelClaimRequest:
+      type: object
+      required: [claim_token]
+      properties:
+        claim_token: { type: string, format: uuid }
+        error: { type: string, maxLength: 1000 }
     Problem:
       type: object
       required: [type, title, status, code, detail, request_id, error]

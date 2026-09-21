@@ -11,6 +11,52 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const ackChannelExtensionOutbound = `-- name: AckChannelExtensionOutbound :one
+UPDATE channel_extension_outbox AS outbound
+SET delivered_at = now(),
+    claimed_until = NULL,
+    claim_token = NULL,
+    last_error = NULL,
+    updated_at = now()
+WHERE outbound.id = $1
+  AND outbound.claim_token = $2
+  AND outbound.installation_id IN (
+      SELECT installation.id
+      FROM channel_installation AS installation
+      WHERE installation.channel_type = 'external'
+        AND installation.config ->> 'app_id' = $3::text
+  )
+  AND outbound.delivered_at IS NULL
+RETURNING outbound.id, outbound.installation_id, outbound.channel_chat_id, outbound.text, outbound.dedupe_key, outbound.available_at, outbound.claimed_until, outbound.claim_token, outbound.attempts, outbound.last_error, outbound.delivered_at, outbound.created_at, outbound.updated_at
+`
+
+type AckChannelExtensionOutboundParams struct {
+	ID                   pgtype.UUID `json:"id"`
+	ClaimToken           pgtype.UUID `json:"claim_token"`
+	PluginInstallationID string      `json:"plugin_installation_id"`
+}
+
+func (q *Queries) AckChannelExtensionOutbound(ctx context.Context, arg AckChannelExtensionOutboundParams) (ChannelExtensionOutbox, error) {
+	row := q.db.QueryRow(ctx, ackChannelExtensionOutbound, arg.ID, arg.ClaimToken, arg.PluginInstallationID)
+	var i ChannelExtensionOutbox
+	err := row.Scan(
+		&i.ID,
+		&i.InstallationID,
+		&i.ChannelChatID,
+		&i.Text,
+		&i.DedupeKey,
+		&i.AvailableAt,
+		&i.ClaimedUntil,
+		&i.ClaimToken,
+		&i.Attempts,
+		&i.LastError,
+		&i.DeliveredAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const acquireChannelReplyDelivery = `-- name: AcquireChannelReplyDelivery :one
 INSERT INTO channel_reply_delivery (
     turn_id, task_id, attempt_depth, binding_id, installation_id, channel_type, chat_id,
@@ -256,6 +302,74 @@ func (q *Queries) ChannelMediaObjectIsReferenced(ctx context.Context, arg Channe
 	var referenced bool
 	err := row.Scan(&referenced)
 	return referenced, err
+}
+
+const claimChannelExtensionOutbound = `-- name: ClaimChannelExtensionOutbound :many
+WITH candidates AS (
+    SELECT outbound.id
+    FROM channel_extension_outbox AS outbound
+    JOIN channel_installation AS installation
+      ON installation.id = outbound.installation_id
+    WHERE installation.channel_type = 'external'
+      AND installation.status = 'active'
+      AND installation.config ->> 'app_id' = $1::text
+      AND outbound.delivered_at IS NULL
+      AND outbound.available_at <= now()
+      AND (outbound.claimed_until IS NULL OR outbound.claimed_until <= now())
+    ORDER BY outbound.created_at, outbound.id
+    FOR UPDATE OF outbound SKIP LOCKED
+    LIMIT $2
+)
+UPDATE channel_extension_outbox AS outbound
+SET claim_token = gen_random_uuid(),
+    claimed_until = now() + INTERVAL '60 seconds',
+    attempts = outbound.attempts + 1,
+    updated_at = now()
+FROM candidates
+WHERE outbound.id = candidates.id
+RETURNING outbound.id, outbound.installation_id, outbound.channel_chat_id, outbound.text, outbound.dedupe_key, outbound.available_at, outbound.claimed_until, outbound.claim_token, outbound.attempts, outbound.last_error, outbound.delivered_at, outbound.created_at, outbound.updated_at
+`
+
+type ClaimChannelExtensionOutboundParams struct {
+	PluginInstallationID string `json:"plugin_installation_id"`
+	ClaimLimit           int32  `json:"claim_limit"`
+}
+
+// One Plugin installation owns one external channel installation (app_id is
+// its immutable Plugin installation id). A short lease allows crash recovery;
+// SKIP LOCKED permits more than one sidecar replica without duplicate claims.
+func (q *Queries) ClaimChannelExtensionOutbound(ctx context.Context, arg ClaimChannelExtensionOutboundParams) ([]ChannelExtensionOutbox, error) {
+	rows, err := q.db.Query(ctx, claimChannelExtensionOutbound, arg.PluginInstallationID, arg.ClaimLimit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ChannelExtensionOutbox{}
+	for rows.Next() {
+		var i ChannelExtensionOutbox
+		if err := rows.Scan(
+			&i.ID,
+			&i.InstallationID,
+			&i.ChannelChatID,
+			&i.Text,
+			&i.DedupeKey,
+			&i.AvailableAt,
+			&i.ClaimedUntil,
+			&i.ClaimToken,
+			&i.Attempts,
+			&i.LastError,
+			&i.DeliveredAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const claimChannelInboundDedup = `-- name: ClaimChannelInboundDedup :one
@@ -1183,6 +1297,15 @@ func (q *Queries) DeleteChannelChatSessionBindingsByInstallation(ctx context.Con
 	return err
 }
 
+const deleteChannelExtensionOutboxByInstallation = `-- name: DeleteChannelExtensionOutboxByInstallation :exec
+DELETE FROM channel_extension_outbox WHERE installation_id = $1
+`
+
+func (q *Queries) DeleteChannelExtensionOutboxByInstallation(ctx context.Context, installationID pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteChannelExtensionOutboxByInstallation, installationID)
+	return err
+}
+
 const deleteChannelInstallationsBySystemRuntimeAgents = `-- name: DeleteChannelInstallationsBySystemRuntimeAgents :exec
 WITH system_agents AS (
     SELECT system_agent.id FROM agent AS system_agent
@@ -1213,6 +1336,9 @@ cleared_task_deliveries AS (
 ),
 cleared_outbound_messages AS (
     DELETE FROM channel_outbound_message WHERE installation_id IN (SELECT id FROM doomed)
+),
+cleared_extension_outbox AS (
+    DELETE FROM channel_extension_outbox WHERE installation_id IN (SELECT id FROM doomed)
 ),
 cleared_chat_sessions AS (
     DELETE FROM channel_chat_session_binding WHERE installation_id IN (SELECT id FROM doomed)
@@ -1338,6 +1464,53 @@ type DeleteChannelUserBindingsByWorkspaceMemberParams struct {
 func (q *Queries) DeleteChannelUserBindingsByWorkspaceMember(ctx context.Context, arg DeleteChannelUserBindingsByWorkspaceMemberParams) error {
 	_, err := q.db.Exec(ctx, deleteChannelUserBindingsByWorkspaceMember, arg.WorkspaceID, arg.MulticaUserID)
 	return err
+}
+
+const enqueueChannelExtensionOutbound = `-- name: EnqueueChannelExtensionOutbound :one
+
+INSERT INTO channel_extension_outbox (
+    installation_id, channel_chat_id, text, dedupe_key
+) VALUES ($1, $2, $3, $4)
+ON CONFLICT (installation_id, dedupe_key) DO NOTHING
+RETURNING id, installation_id, channel_chat_id, text, dedupe_key, available_at, claimed_until, claim_token, attempts, last_error, delivered_at, created_at, updated_at
+`
+
+type EnqueueChannelExtensionOutboundParams struct {
+	InstallationID pgtype.UUID `json:"installation_id"`
+	ChannelChatID  string      `json:"channel_chat_id"`
+	Text           string      `json:"text"`
+	DedupeKey      string      `json:"dedupe_key"`
+}
+
+// =====================
+// channel_extension_outbox
+// =====================
+// The dedupe key is chosen by the caller from the source event/message. A
+// replay returns no row rather than creating a second externally visible send.
+func (q *Queries) EnqueueChannelExtensionOutbound(ctx context.Context, arg EnqueueChannelExtensionOutboundParams) (ChannelExtensionOutbox, error) {
+	row := q.db.QueryRow(ctx, enqueueChannelExtensionOutbound,
+		arg.InstallationID,
+		arg.ChannelChatID,
+		arg.Text,
+		arg.DedupeKey,
+	)
+	var i ChannelExtensionOutbox
+	err := row.Scan(
+		&i.ID,
+		&i.InstallationID,
+		&i.ChannelChatID,
+		&i.Text,
+		&i.DedupeKey,
+		&i.AvailableAt,
+		&i.ClaimedUntil,
+		&i.ClaimToken,
+		&i.Attempts,
+		&i.LastError,
+		&i.DeliveredAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const findChannelBindingForMember = `-- name: FindChannelBindingForMember :one
@@ -2628,6 +2801,9 @@ cleared_outbound_messages AS (
 cleared_reply_deliveries AS (
     DELETE FROM channel_reply_delivery WHERE installation_id IN (SELECT id FROM dead)
 ),
+cleared_extension_outbox AS (
+    DELETE FROM channel_extension_outbox WHERE installation_id IN (SELECT id FROM dead)
+),
 cleared_chat_sessions AS (
     DELETE FROM channel_chat_session_binding
     WHERE installation_id IN (SELECT id FROM dead)
@@ -3112,6 +3288,58 @@ func (q *Queries) RetireChannelChatSessionBinding(ctx context.Context, arg Retir
 		&i.HistoryStartMessageID,
 		&i.HistoryEndMessageID,
 		&i.HistoryBoundaryPending,
+	)
+	return i, err
+}
+
+const retryChannelExtensionOutbound = `-- name: RetryChannelExtensionOutbound :one
+UPDATE channel_extension_outbox AS outbound
+SET available_at = now() + INTERVAL '1 second' * LEAST(60, power(2, GREATEST(attempts - 1, 0))::integer),
+    claimed_until = NULL,
+    claim_token = NULL,
+    last_error = left($1::text, 1000),
+    updated_at = now()
+WHERE outbound.id = $2
+  AND outbound.claim_token = $3
+  AND outbound.installation_id IN (
+      SELECT installation.id
+      FROM channel_installation AS installation
+      WHERE installation.channel_type = 'external'
+        AND installation.config ->> 'app_id' = $4::text
+  )
+  AND outbound.delivered_at IS NULL
+RETURNING outbound.id, outbound.installation_id, outbound.channel_chat_id, outbound.text, outbound.dedupe_key, outbound.available_at, outbound.claimed_until, outbound.claim_token, outbound.attempts, outbound.last_error, outbound.delivered_at, outbound.created_at, outbound.updated_at
+`
+
+type RetryChannelExtensionOutboundParams struct {
+	LastError            string      `json:"last_error"`
+	ID                   pgtype.UUID `json:"id"`
+	ClaimToken           pgtype.UUID `json:"claim_token"`
+	PluginInstallationID string      `json:"plugin_installation_id"`
+}
+
+func (q *Queries) RetryChannelExtensionOutbound(ctx context.Context, arg RetryChannelExtensionOutboundParams) (ChannelExtensionOutbox, error) {
+	row := q.db.QueryRow(ctx, retryChannelExtensionOutbound,
+		arg.LastError,
+		arg.ID,
+		arg.ClaimToken,
+		arg.PluginInstallationID,
+	)
+	var i ChannelExtensionOutbox
+	err := row.Scan(
+		&i.ID,
+		&i.InstallationID,
+		&i.ChannelChatID,
+		&i.Text,
+		&i.DedupeKey,
+		&i.AvailableAt,
+		&i.ClaimedUntil,
+		&i.ClaimToken,
+		&i.Attempts,
+		&i.LastError,
+		&i.DeliveredAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }

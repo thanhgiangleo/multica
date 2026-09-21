@@ -20,7 +20,7 @@ func sessionContinuityNoticeFor(task Task) string {
 		return execenv.SessionContinuityNoticeChannelHistory
 	}
 	// Every other chat session that persists a transcript (web chat, Feishu,
-	// WeCom, DingTalk) reads it back via `multica chat history`; Slack alone
+	// WeCom, DingTalk, external task channels) reads it back via `multica chat history`; Slack alone
 	// reads the live channel. Only a surface that never stored a transcript
 	// falls through to Unrecoverable — see SurfacePersistsTranscript.
 	if execenv.SurfacePersistsTranscript(task.ChatChannelType) {
@@ -237,6 +237,9 @@ func buildPromptBody(task Task, provider string) string {
 	// treat the read as mandatory)", which read as if comment-triggered turns
 	// did not (MUL-6984).
 	fmt.Fprintf(&b, "For comment history, workflow step 2 applies. Scan the threads first with `multica issue comment list %s --roots-only --summary --compact --output json`, then expand only what matters with `--thread <thread-id> --tail 30`. For `--since` incremental polling, pagination, and folding, see `multica issue comment list --help`.\n", task.IssueID)
+	if task.ChannelReportOnly {
+		b.WriteString("\nThis issue came from a one-way task handoff, not an interactive conversation. Do NOT ask questions, request clarification, or wait for confirmation. Carry the work to completion using reasonable assumptions. If a required input or permission makes completion unsafe or impossible, do not invent it; state the exact blocker and requirement in your final report. Produce only the final outcome after the work is complete or terminally blocked.\n")
+	}
 	return b.String()
 }
 
@@ -616,8 +619,8 @@ func buildChatPrompt(task Task) string {
 	//
 	// The history half: `multica chat history` is served by handler/chat_history.go,
 	// which reads the live channel for Slack and falls back to the stored
-	// chat_message transcript for every other surface — so Slack, Feishu, WeCom
-	// and DingTalk can all read the conversation back. Slack additionally has
+	// chat_message transcript for every other surface — so Slack, Feishu, WeCom,
+	// DingTalk and external task channels can all read the conversation back. Slack additionally has
 	// `multica chat thread` (thread expansion); the transcript surfaces have no
 	// thread reader, so they get the transcript command without the thread
 	// drill-down (MUL-4899).
@@ -652,8 +655,13 @@ func buildChatPrompt(task Task) string {
 			b.WriteString("Do these reads SILENTLY as an internal step — they are how you gather context, not part of your answer.\n")
 		} else if execenv.SurfacePersistsTranscript(task.ChatChannelType) {
 			fmt.Fprintf(&b, "The conversation happens in %s, and Multica stores a transcript of it. The message below may be only what triggered you — read it back with `multica chat history` when you need earlier context that is not below.\n", platform)
+		} else if task.ChannelReportOnly {
+			fmt.Fprintf(&b, "This task handoff originates in %s, and Multica has no history reader for it. Work only from the context provided below and make reasonable assumptions when details are missing.\n", platform)
 		} else {
 			fmt.Fprintf(&b, "This conversation and its history live in %s, NOT in Multica, and Multica has no history reader for it. Work from the context already provided to you below — no command can fetch more of this conversation. If you genuinely need earlier context that is not here, ask the user for it rather than guessing.\n", platform)
+		}
+		if task.ChannelReportOnly {
+			b.WriteString("This is a one-way task handoff, not an interactive conversation. Do NOT ask questions, request clarification, or wait for confirmation. Carry the work to completion using reasonable assumptions. If a required input or permission makes completion unsafe or impossible, do not invent it; state the exact blocker and requirement in the final report.\n")
 		}
 		// Scoped to process, not results — a completion confirmation IS the deliverable.
 		fmt.Fprintf(&b, "Reply to %s with the final outcome only. Do NOT narrate planned or in-progress steps (\"我先读取…\"); completed actions are part of the outcome.\n", platform)

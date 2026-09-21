@@ -1335,6 +1335,17 @@
     "expiry_30d": "30日",
     "expiry_never": "無期限"
   },
+  "task_channel": {
+    "managed_by_extension": "このメッセージチャネルは外部拡張機能によって管理されています。拡張機能はメッセージの受信と結果の報告を行い、割り当てられた Multica エージェントが作業を実行します。",
+    "managed_by_extension_report_only": "Zalo Bot は作業を単発タスクとして受け付けます。追加質問や進捗更新は行わず、割り当てられた Multica エージェントの完了後に最終レポートを一度だけ返します。",
+    "connected_accounts": "接続済みアカウント",
+    "account_id": "アカウント ID：{{id}}",
+    "assigned_agent": "割り当て済みエージェント：{{agent}}",
+    "active_badge": "有効",
+    "inactive_badge": "無効",
+    "loading": "拡張機能の状態を読み込み中...",
+    "load_failed": "メッセージ拡張機能の状態を取得できませんでした。"
+  },
   "integrations": {
     "code_title": "コードとリポジトリ",
     "messaging_title": "メッセージチャネル",
@@ -1348,6 +1359,7 @@
     "status_not_connected": "未接続",
     "status_loading": "確認中...",
     "status_unknown": "状態を取得できません",
-    "channel_hint": "{{channel}} でエージェントと会話し、タスクを作成します。"
+    "channel_hint": "{{channel}} でエージェントと会話し、タスクを作成します。",
+    "channel_report_only_hint": "{{channel}} から作業を依頼し、完了後に最終レポートを受け取ります。"
   }
 }

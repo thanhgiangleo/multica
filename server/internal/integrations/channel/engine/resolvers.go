@@ -135,6 +135,9 @@ type StartSessionResult struct {
 // transaction turns it into a DB-clock deadline (now() + budget) so every
 // now()-based consumer reads the same clock that wrote it.
 type AppendParams struct {
+	// Installation carries adapter policy needed to normalize this turn before
+	// persisting it, such as a one-way transport's task-command conversion.
+	Installation        ResolvedInstallation
 	SessionID           pgtype.UUID
 	Sender              pgtype.UUID
 	InstallationID      pgtype.UUID
@@ -269,6 +272,13 @@ type IdentityResolver interface {
 	ResolveSender(ctx context.Context, inst ResolvedInstallation, msg channel.InboundMessage) (ResolvedIdentity, error)
 }
 
+// AgentRouter optionally replaces an installation's default agent after the
+// sender identity and workspace membership have been verified. It is for
+// narrow, provider-owned intent routes; authorization remains adapter-owned.
+type AgentRouter interface {
+	RouteAgent(ctx context.Context, inst ResolvedInstallation, sender ResolvedIdentity, msg channel.InboundMessage) (pgtype.UUID, error)
+}
+
 // Deduper is the two-phase idempotency seam. Claim mints an owner-fence token
 // (ErrDuplicate when already processed / in flight); Mark/Release are fenced on
 // the token (a no-op on token mismatch is not an error).
@@ -398,6 +408,7 @@ type TypingNotifier interface {
 type ResolverSet struct {
 	Installation InstallationResolver
 	Identity     IdentityResolver
+	AgentRouter  AgentRouter
 	Dedup        Deduper
 	Session      SessionBinder
 	Media        MediaResolver

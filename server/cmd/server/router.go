@@ -19,6 +19,7 @@ import (
 	"github.com/redis/go-redis/v9"
 
 	"github.com/multica-ai/multica/server/internal/analytics"
+	"github.com/multica-ai/multica/server/internal/apicatalog"
 	"github.com/multica-ai/multica/server/internal/auth"
 	"github.com/multica-ai/multica/server/internal/cloudruntime"
 	"github.com/multica-ai/multica/server/internal/daemonws"
@@ -32,6 +33,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/integrations/dingtalk"
 	"github.com/multica-ai/multica/server/internal/integrations/lark"
 	"github.com/multica-ai/multica/server/internal/integrations/slack"
+	"github.com/multica-ai/multica/server/internal/integrations/taskchannel"
 	"github.com/multica-ai/multica/server/internal/integrations/telegram"
 	"github.com/multica-ai/multica/server/internal/integrations/wecom"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
@@ -109,6 +111,11 @@ func registerPluginActionRoutes(r chi.Router, h *handler.Handler) {
 	r.Get(publicapiv1.PathStorageValue, h.GetPluginStorage)
 	r.Put(publicapiv1.PathStorageValue, h.PutPluginStorage)
 	r.Delete(publicapiv1.PathStorageValue, h.DeletePluginStorage)
+	r.Put(publicapiv1.PathTaskChannelInstallation, h.RegisterTaskChannel)
+	r.Post(publicapiv1.PathTaskChannelMessages, h.IngestTaskChannelMessage)
+	r.Post(publicapiv1.PathTaskChannelOutboxClaim, h.ClaimTaskChannelOutbox)
+	r.Post(publicapiv1.PathTaskChannelOutboxAck, h.AckTaskChannelOutbox)
+	r.Post(publicapiv1.PathTaskChannelOutboxRetry, h.RetryTaskChannelOutbox)
 }
 
 func allowedOrigins() []string {
@@ -527,6 +534,15 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 	// into one agent run instead of one per message (MUL-2968).
 	channelRouter.EnableRunBatching(engine.DefaultChatRunBatchWindow)
 	h.ChannelRouter = channelRouter
+	// Task-channel extensions run out of process and push only normalized
+	// envelopes through the Plugin Public API. The generic resolver keeps
+	// identity binding, deduplication, Chat persistence and task ownership in
+	// Multica while provider credentials and SDKs remain in the sidecar.
+	taskChannel := taskchannel.NewService(queries, pool, channelRouter)
+	taskChannelReplier := taskchannel.NewReplier(queries, taskChannel.BindingTokens(), appURLFromEnv())
+	channelRouter.Register(taskchannel.TypeExternal, taskchannel.NewResolverSet(queries, pool, taskChannelReplier))
+	taskchannel.NewOutbound(queries, appURLFromEnv(), slog.Default()).Register(bus)
+	h.TaskChannel = taskChannel
 	// Media intent-ledger reconciler: settles uploaded-but-unbound objects.
 	// Built ONLY when a storage backend exists — store is nil when S3 is not
 	// configured and the local upload dir failed to initialize, and a
@@ -1755,6 +1771,7 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 				// listing is member-visible; install + revoke are admin-only.
 				r.Group(func(r chi.Router) {
 					r.Use(middleware.RequireWorkspaceMemberFromURL(queries, "id"))
+					r.Get("/task-channel/installations", h.ListTaskChannelInstallations)
 					r.Get("/telegram/installations", h.ListTelegramInstallations)
 				})
 				r.Group(func(r chi.Router) {
@@ -1789,6 +1806,7 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 		// workspace-scoped, identity from the session, token proves only
 		// "this Telegram user id requested binding".
 		r.Post("/api/telegram/binding/redeem", h.RedeemTelegramBindingToken)
+		r.Post("/api/channel/binding/redeem", h.RedeemTaskChannelBindingToken)
 
 		// Composio integration (MUL-3720). User-scoped (no workspace context):
 		// a connection belongs to a user. These four require a logged-in
@@ -2336,6 +2354,14 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 				r.Put("/", h.UpdateNotificationPreferences)
 			})
 		})
+	})
+
+	// The approval gateway consumes this authenticated route inventory instead
+	// of maintaining a second endpoint allowlist. It exposes method + Chi path
+	// patterns only; request/response data and handler names remain private.
+	r.Group(func(catalogRouter chi.Router) {
+		catalogRouter.Use(middleware.Auth(queries, patCache, cloudPATVerifier, cfSigner))
+		catalogRouter.Get("/api/meta/routes", apicatalog.Handler(r))
 	})
 
 	return r, h

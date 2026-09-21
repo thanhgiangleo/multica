@@ -87,6 +87,16 @@
     "error_not_member": "Vous êtes connecté avec un compte Multica qui n'est pas membre de cet espace de travail.",
     "error_unknown": "Une erreur est survenue. Réessayez et, si le problème persiste, contactez l'administrateur de l'espace de travail."
   },
+  "channel_bind": {
+    "page_title": "Associer votre compte de messagerie",
+    "redeeming": "Association de votre compte…",
+    "needs_auth": "Connectez-vous à Multica pour terminer l'association de ce compte de messagerie.",
+    "sign_in": "Se connecter",
+    "done": "Votre compte de messagerie est associé. Vous pouvez fermer cet onglet.",
+    "error_title": "Impossible de terminer l'association",
+    "expired": "Ce lien est invalide ou expiré. Écrivez de nouveau au bot pour en obtenir un nouveau.",
+    "error": "Une erreur est survenue. Écrivez de nouveau au bot ou contactez l'administrateur de l'espace de travail."
+  },
   "telegram_bind": {
     "page_title": "Associer votre compte Telegram",
     "redeeming": "Association de votre compte…",

@@ -199,6 +199,8 @@ import type {
   ListTelegramInstallationsResponse,
   RegisterTelegramRequest,
   RedeemTelegramBindingTokenResponse,
+  ListTaskChannelInstallationsResponse,
+  RedeemTaskChannelBindingTokenResponse,
   Squad,
   SquadMember,
   SquadMemberStatusListResponse,
@@ -373,6 +375,10 @@ import {
   EMPTY_TELEGRAM_INSTALLATION,
   EMPTY_LIST_TELEGRAM_INSTALLATIONS_RESPONSE,
   EMPTY_REDEEM_TELEGRAM_BINDING_TOKEN_RESPONSE,
+  ListTaskChannelInstallationsResponseSchema,
+  EMPTY_LIST_TASK_CHANNEL_INSTALLATIONS_RESPONSE,
+  RedeemTaskChannelBindingTokenResponseSchema,
+  EMPTY_REDEEM_TASK_CHANNEL_BINDING_TOKEN_RESPONSE,
   EMPTY_BILLING_BALANCE,
   EMPTY_BILLING_TRANSACTIONS_PAGE,
   EMPTY_BILLING_BATCHES_PAGE,
@@ -5002,6 +5008,33 @@ export class ApiClient {
       RedeemTelegramBindingTokenResponseSchema,
       EMPTY_REDEEM_TELEGRAM_BINDING_TOKEN_RESPONSE,
       { endpoint: "POST /api/telegram/binding/redeem" },
+    );
+  }
+
+  async listTaskChannelInstallations(
+    workspaceId: string,
+  ): Promise<ListTaskChannelInstallationsResponse> {
+    const raw = await this.fetch<unknown>(
+      `/api/workspaces/${workspaceId}/task-channel/installations`,
+    );
+    return parseWithFallback(
+      raw,
+      ListTaskChannelInstallationsResponseSchema,
+      EMPTY_LIST_TASK_CHANNEL_INSTALLATIONS_RESPONSE,
+      { endpoint: "GET /api/workspaces/:id/task-channel/installations" },
+    );
+  }
+
+  async redeemTaskChannelBindingToken(token: string): Promise<RedeemTaskChannelBindingTokenResponse> {
+    const raw = await this.fetch<unknown>(`/api/channel/binding/redeem`, {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    });
+    return parseWithFallback(
+      raw,
+      RedeemTaskChannelBindingTokenResponseSchema,
+      EMPTY_REDEEM_TASK_CHANNEL_BINDING_TOKEN_RESPONSE,
+      { endpoint: "POST /api/channel/binding/redeem" },
     );
   }
 }

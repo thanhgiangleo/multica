@@ -1342,6 +1342,17 @@
     "expiry_30d": "30 jours",
     "expiry_never": "Jamais"
   },
+  "task_channel": {
+    "managed_by_extension": "L'extension externe gère ce canal de messagerie. L'extension reçoit les messages et transmet les résultats ; l'agent Multica assigné exécute le travail.",
+    "managed_by_extension_report_only": "Zalo Bot reçoit les demandes comme tâches uniques. Il ne pose pas de question de suivi et n'envoie pas de mises à jour de progression ; il transmet un rapport quand l'agent Multica assigné a terminé.",
+    "connected_accounts": "Comptes connectés",
+    "account_id": "ID du compte : {{id}}",
+    "assigned_agent": "Agent assigné : {{agent}}",
+    "active_badge": "Actif",
+    "inactive_badge": "Inactif",
+    "loading": "Chargement du statut de l'extension...",
+    "load_failed": "Impossible de charger le statut de l'extension de messagerie."
+  },
   "integrations": {
     "code_title": "Code et dépôts",
     "messaging_title": "Canaux de messagerie",
@@ -1355,6 +1366,7 @@
     "status_not_connected": "Non connecté",
     "status_loading": "Vérification...",
     "status_unknown": "État indisponible",
-    "channel_hint": "Discutez avec les agents et créez des tâches depuis {{channel}}."
+    "channel_hint": "Discutez avec les agents et créez des tâches depuis {{channel}}.",
+    "channel_report_only_hint": "Envoyez une demande via {{channel}} et recevez le rapport final une fois le travail terminé."
   }
 }

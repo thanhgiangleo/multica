@@ -139,6 +139,9 @@ services:
       # this backend. Both settings are optional only in the sense that leaving
       # either empty disables plugin surfaces rather than weakening isolation.
       MULTICA_PLUGIN_SECRET_KEY: ${MULTICA_PLUGIN_SECRET_KEY:-}
+      # Plugin-backed sidecars use the stable /v1 action API. The flag remains
+      # opt-in for existing self-host deployments.
+      FF_PLUGINS_V1: ${FF_PLUGINS_V1:-}
       MULTICA_PLUGIN_SURFACE_ORIGIN: ${MULTICA_PLUGIN_SURFACE_ORIGIN:-}
       MULTICA_PLUGIN_API_URL: ${MULTICA_PLUGIN_API_URL:-}
       MULTICA_PLUGIN_DIR: ${MULTICA_PLUGIN_DIR:-}
@@ -215,7 +218,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+      - "${FRONTEND_BIND_ADDRESS:-127.0.0.1}:${FRONTEND_PORT:-3000}:3000"
     environment:
       HOSTNAME: "0.0.0.0"
       REMOTE_API_URL: ${REMOTE_API_URL:-http://backend:8080}

@@ -24,6 +24,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/auth"
 	"github.com/multica-ai/multica/server/internal/daemonws"
 	"github.com/multica-ai/multica/server/internal/integrations/slack"
+	"github.com/multica-ai/multica/server/internal/integrations/taskchannel"
 	"github.com/multica-ai/multica/server/internal/issuestatus"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
 	"github.com/multica-ai/multica/server/internal/middleware"
@@ -2628,6 +2629,26 @@ func (h *Handler) buildClaimedTaskResponse(r *http.Request, task *db.AgentTaskQu
 		}
 		resp.ThreadName = issue.Title
 		issueNumber = issue.Number
+		if issue.OriginType.Valid && issue.OriginType.String == taskchannel.OriginExternalChat {
+			delivery, deliveryErr := h.Queries.GetChannelTaskDelivery(r.Context(), task.ID)
+			if deliveryErr == nil && delivery.ChannelType == string(taskchannel.TypeExternal) {
+				installation, installationErr := h.Queries.GetChannelInstallation(
+					r.Context(),
+					db.GetChannelInstallationParams{
+						ID:          delivery.InstallationID,
+						ChannelType: string(taskchannel.TypeExternal),
+					},
+				)
+				if installationErr != nil {
+					return resp, deliveredCommentIDs, issueSnapshot, agentSkillCount, builtinSkillCount,
+						h.rejectClaimSourceLoad(r.Context(), task, installationErr, "task channel installation", uuidToString(delivery.InstallationID))
+				}
+				resp.ChannelReportOnly = taskchannel.InstallationIsReportOnly(installation.Config)
+			} else if deliveryErr != nil && !errors.Is(deliveryErr, pgx.ErrNoRows) {
+				return resp, deliveredCommentIDs, issueSnapshot, agentSkillCount, builtinSkillCount,
+					h.rejectClaimSourceLoad(r.Context(), task, deliveryErr, "channel task delivery", uuidToString(task.ID))
+			}
+		}
 
 		// Issue-state delta (MUL-7344). Every field below already sits on the
 		// `issue` row this claim loaded, so this costs one extra read — the
@@ -3109,6 +3130,20 @@ func (h *Handler) buildClaimedTaskResponse(r *http.Request, task *db.AgentTaskQu
 			resp.ChatChannelType = delivery.ChannelType
 			resp.ChatType = delivery.ChatType
 			resp.ChatChannelDeliversFiles = h.channelDeliversFiles(delivery.ChannelType)
+			if delivery.ChannelType == string(taskchannel.TypeExternal) {
+				installation, installationErr := h.Queries.GetChannelInstallation(
+					r.Context(),
+					db.GetChannelInstallationParams{
+						ID:          delivery.InstallationID,
+						ChannelType: string(taskchannel.TypeExternal),
+					},
+				)
+				if installationErr != nil {
+					return resp, deliveredCommentIDs, issueSnapshot, agentSkillCount, builtinSkillCount,
+						h.rejectClaimSourceLoad(r.Context(), task, installationErr, "task channel installation", uuidToString(delivery.InstallationID))
+				}
+				resp.ChannelReportOnly = taskchannel.InstallationIsReportOnly(installation.Config)
+			}
 			if delivery.ChannelType == string(slack.TypeSlack) {
 				resp.ChatInThread = delivery.ChannelThreadID.Valid &&
 					delivery.ChannelThreadID.String != "" &&

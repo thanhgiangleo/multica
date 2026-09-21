@@ -3029,6 +3029,7 @@ func (h *Handler) CreateIssue(w http.ResponseWriter, r *http.Request) {
 	// be provided together.
 	var originType pgtype.Text
 	var originID pgtype.UUID
+	var agentOriginTaskID pgtype.UUID
 	if req.OriginType != nil || req.OriginID != nil {
 		if req.OriginType == nil || req.OriginID == nil {
 			writeError(w, http.StatusBadRequest, "origin_type and origin_id must be provided together")
@@ -3069,8 +3070,24 @@ func (h *Handler) CreateIssue(w http.ResponseWriter, r *http.Request) {
 				if task, terr := h.Queries.GetAgentTask(r.Context(), taskUUID); terr == nil && uuidToString(task.AgentID) == actualCreatorID {
 					originType = pgtype.Text{String: "agent_create", Valid: true}
 					originID = taskUUID
+					agentOriginTaskID = taskUUID
 				}
 			}
+		}
+	}
+
+	// Copy a channel task's immutable delivery route to its delegated assignee.
+	// Otherwise the assigned agent completes only on the board, never in Zalo.
+	var assignedTaskChannelDeliveryParentID pgtype.UUID
+	var assignedAgentRunFireAt time.Time
+	if agentOriginTaskID.Valid && assigneeType.Valid && assigneeType.String == "agent" && assigneeID.Valid {
+		if _, err := h.Queries.GetChannelTaskDelivery(r.Context(), agentOriginTaskID); err == nil {
+			assignedTaskChannelDeliveryParentID = agentOriginTaskID
+			// Post-commit promotion queues this immediately; deadline recovers a
+			// process interruption between delivery copy and promotion.
+			assignedAgentRunFireAt = time.Now().Add(time.Minute)
+		} else if !errors.Is(err, pgx.ErrNoRows) {
+			slog.Warn("load delegated channel task delivery failed", append(logger.RequestAttrs(r), "task_id", uuidToString(agentOriginTaskID), "error", err)...)
 		}
 	}
 
@@ -3127,9 +3144,11 @@ func (h *Handler) CreateIssue(w http.ResponseWriter, r *http.Request) {
 		LabelIDs:       labelIDs,
 		AllowDuplicate: req.AllowDuplicate,
 	}, service.IssueCreateOpts{
-		ActorID:          actualCreatorID,
-		AnalyticsAgentID: analyticsAgentID,
-		Platform:         func() string { p, _, _ := middleware.ClientMetadataFromContext(r.Context()); return p }(),
+		ActorID:                                 actualCreatorID,
+		AnalyticsAgentID:                        analyticsAgentID,
+		Platform:                                func() string { p, _, _ := middleware.ClientMetadataFromContext(r.Context()); return p }(),
+		AssignedAgentRunFireAt:                  assignedAgentRunFireAt,
+		AssignedTaskChannelDeliveryParentTaskID: assignedTaskChannelDeliveryParentID,
 		BroadcastPayload: func(issue db.Issue, atts []db.Attachment, labels []db.IssueLabel) map[string]any {
 			payload := issueToResponse(issue, prefix)
 			// The event other tabs receive must carry the category too — filling
