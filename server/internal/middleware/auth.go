@@ -83,6 +83,10 @@ func Auth(queries *db.Queries, patCache *auth.PATCache, cloudPAT *auth.CloudPATV
 			r.Header.Del("X-Agent-ID")
 			r.Header.Del("X-Task-ID")
 
+			if tryAPISidecarAuth(w, r, next) {
+				return
+			}
+
 			tokenString, fromCookie := extractToken(r)
 			if tokenString == "" {
 				slog.Debug("auth: no token found", "path", r.URL.Path)

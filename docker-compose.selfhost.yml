@@ -57,8 +57,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "127.0.0.1:${BACKEND_PORT:-${API_PORT:-${SERVER_PORT:-${PORT:-8080}}}}:8080"
+    expose:
+      - "8080"
     volumes:
       - backend_uploads:/app/data/uploads
     environment:
@@ -73,6 +73,8 @@ services:
       MAINTENANCE_PORT: ${MAINTENANCE_PORT:-}
       METRICS_ADDR: ${METRICS_ADDR:-}
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set to a strong random value — generate one with 'openssl rand -hex 32'}
+      MULTICA_API_SIDECAR_KEY: ${MULTICA_API_SIDECAR_KEY:-}
+      MULTICA_API_SIDECAR_REQUIRED: ${MULTICA_API_SIDECAR_REQUIRED:-false}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:3000}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
       RESEND_API_KEY: ${RESEND_API_KEY:-}

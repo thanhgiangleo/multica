@@ -41,7 +41,11 @@ func (h *Handler) ListTaskChannelInstallations(w http.ResponseWriter, r *http.Re
 }
 
 func requirePluginActor(w http.ResponseWriter, r *http.Request, actor pluginActor) bool {
-	if !actor.isMember() {
+	// A workspace API key is still resolved as the bound member so plugin scope
+	// authorization and live membership checks keep applying. The sidecar auth
+	// middleware stamps X-Actor-Source only after validating its mgs_ service
+	// credential, so this path cannot be reached by an ordinary browser session.
+	if !actor.isMember() || r.Header.Get("X-Actor-Source") == "api_sidecar" {
 		return true
 	}
 	publicapiv1.WriteProblem(w, r, http.StatusForbidden, "plugin_token_required", "this endpoint requires the Plugin install token")
