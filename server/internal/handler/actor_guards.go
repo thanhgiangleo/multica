@@ -112,7 +112,7 @@ func isMachineCredentialActor(r *http.Request) bool {
 	// client-supplied value before stamping its own, so a recognized value here
 	// is authoritative.
 	switch r.Header.Get("X-Actor-Source") {
-	case "task_token", "cloud_pat", "api_sidecar":
+	case "task_token", "cloud_pat":
 		return true
 	default:
 		return false

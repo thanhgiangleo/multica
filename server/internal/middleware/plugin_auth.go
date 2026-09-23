@@ -15,13 +15,6 @@ import (
 // against its store and rejects an invalid or expired credential.
 func PluginBearerOnly(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if tryAPISidecarAuth(w, r, next) {
-			return
-		}
-		if apiSidecarRequired() {
-			publicapiv1.WriteProblem(w, r, http.StatusUnauthorized, "api_sidecar_required", "public API access must use the API sidecar")
-			return
-		}
 		if !IsPluginBearerToken(BearerToken(r)) {
 			publicapiv1.WriteProblem(w, r, http.StatusUnauthorized, "plugin_bearer_required", "plugin bearer token required")
 			return
