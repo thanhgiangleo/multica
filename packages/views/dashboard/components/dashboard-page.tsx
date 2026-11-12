@@ -498,9 +498,9 @@ export function DashboardPage() {
           switching on the left, page-scoped filters on the right. Both tabs
           share the range and project filter, which is why the filters live
           here and not inside a tab. */}
-      <div className={cn("h-12 shrink-0 overflow-x-auto border-b [-webkit-overflow-scrolling:touch]", PAGE_GUTTER)}>
-        <div className="flex h-full w-max min-w-full items-center justify-between gap-2">
-          <TabsList variant="line" className="gap-0 p-0 group-data-horizontal/tabs:h-full">
+      <div className={cn("shrink-0 border-b", PAGE_GUTTER)}>
+        <div className="flex min-w-0 flex-col items-start gap-2 pb-2 sm:h-12 sm:flex-row sm:items-center sm:justify-between sm:pb-0">
+          <TabsList variant="line" className="h-12 shrink-0 gap-0 p-0 sm:group-data-horizontal/tabs:h-full">
             <TabsTrigger
               value="usage"
               className="h-full rounded-none px-2.5 text-label group-data-horizontal/tabs:after:bottom-0"
@@ -514,7 +514,7 @@ export function DashboardPage() {
               {t(($) => $.errors.title)}
             </TabsTrigger>
           </TabsList>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex max-w-full shrink-0 items-center gap-2 overflow-x-auto">
             <TimeRangeFilter days={days} onChange={setDays} />
             <ProjectFilter
               projects={projects}

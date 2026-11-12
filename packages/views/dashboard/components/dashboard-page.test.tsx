@@ -644,6 +644,15 @@ describe("DashboardPage — the two questions are separate tabs", () => {
     cleanup();
   });
 
+  it("stacks tabs and filters on narrow screens", () => {
+    renderDashboard();
+
+    const tabs = screen.getByRole("tablist");
+    const toolbar = tabs.parentElement;
+    expect(toolbar).toHaveClass("flex-col", "sm:flex-row");
+    expect(toolbar?.lastElementChild).toHaveClass("max-w-full", "overflow-x-auto");
+  });
+
   it("keeps failures off the Usage tab and reaches them in one click", async () => {
     const user = userEvent.setup();
     renderDashboard();
