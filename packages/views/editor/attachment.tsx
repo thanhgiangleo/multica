@@ -40,6 +40,8 @@ import { copyText } from "@multica/ui/lib/clipboard";
 import { api } from "@multica/core/api";
 import { useConfigStore } from "@multica/core/config";
 import type { Attachment as AttachmentRecord } from "@multica/core/types";
+import { attachmentDownloadPath } from "@multica/core/types/attachment-url";
+import { isPrivateWorkspaceUploadURL } from "./utils/private-upload-url";
 import { useT } from "../i18n";
 import { DeferredTooltip } from "../common/deferred-tooltip";
 import { useAttachmentDownloadResolver } from "./attachment-download-context";
@@ -210,9 +212,8 @@ function absolutizeMediaURL(rawUrl: string): string {
 // for rendering but must not replace durable Markdown references.
 //
 // Use known public/CDN URLs directly only when cdn_signed is false; unsigned URLs
-// on a private CDN fail even when the domain matches. Local /uploads paths remain
-// valid after origin normalization. Otherwise prefer the server's markdown_url,
-// then legacy storage URLs, then the original input.
+// on a private CDN fail even when the domain matches. Otherwise prefer the
+// server's markdown_url, then legacy storage URLs, then the original input.
 function pickInlineMediaURL(
   record: AttachmentRecord,
   fallback: string,
@@ -226,9 +227,17 @@ function pickInlineMediaURL(
   ) {
     return dl;
   }
-  if (!cdnSigned && storageURLMatchesCdnDomain(record.url, cdnDomain)) return record.url;
-  if (isSiteRelativeLocalUploadURL(record.url)) return record.url;
+  // Workspace uploads are gated by storage key, so even a URL whose host
+  // matches the configured CDN domain 302s to the auth-gated endpoint.
+  const privateUpload = isPrivateWorkspaceUploadURL(record.url);
+  if (!privateUpload && !cdnSigned && storageURLMatchesCdnDomain(record.url, cdnDomain)) {
+    return record.url;
+  }
+  // Prefer the durable API URL, which the re-sign hook upgrades for token
+  // clients that cannot authenticate a native resource load.
+  if (!privateUpload && isSiteRelativeLocalUploadURL(record.url)) return record.url;
   if (record.markdown_url) return record.markdown_url;
+  if (privateUpload) return attachmentDownloadPath(record.id);
   if (record.url) return record.url;
   return fallback;
 }
@@ -301,7 +310,7 @@ export function Attachment({
   // on deployments that have no signed URL to give — to an object URL built
   // from the authenticated byte fetch. Only the image branch renders a native
   // resource load, so only it opts into that byte fetch.
-  const { url: mediaUrl } = useResignedInlineMedia(
+  const { url: mediaUrl, pending } = useResignedInlineMedia(
     state.attachmentId,
     state.url,
     kind === "image",
@@ -363,6 +372,9 @@ export function Attachment({
           linkUrl={shareUrl}
           alt={state.filename}
           uploading={state.uploading}
+          // The picked URL is not loadable yet; painting it (or its alt text)
+          // is what shows the browser's broken-image glyph for a pasted image.
+          pending={pending && !state.uploading}
           width={state.width}
           height={state.height}
           editable={editable}
@@ -433,6 +445,7 @@ interface ImageAttachmentViewProps {
   linkUrl: string;
   alt: string;
   uploading: boolean;
+  pending: boolean;
   width?: number;
   height?: number;
   editable?: boolean;
@@ -448,6 +461,7 @@ function ImageAttachmentView({
   linkUrl,
   alt,
   uploading,
+  pending,
   width,
   height,
   editable,
@@ -472,7 +486,7 @@ function ImageAttachmentView({
   // selection / cursor placement and route preview through the explicit
   // Maximize button. The CSS rule `.image-figure[data-clickable="true"] {
   // cursor: zoom-in }` keys off this same flag for the cursor affordance.
-  const clickable = !editable && !uploading;
+  const clickable = !editable && !uploading && !pending;
 
   // DOM mirrors the original ReadonlyImage (span-only chain so it stays
   // valid HTML5 when rendered inside a markdown <p>). In editor surfaces
@@ -490,15 +504,31 @@ function ImageAttachmentView({
         contentEditable={false}
         onClick={clickable ? onView : undefined}
       >
-        <img
-          src={src || undefined}
-          alt={alt}
-          width={width}
-          height={height}
-          className={cn("image-content", uploading && "image-uploading")}
-          draggable={false}
-        />
-        {!uploading && src && (
+        {pending ? (
+          // No <img> at all while the authenticated URL is in flight. Safari
+          // and Chromium can paint the broken-image glyph for an img whose src
+          // was removed or whose blob was revoked, so an empty alt is not
+          // enough — a placeholder span reserves the box instead.
+          <span
+            className="image-content image-uploading"
+            style={
+              width && height
+                ? { width, aspectRatio: `${width} / ${height}` }
+                : undefined
+            }
+            aria-hidden="true"
+          />
+        ) : (
+          <img
+            src={src || undefined}
+            alt={alt}
+            width={width}
+            height={height}
+            className={cn("image-content", uploading && "image-uploading")}
+            draggable={false}
+          />
+        )}
+        {!uploading && !pending && src && (
           <span
             className="image-toolbar"
             onMouseDown={(e) => e.stopPropagation()}

@@ -1779,6 +1779,21 @@ func TestBuildMarkdownURL_PublicCdnAbsoluteURLReusedVerbatim(t *testing.T) {
 	}
 }
 
+func TestBuildMarkdownURL_LocalWorkspaceAbsoluteURLUsesAuthenticatedDownload(t *testing.T) {
+	t.Setenv("LOCAL_UPLOAD_DIR", t.TempDir())
+	t.Setenv("LOCAL_UPLOAD_BASE_URL", "https://api.multica.test")
+	local := storage.NewLocalStorageFromEnv()
+	if local == nil {
+		t.Fatal("NewLocalStorageFromEnv returned nil")
+	}
+	id := "4a4ae03f-4b71-4604-bfa8-c43055803a22"
+	h := &Handler{Storage: local, cfg: Config{PublicURL: "https://api.multica.test"}}
+	att := db.Attachment{Url: local.ObjectURL("workspaces/ws-1/" + id + ".png")}
+	if got, want := h.buildMarkdownURL(att, id), "https://api.multica.test/api/attachments/"+id+"/download"; got != want {
+		t.Fatalf("markdown_url = %q, want %q", got, want)
+	}
+}
+
 // MUL-3192 review must-fix 1 — `att.url` for a private S3 / R2 / MinIO
 // bucket is absolute https + unsigned but is NOT publicly readable. The
 // generic "absolute http(s) without signature" check would have wrongly
@@ -1958,14 +1973,14 @@ func TestIsDurablePublicURL(t *testing.T) {
 }
 
 // TestServeLocalUpload_RelaxesFrameAncestorsForPreview covers the self-hosted
-// local-disk case where document previews (PDF/HTML) are fetched straight from
+// user-scoped case where document previews (PDF/HTML) are fetched straight from
 // the public /uploads/* static route. That route inherits the global
 // "frame-ancestors 'none'" CSP from the middleware, which blocks iframe
 // previews; ServeLocalUpload must overwrite it with the same relaxed preview
 // policy the /api/attachments download endpoint uses. See MUL-3821 / #4477.
 func TestServeLocalUpload_RelaxesFrameAncestorsForPreview(t *testing.T) {
 	dir := t.TempDir()
-	key := "workspaces/ws-1/preview.pdf"
+	key := "users/user-1/preview.pdf"
 	full := filepath.Join(dir, filepath.FromSlash(key))
 	if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
 		t.Fatalf("mkdir: %v", err)
@@ -2002,6 +2017,43 @@ func TestServeLocalUpload_RelaxesFrameAncestorsForPreview(t *testing.T) {
 		t.Fatalf("body = %q, want %q", got, body)
 	}
 	requireAttachmentPreviewCSP(t, w.Header(), "https://app.example.test")
+}
+
+func TestServeLocalUpload_WorkspaceObjectsNeverStreamPublicly(t *testing.T) {
+	dir := t.TempDir()
+	id := "4a4ae03f-4b71-4604-bfa8-c43055803a22"
+	cases := []struct {
+		name       string
+		key        string
+		wantStatus int
+		wantPath   string
+	}{
+		{"attachment", "workspaces/ws-1/" + id + ".png", http.StatusFound, "/api/attachments/" + id + "/download"},
+		{"channel media", "workspaces/ws-1/telegram/private.png", http.StatusNotFound, ""},
+		{"unknown filename", "workspaces/ws-1/private.png", http.StatusNotFound, ""},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			full := filepath.Join(dir, filepath.FromSlash(tc.key))
+			if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(full, []byte("private bytes"), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			t.Setenv("LOCAL_UPLOAD_DIR", dir)
+			t.Setenv("LOCAL_UPLOAD_BASE_URL", "")
+			h := &Handler{Storage: storage.NewLocalStorageFromEnv()}
+			w := httptest.NewRecorder()
+			h.ServeLocalUpload(w, httptest.NewRequest(http.MethodGet, "/uploads/"+tc.key, nil))
+			if w.Code != tc.wantStatus || w.Header().Get("Location") != tc.wantPath {
+				t.Fatalf("status = %d, Location = %q; want %d, %q", w.Code, w.Header().Get("Location"), tc.wantStatus, tc.wantPath)
+			}
+			if strings.Contains(w.Body.String(), "private bytes") {
+				t.Fatal("public response streamed private workspace bytes")
+			}
+		})
+	}
 }
 
 // TestServeLocalUpload_NonLocalStorage404 guards the defensive branch: the

@@ -9,6 +9,7 @@ const {
   getAttachmentMock,
   getAttachmentBlobMock,
   getBaseUrlMock,
+  getTokenMock,
   downloadMock,
   openExternalMock,
   openByUrlMock,
@@ -21,6 +22,7 @@ const {
   // absolutize-specific suite below overrides this to simulate Desktop /
   // mobile webview, where the renderer's origin does NOT proxy /api.
   getBaseUrlMock: vi.fn(() => ""),
+  getTokenMock: vi.fn((): string | null => null),
   downloadMock: vi.fn(),
   openExternalMock: vi.fn(),
   openByUrlMock: vi.fn(),
@@ -32,6 +34,7 @@ vi.mock("@multica/core/api", () => ({
     getAttachment: getAttachmentMock,
     getAttachmentBlob: getAttachmentBlobMock,
     getBaseUrl: getBaseUrlMock,
+    getToken: getTokenMock,
   },
   PreviewTooLargeError: class extends Error {},
   PreviewUnsupportedError: class extends Error {},
@@ -176,6 +179,7 @@ beforeEach(() => {
   // the web app's same-origin proxy. Tests that simulate Desktop / mobile
   // webview override per-case via getBaseUrlMock.mockReturnValue(...).
   getBaseUrlMock.mockReturnValue("");
+  getTokenMock.mockReturnValue(null);
 
   originalCreateObjectURL = URL.createObjectURL;
   originalRevokeObjectURL = URL.revokeObjectURL;
@@ -313,38 +317,122 @@ describe("Attachment — image dispatch", () => {
     );
   });
 
-  it("prefers a local disk /uploads URL over API markdown in split-origin self-host", () => {
-    getBaseUrlMock.mockReturnValue("https://api.example.test");
+  it.each(["record", "url"] as const)(
+    "loads a private workspace upload through authenticated bytes in token-mode web (%s)",
+    async (inputKind) => {
+      getTokenMock.mockReturnValue("test-token");
+      const id = "11111111-2222-3333-4444-555555555555";
+      const markdownUrl = `/api/attachments/${id}/download`;
+      const att = makeRecord({
+        id,
+        url: `/uploads/workspaces/ws-1/${id}.png`,
+        markdown_url: markdownUrl,
+        download_url: markdownUrl,
+      });
+      resolverState.attachments = [att];
+      getAttachmentMock.mockResolvedValue(att);
+      const blob = new Blob(["png-bytes"], { type: "image/png" });
+      getAttachmentBlobMock.mockResolvedValue(blob);
+
+      renderWithQuery(
+        <Attachment
+          attachment={
+            inputKind === "record"
+              ? { kind: "record", attachment: att }
+              : { kind: "url", url: att.url, filename: att.filename, forceKind: "image" }
+          }
+        />,
+      );
+
+      await waitFor(() => {
+        expect(document.querySelector("img")?.getAttribute("src")).toBe(OBJECT_URL);
+      });
+      expect(getAttachmentMock).toHaveBeenCalledWith(id);
+      expect(getAttachmentBlobMock).toHaveBeenCalledWith(id);
+      expect(createObjectURLMock).toHaveBeenCalledWith(blob);
+    },
+  );
+
+  it("never paints the auth-gated endpoint while the bytes are still loading in token-mode web", async () => {
+    // A freshly pasted image settles from its local blob preview straight to
+    // the durable endpoint, and a token-mode <img> request for that endpoint
+    // 401s. Painting it while the authenticated byte fetch is in flight is
+    // what showed the browser's broken-image glyph before the real image.
+    getTokenMock.mockReturnValue("test-token");
     const id = "11111111-2222-3333-4444-555555555555";
-    const markdownUrl = `https://api.example.test/api/attachments/${id}/download`;
-    const mediaUrl = "https://api.example.test/uploads/workspaces/ws-1/shot.png";
+    const markdownUrl = `/api/attachments/${id}/download`;
     const att = makeRecord({
       id,
-      url: "/uploads/workspaces/ws-1/shot.png",
+      url: `/uploads/workspaces/ws-1/${id}.png`,
       markdown_url: markdownUrl,
-      download_url: `/api/attachments/${id}/download`,
+      download_url: markdownUrl,
+    });
+    resolverState.attachments = [att];
+    getAttachmentMock.mockResolvedValue(att);
+    getAttachmentBlobMock.mockReturnValue(new Promise(() => {}));
+
+    renderWithQuery(
+      <Attachment
+        attachment={{ kind: "url", url: markdownUrl, filename: "shot.png", forceKind: "image" }}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(getAttachmentBlobMock).toHaveBeenCalledWith(id);
+    });
+    // Safari can paint a broken-image glyph even for <img alt=""> with no
+    // src. The pending frame must contain no native image element at all.
+    expect(document.querySelector("img")).toBeNull();
+  });
+
+  it("uses the authorized markdown URL instead of a private local upload in cookie mode", () => {
+    const id = "11111111-2222-3333-4444-555555555555";
+    const markdownUrl = `/api/attachments/${id}/download`;
+    const att = makeRecord({
+      id,
+      url: `/uploads/workspaces/ws-1/${id}.png`,
+      markdown_url: markdownUrl,
+      download_url: markdownUrl,
     });
     resolverState.attachments = [att];
 
     renderWithQuery(
-      <Attachment
-        attachment={{
-          kind: "url",
-          url: markdownUrl,
-          filename: "shot.png",
-          forceKind: "image",
-        }}
-      />,
+      <Attachment attachment={{ kind: "url", url: att.url, filename: att.filename, forceKind: "image" }} />,
     );
 
-    expect(document.querySelector("img")?.getAttribute("src")).toBe(mediaUrl);
+    expect(document.querySelector("img")?.getAttribute("src")).toBe(markdownUrl);
+    expect(getAttachmentMock).not.toHaveBeenCalled();
+  });
 
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+  it("does not treat workspace uploads as public even if their host matches the CDN setting", () => {
+    configStore.setState({ cdnDomain: "api.example.test" });
+    const id = "11111111-2222-3333-4444-555555555555";
+    const att = makeRecord({
+      id,
+      url: `https://api.example.test/uploads/workspaces/ws-1/${id}.png`,
+      markdown_url: `/api/attachments/${id}/download`,
+      download_url: `/api/attachments/${id}/download`,
+    });
 
-    const imageSrcs = [...document.querySelectorAll("img")].map((img) =>
-      img.getAttribute("src"),
+    renderWithQuery(<Attachment attachment={{ kind: "record", attachment: att }} />);
+
+    expect(document.querySelector("img")?.getAttribute("src")).toBe(att.markdown_url);
+  });
+
+  it("uses the attachment endpoint when private upload metadata has no markdown URL", () => {
+    const id = "11111111-2222-3333-4444-555555555555";
+    const att = makeRecord({
+      id,
+      url: `/uploads/workspaces/ws-1/${id}.png`,
+      markdown_url: "",
+      download_url: `/api/attachments/${id}/download`,
+    });
+
+    renderWithQuery(<Attachment attachment={{ kind: "record", attachment: att }} />);
+
+    expect(document.querySelector("img")?.getAttribute("src")).toBe(
+      `/api/attachments/${id}/download`,
     );
-    expect(imageSrcs).toEqual([mediaUrl, mediaUrl]);
   });
 
   it("opens preview with the same resolved media URL when a reopened draft record has no download_url", () => {
@@ -411,6 +499,24 @@ describe("Attachment — image dispatch", () => {
     // Web (same-origin proxy / same-site cookie): the API endpoint loads
     // natively, so no metadata re-fetch is needed.
     expect(getAttachmentMock).not.toHaveBeenCalled();
+  });
+
+  it("re-signs a same-origin API URL without a resolver in token-mode web", async () => {
+    getTokenMock.mockReturnValue("test-token");
+    const id = "11111111-2222-3333-4444-555555555555";
+    const markdownUrl = `/api/attachments/${id}/download`;
+    const signed = "https://cdn.example.test/shot.png?Signature=fresh";
+    getAttachmentMock.mockResolvedValue(makeRecord({ id, download_url: signed }));
+
+    renderWithQuery(
+      <Attachment attachment={{ kind: "url", url: markdownUrl, filename: "shot.png", forceKind: "image" }} />,
+    );
+
+    await waitFor(() => {
+      expect(document.querySelector("img")?.getAttribute("src")).toBe(signed);
+    });
+    expect(getAttachmentMock).toHaveBeenCalledWith(id);
+    expect(getAttachmentBlobMock).not.toHaveBeenCalled();
   });
 
   it("re-signs a cross-origin API image URL in the web editor", async () => {
@@ -1172,7 +1278,8 @@ describe("Attachment — blob URL GC (MUL-7741)", () => {
       </QueryClientProvider>,
     );
     await new Promise((r) => setTimeout(r, 20));
-    expect(document.querySelector("img")?.getAttribute("src")).toBe(markdownUrl);
+    // The upgrade is in flight, so there is no loadable src yet — the point
+    // here is only that A's blob URL is not reused.
     expect(document.querySelector("img")?.getAttribute("src")).not.toBe(OBJECT_URL);
     expect(getAttachmentBlobMock).not.toHaveBeenCalled();
     unmountB();

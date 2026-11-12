@@ -194,6 +194,47 @@ function moveSelectionToParagraphAfterImage(editor: any, src: string) {
 }
 
 /**
+ * Release a pasted preview's object URL only once no <img> still shows it.
+ *
+ * Revoking it while the element is on screen — or still decoding — aborts that
+ * load and the browser paints its broken-image glyph: the flash users saw
+ * between the pasted preview and the uploaded image. The swap that installs
+ * the uploaded URL runs through React, so it lands a commit after the upload
+ * settles; a large screenshot is also often still decoding at that moment.
+ *
+ * So the bytes stay alive until the element that showed them is gone (the
+ * swap unmounts it or rewrites `src`). The poll plus timeout bound that wait
+ * so a surface that never remounts cannot leak the blob for the session.
+ */
+export function releaseObjectURLWhenUnused(editor: any, blobUrl: string) {
+  const revoke = () => URL.revokeObjectURL(blobUrl);
+  const doc: Document | undefined = editor?.view?.dom?.ownerDocument ?? undefined;
+  if (!doc || editor.isDestroyed) {
+    revoke();
+    return;
+  }
+  const inUse = () =>
+    Array.from(doc.querySelectorAll("img")).some((img) =>
+      [img.getAttribute("src"), img.currentSrc].includes(blobUrl),
+    );
+  // Even if the editor has no <img> yet, React can still be committing the
+  // inserted NodeView. Give it one frame before considering the blob unused.
+  const startedAt = Date.now();
+  const timer = setInterval(() => {
+    if (!inUse() || Date.now() - startedAt >= OBJECT_URL_REVOKE_FALLBACK_MS) {
+      clearInterval(timer);
+      revoke();
+    }
+  }, OBJECT_URL_REVOKE_POLL_MS);
+  if (typeof (timer as unknown as { unref?: () => void }).unref === "function") {
+    (timer as unknown as { unref: () => void }).unref();
+  }
+}
+
+const OBJECT_URL_REVOKE_POLL_MS = 50;
+const OBJECT_URL_REVOKE_FALLBACK_MS = 10_000;
+
+/**
  * Shared upload flow: insert blob preview → upload → replace with real URL.
  * Used by both paste/drop (at cursor) and button upload (at end of doc).
  */
@@ -237,7 +278,7 @@ export async function uploadAndInsertFile(
     } catch {
       if (!editor.isDestroyed) removeUploadNode(editor, uploadId);
     } finally {
-      URL.revokeObjectURL(blobUrl);
+      releaseObjectURLWhenUnused(editor, blobUrl);
     }
   } else {
     // Non-image: insert skeleton fileCard → upload → finalize with real URL
