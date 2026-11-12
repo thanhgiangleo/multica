@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import type { Attachment } from "@multica/core/types";
+import { attachmentDownloadPath } from "@multica/core/types/attachment-url";
 import { resolvePublicFileUrl } from "@multica/core/workspace/avatar-url";
 import { cn } from "@multica/ui/lib/utils";
 import { useResignedInlineMedia } from "../../../editor/hooks/use-inline-media-url";
+import { isPrivateWorkspaceUploadURL } from "../../../editor/utils/private-upload-url";
 import { fileTypeLabel, getPreviewKind } from "../../../editor/utils/preview";
 import { fileIcon } from "../../../editor/utils/file-icon";
 
@@ -70,7 +72,9 @@ function ImageThumbnail({
   className?: string;
 }) {
   const picked =
-    attachment.download_url || attachment.markdown_url || attachment.url;
+    [attachment.download_url, attachment.markdown_url, attachment.url].find(
+      (url) => url && !isPrivateWorkspaceUploadURL(url),
+    ) || attachmentDownloadPath(attachment.id);
   const { url, pending } = useResignedInlineMedia(
     attachment.id,
     resolvePublicFileUrl(picked) ?? picked,

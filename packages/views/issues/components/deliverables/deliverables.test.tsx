@@ -40,6 +40,7 @@ vi.mock("@multica/core/workspace/avatar-url", () => ({
 vi.mock("../../../platform", () => ({ useImmersiveMode: () => {} }));
 
 import { DeliverablesSection } from "./deliverables-section";
+import { DeliverableThumbnail } from "./deliverable-thumbnail";
 import { DeliverablesOverview } from "./deliverables-overview";
 import { useDeliverableDetails, type DeliverableOrigin } from "./deliverable-details";
 
@@ -272,6 +273,43 @@ describe("DeliverablesOverview focus", () => {
     fireEvent.click(within(dialog).getByRole("button", { name: "Close" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     await waitFor(() => expect(document.activeElement).toBe(opener));
+  });
+});
+
+describe("DeliverableThumbnail", () => {
+  it("keeps a signed CDN URL in the workspace upload namespace", () => {
+    const id = "11111111-2222-3333-4444-555555555555";
+    const signed = `https://cdn.example.test/uploads/workspaces/ws-1/${id}.png?Signature=fresh`;
+    const shot = attachment({
+      id,
+      filename: "shot.png",
+      content_type: "image/png",
+      url: `/uploads/workspaces/ws-1/${id}.png`,
+      download_url: signed,
+      markdown_url: `/api/attachments/${id}/download`,
+    });
+
+    const { container } = renderWithI18n(withQuery(<DeliverableThumbnail attachment={shot} />));
+
+    expect(container.querySelector("img")?.getAttribute("src")).toBe(signed);
+  });
+
+  it("renders the attachment endpoint instead of a private storage URL", () => {
+    const id = "11111111-2222-3333-4444-555555555555";
+    const shot = attachment({
+      id,
+      filename: "shot.png",
+      content_type: "image/png",
+      url: `/uploads/workspaces/ws-1/${id}.png`,
+      download_url: "",
+      markdown_url: "",
+    });
+
+    const { container } = renderWithI18n(withQuery(<DeliverableThumbnail attachment={shot} />));
+
+    expect(container.querySelector("img")?.getAttribute("src")).toBe(
+      `/api/attachments/${id}/download`,
+    );
   });
 });
 

@@ -235,7 +235,7 @@ func (h *Handler) buildMarkdownURL(a db.Attachment, id string) string {
 	relPath := util.AttachmentDownloadPath(id)
 	publicURL := strings.TrimRight(h.cfg.PublicURL, "/")
 
-	if h.storageURLIsPubliclyReadable(a.Url) {
+	if h.storageURLIsPubliclyReadable(a.Url) && !h.isLocalWorkspaceObject(a.Url) {
 		return a.Url
 	}
 
@@ -243,6 +243,17 @@ func (h *Handler) buildMarkdownURL(a db.Attachment, id string) string {
 		return publicURL + relPath
 	}
 	return relPath
+}
+
+func (h *Handler) isLocalWorkspaceObject(rawURL string) bool {
+	if _, ok := h.Storage.(*storage.LocalStorage); !ok {
+		return false
+	}
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		return false
+	}
+	return strings.Contains(parsed.Path, "/uploads/"+workspaceUploadNamespace)
 }
 
 // storageURLIsPubliclyReadable returns true when the deployment has signaled
@@ -958,21 +969,31 @@ func shouldProxyAttachmentURL(rawURL string) bool {
 	return false
 }
 
-// ServeLocalUpload serves a local-disk object from the public /uploads/*
-// route. It carries the same preview security headers as the authenticated
-// download endpoint so self-hosted deployments — same-origin or split
-// frontend/backend origins — can inline-render images and iframe-preview
-// documents (PDF/HTML) fetched straight from the static route. Without these
-// headers the global "frame-ancestors 'none'" policy blocks those previews.
-// See MUL-3821 / #4477.
+// ServeLocalUpload serves user-scoped local objects directly. Legacy workspace
+// URLs with an attachment ID redirect to the authenticated download route;
+// channel media keys have no attachment ID and fail closed. Never stream
+// workspace bytes from this public route.
 func (h *Handler) ServeLocalUpload(w http.ResponseWriter, r *http.Request) {
 	local, ok := h.Storage.(*storage.LocalStorage)
 	if !ok {
 		http.NotFound(w, r)
 		return
 	}
-	h.setAttachmentPreviewSecurityHeaders(w)
 	key := strings.TrimPrefix(r.URL.Path, "/uploads/")
+	cleanKey := strings.TrimPrefix(path.Clean("/"+key), "/")
+	if cleanKey == "workspaces" || strings.HasPrefix(cleanKey, "workspaces/") {
+		parts := strings.Split(cleanKey, "/")
+		if len(parts) == 3 {
+			if id, ok := attachmentIDFromStorageKey(cleanKey); ok {
+				downloadURL := strings.TrimRight(h.cfg.PublicURL, "/") + util.AttachmentDownloadPath(uuidToString(id))
+				http.Redirect(w, r, downloadURL, http.StatusFound)
+				return
+			}
+		}
+		http.NotFound(w, r)
+		return
+	}
+	h.setAttachmentPreviewSecurityHeaders(w)
 	local.ServeFile(w, r, key)
 }
 

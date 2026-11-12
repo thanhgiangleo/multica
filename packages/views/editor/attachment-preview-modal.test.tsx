@@ -36,6 +36,7 @@ const {
   getAttachmentMock,
   downloadMock,
   getBaseUrlMock,
+  getTokenMock,
   FakePreviewTooLargeError,
   FakePreviewUnsupportedError,
 } = vi.hoisted(() => {
@@ -60,6 +61,7 @@ const {
     // Default to the web shape (empty base, same-origin). Tests covering
     // the desktop-renderer / standalone-shell case override per-test.
     getBaseUrlMock: vi.fn(() => ""),
+    getTokenMock: vi.fn((): string | null => null),
     FakePreviewTooLargeError,
     FakePreviewUnsupportedError,
   };
@@ -70,6 +72,7 @@ vi.mock("@multica/core/api", () => ({
     getAttachmentTextContent: getAttachmentTextContentMock,
     getAttachment: getAttachmentMock,
     getBaseUrl: getBaseUrlMock,
+    getToken: getTokenMock,
   },
   PreviewTooLargeError: FakePreviewTooLargeError,
   PreviewUnsupportedError: FakePreviewUnsupportedError,
@@ -232,6 +235,7 @@ beforeEach(() => {
   // Default to web's same-origin empty base so existing absolute-URL tests
   // remain unaffected by the relative-URL resolution added in normalize().
   getBaseUrlMock.mockReturnValue("");
+  getTokenMock.mockReturnValue(null);
 });
 
 afterEach(() => {
@@ -266,6 +270,47 @@ describe("AttachmentPreviewModal — dispatch", () => {
     const img = document.querySelector("img");
     expect(img?.getAttribute("src")).toBe(att.markdown_url);
     expect(img?.getAttribute("src")).not.toContain("Signature=");
+  });
+
+  it("loads a gallery image with a same-origin API URL in token mode", async () => {
+    getTokenMock.mockReturnValue("test-token");
+    const id = "11111111-2222-3333-4444-555555555555";
+    const stable = `/api/attachments/${id}/download`;
+    const signed = "https://cdn.example.test/shot.png?Signature=fresh";
+    const att = makeAttachment({
+      id,
+      filename: "shot.png",
+      content_type: "image/png",
+      url: `/uploads/workspaces/ws-1/${id}.png`,
+      download_url: stable,
+      markdown_url: stable,
+    });
+    getAttachmentMock.mockResolvedValue(makeAttachment({ ...att, download_url: signed }));
+
+    render(<AttachmentPreviewModal source={{ kind: "full", attachment: att }} open onClose={() => {}} />);
+
+    await waitFor(() => {
+      expect(document.querySelector("img")?.getAttribute("src")).toBe(signed);
+    });
+    expect(getAttachmentMock).toHaveBeenCalledWith(id);
+  });
+
+  it("does not point the viewer at private storage when metadata omits download URLs", () => {
+    const id = "11111111-2222-3333-4444-555555555555";
+    const att = makeAttachment({
+      id,
+      filename: "shot.png",
+      content_type: "image/png",
+      url: `/uploads/workspaces/ws-1/${id}.png`,
+      download_url: "",
+      markdown_url: "",
+    });
+
+    render(<AttachmentPreviewModal source={{ kind: "full", attachment: att }} open onClose={() => {}} />);
+
+    expect(document.querySelector("img")?.getAttribute("src")).toBe(
+      `/api/attachments/${id}/download`,
+    );
   });
 
   it("renders an <img> from a URL-only source for image filenames", () => {

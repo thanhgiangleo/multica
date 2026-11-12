@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@multica/core/api";
 import { attachmentIdFromDownloadURL } from "@multica/core/types/attachment-url";
+import { isPrivateWorkspaceUploadURL } from "../utils/private-upload-url";
 
 // Keep refetches well inside the server's signed-URL TTL (30 min default,
 // server/internal/handler/file.go) so a re-render never serves an expired
@@ -54,7 +55,8 @@ export function __resetInlineMediaBlobCacheForTests(): void {
 // mobile webview, and split-origin web deployments cannot rely on that: no
 // cookie is attached and the Bearer token cannot be put on a native resource
 // fetch, so the image 401s. Desktop/mobile expose a non-empty
-// `api.getBaseUrl()`; web can also hit this path when the server emits an
+// `api.getBaseUrl()`; token-mode web clients need the same upgrade even on
+// their own origin. Web can also hit this path when the server emits an
 // absolute markdown URL whose origin differs from the current page.
 //
 // For them, fetch fresh attachment metadata through the authenticated API —
@@ -96,11 +98,17 @@ export function useResignedInlineMedia(
       return false;
     }
   })();
+  // A private workspace upload has no attachment id in its URL (it is just
+  // the storage key), but a resolved record supplies one.
   const needsResign =
     !!resignAttachmentId &&
     !!pickedUrl &&
-    idFromPickedUrl !== undefined &&
-    ((api.getBaseUrl?.() ?? "") !== "" || isCrossOriginWebURL);
+    (idFromPickedUrl !== undefined || isPrivateWorkspaceUploadURL(pickedUrl)) &&
+    // Token-mode web is the one same-origin case: its <img> requests carry no
+    // cookie, so the stable endpoint 401s there just like on other origins.
+    ((api.getBaseUrl?.() ?? "") !== "" ||
+      isCrossOriginWebURL ||
+      (api.getToken?.() ?? null) !== null);
 
   const { data: fresh, isError: freshFailed } = useQuery({
     queryKey: ["attachment-inline-resign", resignAttachmentId],

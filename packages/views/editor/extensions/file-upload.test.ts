@@ -154,6 +154,35 @@ function firstImageAttrs(editor: Editor): Record<string, unknown> | null {
 }
 
 describe("uploadAndInsertFile", () => {
+  it("does not revoke the preview before React has committed the upload swap", async () => {
+    const editor = makeEditor();
+    const file = new File(["image"], "photo.png", { type: "image/png" });
+    await uploadAndInsertFile(
+      editor,
+      file,
+      async () => makeUpload({ id: "attachment-1", link: FINAL_URL, filename: "photo.png" }),
+    );
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+    await vi.waitFor(() => expect(URL.revokeObjectURL).toHaveBeenCalledWith(BLOB_URL));
+  });
+
+  it("keeps the pasted blob alive until its image leaves the editor DOM", async () => {
+    const editor = makeEditor();
+    const file = new File(["image"], "photo.png", { type: "image/png" });
+    const upload = deferred<UploadResult | null>();
+    const task = uploadAndInsertFile(editor, file, () => upload.promise);
+    const preview = document.createElement("img");
+    preview.src = BLOB_URL;
+    document.body.appendChild(preview);
+
+    upload.resolve(makeUpload({ id: "attachment-1", link: FINAL_URL, filename: "photo.png" }));
+    await task;
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+
+    preview.remove();
+    await vi.waitFor(() => expect(URL.revokeObjectURL).toHaveBeenCalledWith(BLOB_URL));
+  });
+
   it("lets typing continue in the trailing paragraph after pasted image upload preview", async () => {
     const editor = makeEditor();
     const upload = deferred<UploadResult | null>();

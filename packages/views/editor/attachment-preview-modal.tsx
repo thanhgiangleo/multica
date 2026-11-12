@@ -55,6 +55,7 @@ import {
   type IconComponent,
 } from "@multica/ui/icons";
 import type { Attachment } from "@multica/core/types";
+import { attachmentDownloadPath } from "@multica/core/types/attachment-url";
 import { paths, useWorkspaceSlug } from "@multica/core/paths";
 import { createShortcutChord } from "@multica/core/shortcuts";
 import { cn } from "@multica/ui/lib/utils";
@@ -82,6 +83,7 @@ import {
   type PreviewKind,
 } from "./utils/preview";
 import { parseStructured } from "./utils/parse-structured";
+import { isPrivateWorkspaceUploadURL } from "./utils/private-upload-url";
 import { formatBytes } from "../common/format-bytes";
 import { ShortcutKeycaps } from "../common/shortcut-keycaps";
 import { useDownloadAttachment } from "./use-download-attachment";
@@ -155,9 +157,16 @@ interface PreviewState {
   kind: PreviewKind | null;
 }
 
+// Workspace uploads and the stable attachment endpoint both need auth; only
+// the latter carries an id the renderer can re-sign. Prefer it over the
+// storage path so the viewer never paints a 302-then-401 as a broken image.
 function resolvePreviewMediaUrl(attachment: Attachment): string {
-  const raw =
-    attachment.download_url || attachment.markdown_url || attachment.url;
+  const candidates = [
+    attachment.download_url,
+    attachment.markdown_url,
+    attachment.url,
+  ].filter((url) => url && !isPrivateWorkspaceUploadURL(url));
+  const raw = candidates[0] || attachmentDownloadPath(attachment.id);
   return resolvePublicFileUrl(raw) ?? raw;
 }
 
