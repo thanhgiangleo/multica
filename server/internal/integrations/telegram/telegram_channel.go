@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/multica-ai/multica/server/internal/integrations/channel"
 )
 
@@ -33,6 +34,9 @@ type telegramChannel struct {
 	// stored (see ChannelDeps.AcceptsMedia). Without it media keeps getting
 	// the unsupported notice instead of a placeholder nothing stands behind.
 	acceptsMedia bool
+	// pool backs the operator-only /get_multica_otp command (see zbs_otp.go).
+	// Nil disables the command.
+	pool *pgxpool.Pool
 }
 
 // pollRetryDelay spaces retries after a transient getUpdates failure inside
@@ -122,6 +126,11 @@ func (c *telegramChannel) Connect(ctx context.Context) error {
 // location, …), they get a courteous notice in a private chat or when
 // explicitly addressed to the bot in a group.
 func (c *telegramChannel) dispatch(ctx context.Context, u Update) error {
+	if u.Message != nil && c.interceptOTPCommand(ctx, u.Message) {
+		// A consumed operator command is never redelivered and never becomes a
+		// turn: the reply is the whole outcome.
+		return nil
+	}
 	msg, ok := inboundFromUpdateWithContext(u, c.botID, c.botUsername, c.recent)
 	if !ok {
 		return nil
@@ -255,6 +264,8 @@ type ChannelDeps struct {
 	// sets it from the same condition, so the loop never accepts a photo the
 	// pipeline cannot keep.
 	AcceptsMedia bool
+	// Pool backs the operator-only /get_multica_otp command. Nil disables it.
+	Pool *pgxpool.Pool
 }
 
 // RegisterTelegram registers the per-installation Telegram Factory so the
@@ -294,6 +305,7 @@ func newTelegramFactory(deps ChannelDeps) channel.Factory {
 			logger:       logger,
 			recent:       newRecentContextBuffer(deps.RecentContextSize),
 			acceptsMedia: deps.AcceptsMedia,
+			pool:         deps.Pool,
 		}, nil
 	}
 }

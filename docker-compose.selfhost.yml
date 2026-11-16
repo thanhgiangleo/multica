@@ -102,6 +102,10 @@ services:
       COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
       APP_ENV: ${APP_ENV:-production}
       MULTICA_DEV_VERIFICATION_CODE: ${MULTICA_DEV_VERIFICATION_CODE:-}
+      # Comma-separated Telegram user ids allowed to run the operator-only
+      # /get_multica_otp command in a private chat with the bot. Empty (the
+      # default) disables the command entirely.
+      MULTICA_OTP_ADMIN_TELEGRAM_IDS: ${MULTICA_OTP_ADMIN_TELEGRAM_IDS:-}
       MULTICA_APP_URL: ${MULTICA_APP_URL:-http://localhost:3000}
       MULTICA_DATABASE_STARTUP_TIMEOUT: ${MULTICA_DATABASE_STARTUP_TIMEOUT:-3m}
       MULTICA_DATABASE_CONNECT_TIMEOUT: ${MULTICA_DATABASE_CONNECT_TIMEOUT:-5s}
