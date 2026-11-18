@@ -557,7 +557,9 @@ async fn list(
                     &options.before.is_some(),
                     &options.before,
                     &options.before_id,
-                    &(recent as i32),
+                    // The Go query keeps `LIMIT $6` uncast, so PostgreSQL infers
+                    // int8 for it; bind int8 rather than widening the SQL.
+                    &(recent as i64),
                 ],
             )
             .await

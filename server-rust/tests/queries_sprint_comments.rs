@@ -1100,3 +1100,15 @@ async fn comments_recent_over_twenty_thousand_is_complete_and_cursor_isolated() 
     assert_eq!(status, StatusCode::OK, "{body}");
     assert_eq!(ids(&body), vec![old]);
 }
+
+// The shipped recent-window SQL must stay byte-identical to the frozen Go
+// oracle (server/pkg/db/generated/comment.sql.go `listRecentThreadCommentsForIssue`).
+// The differential test binds the fixture, so a drifted production file would
+// silently stop being what the oracle comparison actually exercises.
+#[test]
+fn recent_sql_is_byte_identical_to_frozen_go_oracle() {
+    assert_eq!(
+        include_str!("../src/api/queries_sprint_comments_recent.sql"),
+        include_str!("queries_sprint_comments_frozen_recent.sql")
+    );
+}
