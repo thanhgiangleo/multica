@@ -6,11 +6,12 @@
 # a cold build or a long suite cannot consume another batch's 480s gate window.
 #
 # The v52 checkpoint split the suites into six batches. Two v52 test targets no
-# longer exist in the integrated tree and their behavior is covered elsewhere:
-#   - queries_sprint_limit_usage -> tests/p0_daemon_claim_db.rs
-#     (issue_limit_usage_degrades_to_204_and_caps_reported_usage) plus the
-#     issue_read handler tests; run that target separately with
-#     QUERIES_SPRINT_ONLY_LIMIT_USAGE=1.
+# longer exist in the integrated tree:
+#   - queries_sprint_limit_usage: no ZBSI-69-owned DB test exists in this tree.
+#     The only limit-usage DB test is issue_limit_usage_degrades_to_204_and_
+#     caps_reported_usage in tests/p0_daemon_claim_db.rs, which asserts the
+#     ZBSI-100 database name and refuses to run here. Limit-usage therefore has
+#     no verified DB coverage in this gate; do not count it as ported.
 #   - queries_sprint_table_sorts -> sort matrices inside
 #     tests/queries_sprint_table_rows.rs and tests/queries_sprint_issue_list.rs.
 # No suite is silently skipped: every target present in the tree is in a batch.
@@ -70,10 +71,6 @@ if [[ "${QUERIES_SPRINT_ONLY_TASK_SNAPSHOT:-}" == 1 ]]; then
 fi
 if [[ "${QUERIES_SPRINT_ONLY_DETAIL:-}" == 1 ]]; then
   RUST_API_TEST_DATABASE_URL="$url" "$cargo" test --locked --offline --test queries_sprint_issue_detail -- --ignored --nocapture --test-threads=1 || result=$?
-  exit "$result"
-fi
-if [[ "${QUERIES_SPRINT_ONLY_LIMIT_USAGE:-}" == 1 ]]; then
-  RUST_API_TEST_DATABASE_URL="$url" "$cargo" test --locked --offline --test p0_daemon_claim_db issue_limit_usage -- --ignored --nocapture --test-threads=1 || result=$?
   exit "$result"
 fi
 if [[ "${QUERIES_SPRINT_ONLY_GROUPS:-}" == 1 ]]; then

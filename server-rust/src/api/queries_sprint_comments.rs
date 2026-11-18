@@ -446,9 +446,9 @@ async fn list(
         .start()
         .await
         .map_err(db_error)?;
-    tx.batch_execute("SET LOCAL statement_timeout = 8000")
-        .await
-        .map_err(db_error)?;
+    // The Go handler sets no statement timeout here. The recent-window query is
+    // a recursive traversal whose plan is quadratic on very large threads, so a
+    // cap turns a slow but complete page into a 504; parity keeps it unbounded.
     if tx
         .query_opt(
             "SELECT id FROM issue WHERE workspace_id=$1 AND id=$2",
