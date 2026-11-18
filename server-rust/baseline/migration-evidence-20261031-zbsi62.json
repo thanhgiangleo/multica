@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-31",
+  "scope": "three pre-migration data hooks on synthetic historic data, not a production or managed DB certification",
+  "environment": {
+    "owned_container": "multica-rust-zbsi62, pgvector/pgvector:pg17, host network, 127.0.0.1:15462",
+    "databases": [
+      "multica_zbsi62",
+      "multica_zbsi62_upgrade",
+      "multica_zbsi62_fresh"
+    ],
+    "managed_dev": "not verified; original Docker address pool exhaustion; stale azox_multica-225 manifest points to localhost:5432 now listening but manifest credential is rejected; did not delete unknown DB"
+  },
+  "historical_upgrade": {
+    "stages": [
+      102,
+      190,
+      197,
+      430,
+      619
+    ],
+    "at_102": "inserted synthetic user/workspace/runtime/agent/task and usage from 2 hours earlier; 103 SQL guard failed before hook",
+    "at_190": "legacy task originator set with null accountable and null source",
+    "at_197": "198 VALIDATE failed before hook",
+    "at_430": "legacy first-party chat inserted with null explicit-origin marker",
+    "final": "Rust upstream 619 and ZBS 44 ledger entries; hourly rows >0; task attribution matched originator; chat explicit origin matched created_at; rerun applied 0 and skipped 619+44"
+  },
+  "fresh": {
+    "upstream_applied": 619,
+    "upstream_conditional": 5,
+    "zbs_applied": 44,
+    "rerun_applied": 0,
+    "rerun_skipped": 663
+  },
+  "schema_parity": {
+    "method": "pg_dump --schema-only --no-owner --no-privileges, remove random restrict/unrestrict lines",
+    "fresh_and_upgrade_lines_each": 8675,
+    "fresh_and_upgrade_sha256": "8c8860c4ad87dbc1c2c16b66663f15368a6f91ba5510baad1b56d174ef7060b9"
+  },
+  "frozen_manifest": {
+    "sql_files": 1326,
+    "sql_sha256_mismatches": 0,
+    "staged_go_source_manifest_files": 3830,
+    "source_sha256_mismatches": 0
+  },
+  "checks": {
+    "rust_default": "15 passed, 13 ignored DB tests; no DB tests counted as passed in default run",
+    "rust_db": "7/7 original migration regressions; 5/5 hook and rollback guard regressions; 1/1 full historical upgrade",
+    "rust_clippy": "all targets -D warnings passed",
+    "rust_release": "passed",
+    "go": "four named concurrent-index regression patterns passed",
+    "format": "rustfmt completed"
+  },
+  "negative": {
+    "103": "failed monthly slice leaves prior slice committed, watermark unchanged; retry completes",
+    "198": "failed second 5000-row batch leaves ledger absent; retry reconciles remaining row and preserves source",
+    "431": "failed second chat page leaves ledger absent; retry resumes and excludes channel-origin rows",
+    "rollback": "source-context data and retired channel route block down without dropping ledger",
+    "transaction": "original mid-file DDL rollback and concurrent-index invalid cleanup regressions passed"
+  },
+  "gates": {
+    "managed_dev": "not verified; no Docker daemon/network changes attempted",
+    "full_down_historical": "not run",
+    "auth_reads": "unimplemented",
+    "benchmark": "not run",
+    "real_agent": "not authorized/not run",
+    "commit_push_pr": "not performed",
+    "production": "not accessed"
+  },
+  "cleanup": "run-owned multica_zbsi62, multica_zbsi62_fresh and multica_zbsi62_upgrade databases dropped; multica-rust-zbsi62 container and anonymous volume removed. Stale azox_multica-225 manifest retained: configured credential cannot authenticate to localhost:5432, so cannot verify DB ownership."
+}

@@ -1,0 +1,378 @@
+[
+  {
+    "accepted": true,
+    "input": "https://example.com/"
+  },
+  {
+    "accepted": true,
+    "input": "https://EXAMPLE.COM/"
+  },
+  {
+    "accepted": true,
+    "input": "https://example%25.com/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo%25bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://%25/"
+  },
+  {
+    "accepted": true,
+    "input": "https://a%25b/"
+  },
+  {
+    "accepted": false,
+    "input": "https://a%41b/"
+  },
+  {
+    "accepted": false,
+    "input": "https://a%b/"
+  },
+  {
+    "accepted": false,
+    "input": "https://exam ple.com/"
+  },
+  {
+    "accepted": true,
+    "input": "https://ü.example/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo_bar.com/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo..bar/"
+  },
+  {
+    "accepted": false,
+    "input": "https://foo|bar/"
+  },
+  {
+    "accepted": false,
+    "input": "https://foo^bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo!bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo$bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo\u0026bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo,bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo;bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo=bar/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo:/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo:99999/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo:0/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo:00000001/"
+  },
+  {
+    "accepted": false,
+    "input": "https://foo:-1/"
+  },
+  {
+    "accepted": false,
+    "input": "https://foo:+1/"
+  },
+  {
+    "accepted": false,
+    "input": "https://foo:xyz/"
+  },
+  {
+    "accepted": false,
+    "input": "https://foo:１/"
+  },
+  {
+    "accepted": true,
+    "input": "https://[::1]/"
+  },
+  {
+    "accepted": true,
+    "input": "https://[::1%25en0]/"
+  },
+  {
+    "accepted": true,
+    "input": "https://[invalid]/"
+  },
+  {
+    "accepted": true,
+    "input": "https://[ü]/"
+  },
+  {
+    "accepted": true,
+    "input": "https://[]/"
+  },
+  {
+    "accepted": true,
+    "input": "https://[::1]:123456789/"
+  },
+  {
+    "accepted": false,
+    "input": "https://[::1]:-1/"
+  },
+  {
+    "accepted": false,
+    "input": "https://example.com/a%ZZ"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a%00"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a%2F"
+  },
+  {
+    "accepted": false,
+    "input": "https://example.com/a%"
+  },
+  {
+    "accepted": false,
+    "input": "https://example.com/a%2"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a b"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a\\b"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a|b"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a^b"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a{b}"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a[b]"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/é"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a%FF"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a%25"
+  },
+  {
+    "accepted": false,
+    "input": "https://example.com/a#f%"
+  },
+  {
+    "accepted": false,
+    "input": "https://example.com/a#f%2"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a?x=%ZZ"
+  },
+  {
+    "accepted": true,
+    "input": "https://example.com/a#f b"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@example.com/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@EXAMPLE.COM/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@example%25.com/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo%25bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@%25/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@a%25b/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@a%41b/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@a%b/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@exam ple.com/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@ü.example/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo_bar.com/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo..bar/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@foo|bar/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@foo^bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo!bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo$bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo\u0026bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo,bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo;bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo=bar/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo:/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo:99999/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo:0/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@foo:00000001/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@foo:-1/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@foo:+1/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@foo:xyz/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@foo:１/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@[::1]/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@[::1%25en0]/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@[invalid]/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@[ü]/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@[]/"
+  },
+  {
+    "accepted": true,
+    "input": "http://u:p@[::1]:123456789/"
+  },
+  {
+    "accepted": false,
+    "input": "http://u:p@[::1]:-1/"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo@bar@host/path"
+  },
+  {
+    "accepted": false,
+    "input": "https://host@/path"
+  },
+  {
+    "accepted": true,
+    "input": "https://host@@foo/path"
+  },
+  {
+    "accepted": false,
+    "input": "https://[abc]x/path"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo%25bar/path"
+  },
+  {
+    "accepted": true,
+    "input": "https://foo%2525bar/path"
+  }
+]

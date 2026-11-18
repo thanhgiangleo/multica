@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "baseline": {
+    "passed": true,
+    "selected": 2,
+    "executed": 2,
+    "unexecuted": 0,
+    "cases": [
+      {
+        "case": "empty-message-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 7.6062059961259365,
+        "contract_sha256": "1e1364272a1317fb23ce8dee7dbfb98c1233a4572867766df97636477bf88ef3"
+      },
+      {
+        "case": "pending-tasks-has-any",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 5.312259774655104,
+        "contract_sha256": "1e64c8f1b6a273dd68df3c38dac6299f65aaa7b9aebbf9278ee6deaee0a05121"
+      }
+    ]
+  },
+  "candidate": {
+    "passed": true,
+    "selected": 2,
+    "executed": 2,
+    "unexecuted": 0,
+    "cases": [
+      {
+        "case": "empty-message-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 8.329000789672136,
+        "contract_sha256": "1e1364272a1317fb23ce8dee7dbfb98c1233a4572867766df97636477bf88ef3"
+      },
+      {
+        "case": "pending-tasks-has-any",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 8.801797404885292,
+        "contract_sha256": "1e64c8f1b6a273dd68df3c38dac6299f65aaa7b9aebbf9278ee6deaee0a05121"
+      }
+    ]
+  },
+  "differences": {}
+}

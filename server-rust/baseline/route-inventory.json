@@ -1,0 +1,4326 @@
+{
+  "warning": "Raw router registrations, not fully expanded paths or parity evidence",
+  "routes": [
+    {
+      "line": 109,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathContext",
+      "handler_expression": "h.GetPluginContext)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 110,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssue",
+      "handler_expression": "h.GetPluginIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 111,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssue",
+      "handler_expression": "h.PatchPluginIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 112,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssueComments",
+      "handler_expression": "h.ListPluginComments)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 113,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssueComments",
+      "handler_expression": "h.CreatePluginComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 114,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageScope",
+      "handler_expression": "h.ListPluginStorage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 115,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageValue",
+      "handler_expression": "h.GetPluginStorage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 116,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageValue",
+      "handler_expression": "h.PutPluginStorage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 117,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageValue",
+      "handler_expression": "h.DeletePluginStorage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1462,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/health\"",
+      "handler_expression": "health.liveHandler)",
+      "state": "implemented_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ]
+    },
+    {
+      "line": 1463,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/readyz\"",
+      "handler_expression": "health.readyHandler)",
+      "state": "implemented_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ]
+    },
+    {
+      "line": 1464,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/healthz\"",
+      "handler_expression": "health.readyHandler)",
+      "state": "implemented_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ]
+    },
+    {
+      "line": 1475,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/health/realtime\"",
+      "handler_expression": "realtimeMetricsHandler(os.Getenv(\"REALTIME_METRICS_TOKEN\")))",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1488,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/ws\"",
+      "handler_expression": "func(w http.ResponseWriter, r *http.Request) {",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1495,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/uploads/*\"",
+      "handler_expression": "h.ServeLocalUpload)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1507,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/signed-download\"",
+      "handler_expression": "h.DownloadAttachmentWithCapability)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1516,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/avatars/{sig}/*\"",
+      "handler_expression": "h.ServeAvatar)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1522,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugin-surfaces/{token}\"",
+      "handler_expression": "h.ServePluginSurface)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1535,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/auth/logout\"",
+      "handler_expression": "h.Logout)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1538,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/config\"",
+      "handler_expression": "h.GetConfig)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1542,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/share-links/{code}\"",
+      "handler_expression": "h.GetShareLinkInfo)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1547,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/autopilots/{token}\"",
+      "handler_expression": "h.HandleAutopilotWebhook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1550,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/github\"",
+      "handler_expression": "h.HandleGitHubWebhook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1551,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/github/setup\"",
+      "handler_expression": "h.GitHubSetupCallback)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1560,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/vcs/{connectionId}\"",
+      "handler_expression": "h.HandleVCSWebhook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1565,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/stripe\"",
+      "handler_expression": "h.HandleCloudBillingStripeWebhook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1577,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/integrations/composio/callback\"",
+      "handler_expression": "h.ComposioCallback)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1583,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/register\"",
+      "handler_expression": "h.DaemonRegister)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1584,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/deregister\"",
+      "handler_expression": "h.DaemonDeregister)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1585,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/heartbeat\"",
+      "handler_expression": "h.DaemonHeartbeat)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1586,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/ws\"",
+      "handler_expression": "h.DaemonWebSocket)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1587,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workspaces\"",
+      "handler_expression": "h.ListDaemonWorkspaces)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1588,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workspaces/{workspaceId}/repos\"",
+      "handler_expression": "h.GetDaemonWorkspaceRepos)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1589,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workspaces/{workspaceId}/runtime-profiles\"",
+      "handler_expression": "h.DaemonListRuntimeProfiles)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1594,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{id}/plugin-hooks\"",
+      "handler_expression": "h.InvokeAgentPluginHook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1597,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{id}/plugin-mcp/{contributionId}/credential\"",
+      "handler_expression": "h.ResolvePluginMCPCredential)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1599,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/claim\"",
+      "handler_expression": "h.ClaimTaskByRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1603,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/claim\"",
+      "handler_expression": "h.ClaimTasksByRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1604,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/claim\"",
+      "handler_expression": "h.ClaimTasksByRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1605,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/{taskId}/prepare-lease\"",
+      "handler_expression": "h.ExtendTaskPrepareLease)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1606,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/{taskId}/skill-bundles/resolve\"",
+      "handler_expression": "h.ResolveTaskSkillBundles)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1607,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/pending\"",
+      "handler_expression": "h.ListPendingTasksByRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1608,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/update/{updateId}/result\"",
+      "handler_expression": "h.ReportUpdateResult)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1609,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/models/{requestId}/result\"",
+      "handler_expression": "h.ReportModelListResult)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1610,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/local-skills/{requestId}/result\"",
+      "handler_expression": "h.ReportLocalSkillListResult)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1611,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/local-skills/import/{requestId}/result\"",
+      "handler_expression": "h.ReportLocalSkillImportResult)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1613,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/status\"",
+      "handler_expression": "h.GetTaskStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1614,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/start\"",
+      "handler_expression": "h.StartTask)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1615,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/supplements/claim\"",
+      "handler_expression": "h.ClaimTaskSupplement)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1616,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/supplements/{commentId}/ack\"",
+      "handler_expression": "h.AckTaskSupplement)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1617,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/wait-local-directory\"",
+      "handler_expression": "h.MarkTaskWaitingLocalDirectory)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1618,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/progress\"",
+      "handler_expression": "h.ReportTaskProgress)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1619,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/complete\"",
+      "handler_expression": "h.CompleteTask)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1620,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/fail\"",
+      "handler_expression": "h.FailTask)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1621,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/usage\"",
+      "handler_expression": "h.ReportTaskUsage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1622,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/messages\"",
+      "handler_expression": "h.ReportTaskMessages)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1623,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/messages\"",
+      "handler_expression": "h.ListTaskMessages)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1624,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/cancel-ack\"",
+      "handler_expression": "h.AckTaskCancelled)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1626,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/workspaces/{workspaceId}/issues/gc-check\"",
+      "handler_expression": "h.BatchIssueGCCheck)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1627,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/issues/{issueId}/gc-check\"",
+      "handler_expression": "h.GetIssueGCCheck)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1628,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/chat-sessions/{sessionId}/gc-check\"",
+      "handler_expression": "h.GetChatSessionGCCheck)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1629,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/autopilot-runs/{runId}/gc-check\"",
+      "handler_expression": "h.GetAutopilotRunGCCheck)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1630,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/gc-check\"",
+      "handler_expression": "h.GetTaskGCCheck)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1632,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/recover-orphans\"",
+      "handler_expression": "h.RecoverOrphanedTasks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1633,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/session\"",
+      "handler_expression": "h.PinTaskSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1660,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/hooks/{key}\"",
+      "handler_expression": "h.InvokePluginHook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1677,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/me\"",
+      "handler_expression": "h.GetMe)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ]
+    },
+    {
+      "line": 1678,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/api/me\"",
+      "handler_expression": "h.UpdateMe)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1679,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/api/me/onboarding\"",
+      "handler_expression": "h.PatchOnboarding)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1680,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/me/onboarding/complete\"",
+      "handler_expression": "h.CompleteOnboarding)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1681,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/me/onboarding/cloud-waitlist\"",
+      "handler_expression": "h.JoinCloudWaitlist)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1690,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/auth/refresh\"",
+      "handler_expression": "h.RefreshSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1691,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/upload-file\"",
+      "handler_expression": "h.UploadFile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1692,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/feedback\"",
+      "handler_expression": "h.CreateFeedback)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1713,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/download\"",
+      "handler_expression": "h.DownloadAttachment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1717,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/download-metadata\"",
+      "handler_expression": "h.GetAttachmentForDownload)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1720,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListWorkspaces)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ]
+    },
+    {
+      "line": 1721,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateWorkspace)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1726,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetWorkspace)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ]
+    },
+    {
+      "line": 1727,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.ListMembersWithUser)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ]
+    },
+    {
+      "line": 1728,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/leave\"",
+      "handler_expression": "h.LeaveWorkspace)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1729,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/invitations\"",
+      "handler_expression": "h.ListWorkspaceInvitations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1734,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/github/installations\"",
+      "handler_expression": "h.ListGitHubInstallations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1738,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/vcs/connections\"",
+      "handler_expression": "h.ListVCSConnections)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1739,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/qoder\"",
+      "handler_expression": "h.GetQoderConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1740,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/qoder/agents\"",
+      "handler_expression": "h.ListQoderAgents)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1744,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles\"",
+      "handler_expression": "h.ListRuntimeProfiles)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1745,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.GetRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1750,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.ListWorkspaceMcpServers)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1754,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins\"",
+      "handler_expression": "h.ListPlugins)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1758,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/surfaces/{surfaceKey}/launch\"",
+      "handler_expression": "h.GetPluginSurfaceLaunch)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1763,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateWorkspace)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1764,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateWorkspace)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1765,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.CreateInvitation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1767,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateMember)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1768,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteMember)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1770,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/invitations/{invitationId}\"",
+      "handler_expression": "h.RevokeInvitation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1774,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.CreateWorkspaceMcpServer)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1775,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}\"",
+      "handler_expression": "h.UpdateWorkspaceMcpServer)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1776,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}\"",
+      "handler_expression": "h.DeleteWorkspaceMcpServer)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1777,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/share-links\"",
+      "handler_expression": "h.CreateShareLink)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1778,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/share-links/{linkId}\"",
+      "handler_expression": "h.RevokeShareLink)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1779,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/share-links\"",
+      "handler_expression": "h.ListShareLinks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1781,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles\"",
+      "handler_expression": "h.CreateRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1782,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.UpdateRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1783,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.UpdateRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1784,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.DeleteRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1788,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/packages\"",
+      "handler_expression": "h.ListPluginPackages)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1789,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/packages\"",
+      "handler_expression": "h.PublishPluginPackage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1790,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/packages/local\"",
+      "handler_expression": "h.PublishLocalPluginPackage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1791,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/plugins/packages/{packageId}\"",
+      "handler_expression": "h.DeletePluginPackage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1799,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/preview\"",
+      "handler_expression": "h.PreviewPlugin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1800,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins\"",
+      "handler_expression": "h.InstallPlugin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1801,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/invocations\"",
+      "handler_expression": "h.ListPluginInvocations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1802,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/token\"",
+      "handler_expression": "h.RotatePluginToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1803,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/token\"",
+      "handler_expression": "h.RevokePluginToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1806,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/mcp/{hookKey}/tools\"",
+      "handler_expression": "h.ListPluginMCPTools)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1807,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/mcp/{hookKey}/tools\"",
+      "handler_expression": "h.ApprovePluginMCPTools)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1808,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/config\"",
+      "handler_expression": "h.ConfigurePlugin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1809,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/enable\"",
+      "handler_expression": "h.EnablePlugin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1810,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/disable\"",
+      "handler_expression": "h.DisablePlugin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1811,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}\"",
+      "handler_expression": "h.UninstallPlugin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1821,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/github/connect\"",
+      "handler_expression": "h.GitHubConnect)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1822,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/github/installations/{installationId}/repositories\"",
+      "handler_expression": "h.ListGitHubInstallationRepositories)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1823,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/github/installations/{installationId}\"",
+      "handler_expression": "h.DeleteGitHubInstallation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1825,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/vcs/connections\"",
+      "handler_expression": "h.ConnectVCS)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1826,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/qoder\"",
+      "handler_expression": "h.SaveQoderConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1827,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/check\"",
+      "handler_expression": "h.CheckQoderConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1828,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/environments\"",
+      "handler_expression": "h.ListQoderEnvironments)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1829,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/stop\"",
+      "handler_expression": "h.StopQoderConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1830,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/resume\"",
+      "handler_expression": "h.ResumeQoderConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1831,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/qoder\"",
+      "handler_expression": "h.DisconnectQoderConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1832,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/vcs/connections/{connectionId}/rotate-webhook\"",
+      "handler_expression": "h.RotateVCSConnectionWebhook)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1833,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/vcs/connections/{connectionId}\"",
+      "handler_expression": "h.DeleteVCSConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1853,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/lark/installations\"",
+      "handler_expression": "h.ListLarkInstallations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1854,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/lark/installations/{installationId}\"",
+      "handler_expression": "h.RevokeLarkInstallation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1860,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/lark/install/begin\"",
+      "handler_expression": "h.BeginLarkInstall)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1861,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/lark/install/{sessionId}/status\"",
+      "handler_expression": "h.GetLarkInstallStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1871,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/slack/installations\"",
+      "handler_expression": "h.ListSlackInstallations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1872,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/wecom/installations\"",
+      "handler_expression": "h.ListWecomInstallations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1876,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/slack/installations/{installationId}\"",
+      "handler_expression": "h.RevokeSlackInstallation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1877,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/slack/install/byo\"",
+      "handler_expression": "h.RegisterSlackBYO)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1878,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/wecom/installations/{installationId}\"",
+      "handler_expression": "h.RevokeWecomInstallation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1879,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wecom/install/byo\"",
+      "handler_expression": "h.RegisterWecomBYO)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1884,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/dingtalk/installations\"",
+      "handler_expression": "h.ListDingTalkInstallations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1885,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/dingtalk/groups\"",
+      "handler_expression": "h.ListDingTalkGroups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1886,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/dingtalk/installations/{installationId}/groups/{conversationId}\"",
+      "handler_expression": "h.ForgetDingTalkGroup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1887,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/dingtalk/installations/{installationId}\"",
+      "handler_expression": "h.RevokeDingTalkInstallation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1888,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/dingtalk/install/byo\"",
+      "handler_expression": "h.RegisterDingTalkBYO)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1895,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/telegram/installations\"",
+      "handler_expression": "h.ListTelegramInstallations)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1899,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/telegram/installations/{installationId}\"",
+      "handler_expression": "h.RevokeTelegramInstallation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1900,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/telegram/install\"",
+      "handler_expression": "h.RegisterTelegramBot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1912,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/lark/binding/redeem\"",
+      "handler_expression": "h.RedeemLarkBindingToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1918,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/slack/binding/redeem\"",
+      "handler_expression": "h.RedeemSlackBindingToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1921,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/dingtalk/binding/redeem\"",
+      "handler_expression": "h.RedeemDingTalkBindingToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1925,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/wecom/binding/redeem\"",
+      "handler_expression": "h.RedeemWecomBindingToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1929,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/telegram/binding/redeem\"",
+      "handler_expression": "h.RedeemTelegramBindingToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1930,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/zalo/binding/redeem\"",
+      "handler_expression": "zbs.New(h).RedeemZaloBindingToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1938,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/connect/init\"",
+      "handler_expression": "h.ComposioConnectInit)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1939,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/toolkits\"",
+      "handler_expression": "h.ListComposioToolkits)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1940,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/connections\"",
+      "handler_expression": "h.ListComposioConnections)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1941,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/connections/{id}\"",
+      "handler_expression": "h.DeleteComposioConnection)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1945,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/invitations\"",
+      "handler_expression": "h.ListMyInvitations)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/account.rs",
+        "baseline/account-read-20261101.json"
+      ]
+    },
+    {
+      "line": 1946,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/invitations/{id}\"",
+      "handler_expression": "h.GetMyInvitation)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/account.rs",
+        "baseline/account-read-20261101.json"
+      ]
+    },
+    {
+      "line": 1947,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/invitations/{id}/accept\"",
+      "handler_expression": "h.AcceptInvitation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1948,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/invitations/{id}/decline\"",
+      "handler_expression": "h.DeclineInvitation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1949,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/share-links/join\"",
+      "handler_expression": "h.JoinByShareLink)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1957,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListPersonalAccessTokens)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/account.rs",
+        "baseline/account-read-20261101.json"
+      ]
+    },
+    {
+      "line": 1958,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreatePersonalAccessToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1959,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/current/renew\"",
+      "handler_expression": "h.RenewCurrentPersonalAccessToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1960,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/{id}\"",
+      "handler_expression": "h.RevokePersonalAccessToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1990,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/balance\"",
+      "handler_expression": "h.GetCloudBillingBalance)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1991,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/transactions\"",
+      "handler_expression": "h.ListCloudBillingTransactions)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1992,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/batches\"",
+      "handler_expression": "h.ListCloudBillingBatches)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1993,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/topups\"",
+      "handler_expression": "h.ListCloudBillingTopups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1994,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/price-tiers\"",
+      "handler_expression": "h.ListCloudBillingPriceTiers)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1995,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/checkout-sessions\"",
+      "handler_expression": "h.CreateCloudBillingCheckoutSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1996,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/checkout-sessions/{sessionId}\"",
+      "handler_expression": "h.GetCloudBillingCheckoutSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 1997,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/portal-sessions\"",
+      "handler_expression": "h.CreateCloudBillingPortalSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2011,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/summary\"",
+      "handler_expression": "h.GetCloudWorkspaceSubscriptionSummary)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2012,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/prices\"",
+      "handler_expression": "h.GetCloudWorkspaceSubscriptionPrices)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2016,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/checkout-sessions\"",
+      "handler_expression": "h.CreateCloudWorkspaceSubscriptionCheckout)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2017,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/seats/purchase-preview\"",
+      "handler_expression": "h.PreviewCloudWorkspaceSubscriptionSeatPurchase)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2018,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/seats/purchases\"",
+      "handler_expression": "h.PurchaseCloudWorkspaceSubscriptionSeats)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2019,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/seats/reconcile\"",
+      "handler_expression": "h.ReconcileCloudWorkspaceSubscriptionSeats)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2020,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/portal-sessions\"",
+      "handler_expression": "h.CreateCloudWorkspaceSubscriptionPortal)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2029,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/assignee-frequency\"",
+      "handler_expression": "h.GetAssigneeFrequency)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2036,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/manifest\"",
+      "handler_expression": "h.GetSearchIndexManifest)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2037,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/snapshot\"",
+      "handler_expression": "h.GetSearchIndexSnapshot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2038,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/changes\"",
+      "handler_expression": "h.ListSearchIndexChanges)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2043,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/limit-usage\"",
+      "handler_expression": "h.GetIssueLimitUsage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2044,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/table/groups\"",
+      "handler_expression": "h.ListIssueTableGroups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2045,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/table/rows\"",
+      "handler_expression": "h.ListIssueTableRows)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2046,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/table/facets\"",
+      "handler_expression": "h.ListIssueTableFacets)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2047,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/search\"",
+      "handler_expression": "h.SearchIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2048,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/child-progress\"",
+      "handler_expression": "h.ChildIssueProgress)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2049,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/children\"",
+      "handler_expression": "h.ListChildrenByParents)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2050,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/grouped\"",
+      "handler_expression": "h.ListGroupedIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2051,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2054,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/query\"",
+      "handler_expression": "h.QueryIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2055,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2056,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-create\"",
+      "handler_expression": "h.QuickCreateIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2057,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/preview-trigger\"",
+      "handler_expression": "h.PreviewIssueTrigger)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2058,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/batch-update\"",
+      "handler_expression": "h.BatchUpdateIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2059,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/batch-delete\"",
+      "handler_expression": "h.BatchDeleteIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2061,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2062,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2063,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/move\"",
+      "handler_expression": "h.MoveIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2064,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2065,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/comments/trigger-preview\"",
+      "handler_expression": "h.PreviewCommentTriggers)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2066,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/comments\"",
+      "handler_expression": "h.CreateComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2067,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/comments\"",
+      "handler_expression": "h.ListComments)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2068,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/timeline\"",
+      "handler_expression": "h.ListTimeline)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2069,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workflow-handoff\"",
+      "handler_expression": "h.PreviewWorkflowHandoff)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2070,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/subscribers\"",
+      "handler_expression": "h.ListIssueSubscribers)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2071,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/subscribe\"",
+      "handler_expression": "h.SubscribeToIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2072,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/unsubscribe\"",
+      "handler_expression": "h.UnsubscribeFromIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2073,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/unsubscribe/subtree\"",
+      "handler_expression": "h.UnsubscribeFromIssueSubtree)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2074,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/wakeups\"",
+      "handler_expression": "h.ListIssueWakeups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2075,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups\"",
+      "handler_expression": "h.CreateIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2076,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}\"",
+      "handler_expression": "h.CreateIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2077,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/disable\"",
+      "handler_expression": "h.DisableIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2078,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/enable\"",
+      "handler_expression": "h.EnableIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2079,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/instruction\"",
+      "handler_expression": "h.EditIssueWakeupInstruction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2080,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}\"",
+      "handler_expression": "h.DeleteIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2081,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/trigger\"",
+      "handler_expression": "h.TriggerIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2082,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/checkin\"",
+      "handler_expression": "h.CheckInIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2083,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/runs\"",
+      "handler_expression": "h.ListIssueWakeupRuns)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2084,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/system-wakeups\"",
+      "handler_expression": "h.ListIssueSystemWakeups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2085,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/system-wakeups/{rule}\"",
+      "handler_expression": "h.UpdateIssueSystemWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2086,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/active-task\"",
+      "handler_expression": "h.GetActiveTaskForIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2087,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/cancel\"",
+      "handler_expression": "h.CancelTask)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2090,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/rerun\"",
+      "handler_expression": "h.RerunIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2091,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-actions/{quickActionId}/run\"",
+      "handler_expression": "h.RunQuickAction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2092,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-actions/{quickActionId}/render\"",
+      "handler_expression": "h.RenderQuickAction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2093,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/task-runs\"",
+      "handler_expression": "h.ListTasksByIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2094,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage\"",
+      "handler_expression": "h.GetIssueUsage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2095,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.AddIssueReaction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2096,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.RemoveIssueReaction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2097,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/attachments\"",
+      "handler_expression": "h.ListAttachments)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2098,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/children\"",
+      "handler_expression": "h.ListChildIssues)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2099,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/duplicates\"",
+      "handler_expression": "h.ListIssueDuplicates)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2100,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.ListLabelsForIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2101,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.AttachLabel)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2102,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/labels/{labelId}\"",
+      "handler_expression": "h.DetachLabel)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2103,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/metadata\"",
+      "handler_expression": "h.ListIssueMetadata)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2104,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/metadata/{key}\"",
+      "handler_expression": "h.SetIssueMetadataKey)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2105,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/metadata/{key}\"",
+      "handler_expression": "h.DeleteIssueMetadataKey)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2106,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/properties/{propertyId}\"",
+      "handler_expression": "h.SetIssueProperty)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2107,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/properties/{propertyId}\"",
+      "handler_expression": "h.DeleteIssueProperty)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2108,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/pull-requests\"",
+      "handler_expression": "h.ListPullRequestsForIssue)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2109,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/pull-requests\"",
+      "handler_expression": "h.LinkIssuePullRequest)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2110,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/pull-requests/{prId}\"",
+      "handler_expression": "h.UnlinkIssuePullRequest)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2111,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/pr-auto-complete\"",
+      "handler_expression": "h.SetIssuePRAutoComplete)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2116,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/tasks/{taskId}/messages\"",
+      "handler_expression": "h.ListTaskMessagesByUser)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2122,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListQuickActions)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2123,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateQuickAction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2125,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateQuickAction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2126,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteQuickAction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2132,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListProperties)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2133,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateProperty)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2135,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetProperty)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2136,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateProperty)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2142,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListLabels)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2143,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateLabel)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2145,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetLabel)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2146,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateLabel)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2147,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteLabel)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2155,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssueStatuses)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2156,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssueStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2157,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/reorder\"",
+      "handler_expression": "h.ReorderIssueStatuses)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2159,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssueStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2160,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ArchiveIssueStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2169,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssueWorkflows)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2170,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2172,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2173,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2174,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2175,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/handoffs/{status}\"",
+      "handler_expression": "h.SetIssueWorkflowHandoff)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2176,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/brief\"",
+      "handler_expression": "h.PreviewIssueWorkflowBrief)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2182,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/search\"",
+      "handler_expression": "h.SearchProjects)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2183,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListProjects)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2184,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateProject)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2186,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetProject)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "line": 2187,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateProject)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2188,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteProject)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2189,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/workflow\"",
+      "handler_expression": "h.SetProjectWorkflow)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2190,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/resources\"",
+      "handler_expression": "h.ListProjectResources)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2191,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/resources\"",
+      "handler_expression": "h.CreateProjectResource)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2192,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/resources/{resourceId}\"",
+      "handler_expression": "h.UpdateProjectResource)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2193,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/resources/{resourceId}\"",
+      "handler_expression": "h.DeleteProjectResource)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2199,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListSquads)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2200,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateSquad)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2202,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetSquad)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2203,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateSquad)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2204,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteSquad)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2205,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.ListSquadMembers)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2206,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/members/status\"",
+      "handler_expression": "h.ListSquadMemberStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2207,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.AddSquadMember)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2208,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.RemoveSquadMember)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2209,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/members/role\"",
+      "handler_expression": "h.UpdateSquadMemberRole)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2214,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/issues/{id}/squad-evaluated\"",
+      "handler_expression": "h.RecordSquadLeaderEvaluation)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2218,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAutopilots)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2219,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateAutopilot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2220,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/cron-preview\"",
+      "handler_expression": "h.CronPreview)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2221,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage\"",
+      "handler_expression": "h.GetAutopilotQuotaUsage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2223,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetAutopilot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2224,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAutopilot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2225,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteAutopilot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2226,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/trigger\"",
+      "handler_expression": "h.TriggerAutopilot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2227,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runs\"",
+      "handler_expression": "h.ListAutopilotRuns)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2228,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runs/{runId}\"",
+      "handler_expression": "h.GetAutopilotRun)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2229,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/deliveries\"",
+      "handler_expression": "h.ListAutopilotDeliveries)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2230,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/deliveries/{deliveryId}\"",
+      "handler_expression": "h.GetAutopilotDelivery)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2231,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/deliveries/{deliveryId}/replay\"",
+      "handler_expression": "h.ReplayAutopilotDelivery)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2232,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/triggers\"",
+      "handler_expression": "h.CreateAutopilotTrigger)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2234,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAutopilotTrigger)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2235,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteAutopilotTrigger)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2236,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/rotate-webhook-token\"",
+      "handler_expression": "h.RotateAutopilotTriggerWebhookToken)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2237,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/signing-secret\"",
+      "handler_expression": "h.SetAutopilotTriggerSigningSecret)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2239,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/collaborators\"",
+      "handler_expression": "h.AddAutopilotCollaborator)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2240,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/collaborators/{userId}\"",
+      "handler_expression": "h.RemoveAutopilotCollaborator)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2246,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListPins)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2247,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreatePin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2248,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/reorder\"",
+      "handler_expression": "h.ReorderPins)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2249,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/{itemType}/{itemId}\"",
+      "handler_expression": "h.DeletePin)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2253,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-view-preferences\"",
+      "handler_expression": "h.GetIssueViewPreference)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2254,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/api/issue-view-preferences\"",
+      "handler_expression": "h.PutIssueViewPreference)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2256,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssueViews)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2257,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssueView)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2259,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetIssueViewByID)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2260,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssueView)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2261,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteIssueView)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2266,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}\"",
+      "handler_expression": "h.GetAttachmentByID)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2272,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/content\"",
+      "handler_expression": "h.GetAttachmentContent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2273,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}\"",
+      "handler_expression": "h.DeleteAttachment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2279,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2280,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2286,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/keep-replies\"",
+      "handler_expression": "h.DeleteComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2287,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/resolve\"",
+      "handler_expression": "h.ResolveComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2288,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/resolve\"",
+      "handler_expression": "h.UnresolveComment)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2289,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.AddReaction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2290,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.RemoveReaction)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2295,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAgents)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2296,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2301,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mika\"",
+      "handler_expression": "h.CreateMikaAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2303,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2304,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2305,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive\"",
+      "handler_expression": "h.ArchiveAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2306,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/restore\"",
+      "handler_expression": "h.RestoreAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2307,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/cancel-tasks\"",
+      "handler_expression": "h.CancelAgentTasks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2308,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks\"",
+      "handler_expression": "h.ListAgentTasks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2309,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/dingtalk/groups\"",
+      "handler_expression": "h.ListDingTalkGroupsForAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2310,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/skills\"",
+      "handler_expression": "h.ListAgentSkills)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2311,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/skills\"",
+      "handler_expression": "h.SetAgentSkills)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2312,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/skills/add\"",
+      "handler_expression": "h.AddAgentSkills)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2313,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.ListLabelsForAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2314,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.AttachLabelToAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2315,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/labels/{labelId}\"",
+      "handler_expression": "h.DetachLabelFromAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2316,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/skills/{skillId}/enabled\"",
+      "handler_expression": "h.SetAgentSkillEnabled)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2317,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/runtime-skills/enabled\"",
+      "handler_expression": "h.SetAgentRuntimeSkillEnabled)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2318,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/skills/{skillId}\"",
+      "handler_expression": "h.RemoveAgentSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2323,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.ListAgentMcpServers)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2324,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.AddAgentMcpServer)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2325,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}/enabled\"",
+      "handler_expression": "h.SetAgentMcpServerEnabled)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2326,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}\"",
+      "handler_expression": "h.RemoveAgentMcpServer)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2332,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/env\"",
+      "handler_expression": "h.GetAgentEnv)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2333,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/env\"",
+      "handler_expression": "h.UpdateAgentEnv)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2341,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAgentBuilderSessions)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2342,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateAgentBuilderSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2343,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/{sessionId}/runtime\"",
+      "handler_expression": "h.SwitchAgentBuilderRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2346,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/{sessionId}/draft\"",
+      "handler_expression": "h.SaveAgentBuilderDraft)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2351,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListSkills)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2352,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2353,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/search\"",
+      "handler_expression": "h.SearchSkills)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2354,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/import\"",
+      "handler_expression": "h.ImportSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2356,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2357,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2358,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2359,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/refresh\"",
+      "handler_expression": "h.RefreshSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2360,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.ListLabelsForSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2361,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.AttachLabelToSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2362,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/labels/{labelId}\"",
+      "handler_expression": "h.DetachLabelFromSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2363,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/files\"",
+      "handler_expression": "h.ListSkillFiles)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2364,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/files\"",
+      "handler_expression": "h.UpsertSkillFile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2365,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/files/{fileId}\"",
+      "handler_expression": "h.DeleteSkillFile)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2373,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/daily\"",
+      "handler_expression": "h.GetDashboardUsageDaily)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2374,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/by-agent\"",
+      "handler_expression": "h.GetDashboardUsageByAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2375,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/agent-runtime\"",
+      "handler_expression": "h.GetDashboardAgentRunTime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2376,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtime/daily\"",
+      "handler_expression": "h.GetDashboardRunTimeDaily)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2377,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/failures/daily\"",
+      "handler_expression": "h.GetDashboardFailuresDaily)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2378,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/failures/by-agent\"",
+      "handler_expression": "h.GetDashboardFailuresByAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2383,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAgentRuntimes)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2385,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAgentRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2386,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage\"",
+      "handler_expression": "h.GetRuntimeUsage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2387,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/by-agent\"",
+      "handler_expression": "h.GetRuntimeUsageByAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2388,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/by-hour\"",
+      "handler_expression": "h.GetRuntimeUsageByHour)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2389,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/activity\"",
+      "handler_expression": "h.GetRuntimeTaskActivity)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2390,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/update\"",
+      "handler_expression": "h.InitiateUpdate)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2391,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/update/{updateId}\"",
+      "handler_expression": "h.GetUpdate)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2392,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/models\"",
+      "handler_expression": "h.InitiateListModels)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2393,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/models/{requestId}\"",
+      "handler_expression": "h.GetModelListRequest)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2394,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/local-skills\"",
+      "handler_expression": "h.InitiateListLocalSkills)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2395,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/local-skills/{requestId}\"",
+      "handler_expression": "h.GetLocalSkillListRequest)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2396,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/local-skills/import\"",
+      "handler_expression": "h.InitiateImportLocalSkill)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2397,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/local-skills/import/{requestId}\"",
+      "handler_expression": "h.GetLocalSkillImportRequest)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2398,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteAgentRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2406,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/unbind-agents-and-delete\"",
+      "handler_expression": "h.UnbindAgentsAndDeleteRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2411,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/revoke-workspace-access\"",
+      "handler_expression": "h.RevokeRuntimeWorkspaceAccess)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2415,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-agents-and-delete\"",
+      "handler_expression": "h.UnbindAgentsAndDeleteRuntime)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2422,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetCloudRuntimeService)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2423,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/healthz\"",
+      "handler_expression": "h.GetCloudRuntimeHealth)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2424,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/readyz\"",
+      "handler_expression": "h.GetCloudRuntimeReady)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2425,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/nodes\"",
+      "handler_expression": "h.ListCloudRuntimeNodes)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2426,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes\"",
+      "handler_expression": "h.CreateCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2427,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/nodes\"",
+      "handler_expression": "h.DeleteCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2428,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/start\"",
+      "handler_expression": "h.StartCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2429,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/stop\"",
+      "handler_expression": "h.StopCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2430,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/reboot\"",
+      "handler_expression": "h.RebootCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2431,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/status\"",
+      "handler_expression": "h.GetCloudRuntimeNodeStatus)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2432,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/exec\"",
+      "handler_expression": "h.ExecCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2436,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/tasks/{taskId}/cancel\"",
+      "handler_expression": "h.CancelTaskByUser)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2437,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/tasks/{taskId}/rerun\"",
+      "handler_expression": "h.RerunTaskByUser)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2441,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/agent-task-snapshot\"",
+      "handler_expression": "h.ListWorkspaceAgentTaskSnapshot)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2442,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-wakeup-summaries\"",
+      "handler_expression": "h.ListWorkspaceWakeupSummaries)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2443,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-wakeups\"",
+      "handler_expression": "h.ListWorkspaceWakeups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2444,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-wakeup-paused\"",
+      "handler_expression": "h.ListPausedWakeups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2445,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/system-wakeups\"",
+      "handler_expression": "h.ListWorkspaceSystemWakeups)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2446,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/api/system-wakeups/{rule}\"",
+      "handler_expression": "h.UpdateWorkspaceSystemWakeup)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2450,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/working-agents\"",
+      "handler_expression": "h.ListWorkspaceWorkingAgents)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2455,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/agent-activity-30d\"",
+      "handler_expression": "h.GetWorkspaceAgentActivity30d)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2458,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/agent-run-counts\"",
+      "handler_expression": "h.GetWorkspaceAgentRunCounts)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2461,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateChatSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2462,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListChatSessions)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2464,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetChatSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2465,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateChatSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2466,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/pin\"",
+      "handler_expression": "h.SetChatSessionPinned)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2467,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/archive\"",
+      "handler_expression": "h.SetChatSessionArchived)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2468,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteChatSession)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2469,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/messages\"",
+      "handler_expression": "h.SendChatMessage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2470,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/onboarding\"",
+      "handler_expression": "h.StartMikaOnboarding)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2473,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-actions/regenerate\"",
+      "handler_expression": "h.RegenerateChatQuickActions)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2474,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/messages\"",
+      "handler_expression": "h.ListChatMessages)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2475,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/messages/page\"",
+      "handler_expression": "h.ListChatMessagesPage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2476,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/pending-task\"",
+      "handler_expression": "h.GetPendingChatTask)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2477,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/queued-tasks\"",
+      "handler_expression": "h.ClearQueuedChatTasks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2478,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/queued-tasks/{taskId}/prioritize\"",
+      "handler_expression": "h.PrioritizeQueuedChatTask)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2479,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/read\"",
+      "handler_expression": "h.MarkChatSessionRead)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2482,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/draft-restores\"",
+      "handler_expression": "h.ListChatDraftRestores)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2483,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/draft-restores/{restoreId}\"",
+      "handler_expression": "h.ConsumeChatDraftRestore)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2486,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/pending-tasks\"",
+      "handler_expression": "h.ListPendingChatTasks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2487,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/pending-tasks/has-any\"",
+      "handler_expression": "h.HasPendingChatTasks)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2490,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/pinned-agents\"",
+      "handler_expression": "h.ListChatPinnedAgents)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2491,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/chat/pinned-agents\"",
+      "handler_expression": "h.PinChatAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2492,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/api/chat/pinned-agents/{agentId}\"",
+      "handler_expression": "h.UnpinChatAgent)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2499,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/history\"",
+      "handler_expression": "h.GetChatChannelHistory)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2500,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/thread\"",
+      "handler_expression": "h.GetChatThread)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2504,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListInbox)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2508,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/archived\"",
+      "handler_expression": "h.ListArchivedInbox)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2509,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/archived/page\"",
+      "handler_expression": "h.ListArchivedInboxPage)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2510,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/archived/facets\"",
+      "handler_expression": "h.GetArchivedInboxFacets)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2511,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/unread-count\"",
+      "handler_expression": "h.CountUnreadInbox)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2514,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/unread-summary\"",
+      "handler_expression": "h.UnreadInboxSummary)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2515,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mark-all-read\"",
+      "handler_expression": "h.MarkAllInboxRead)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2516,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-all\"",
+      "handler_expression": "h.ArchiveAllInbox)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2517,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-all-read\"",
+      "handler_expression": "h.ArchiveAllReadInbox)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2518,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-completed\"",
+      "handler_expression": "h.ArchiveCompletedInbox)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2519,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/read\"",
+      "handler_expression": "h.MarkInboxRead)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2520,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/unread\"",
+      "handler_expression": "h.MarkInboxUnread)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2521,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/archive\"",
+      "handler_expression": "h.ArchiveInboxItem)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2522,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/unarchive\"",
+      "handler_expression": "h.UnarchiveInboxItem)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2527,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetNotificationPreferences)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2528,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.PatchNotificationPreferences)",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "line": 2529,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateNotificationPreferences)",
+      "state": "unimplemented",
+      "evidence": []
+    }
+  ]
+}

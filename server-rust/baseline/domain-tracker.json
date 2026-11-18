@@ -1,0 +1,856 @@
+{
+  "domains": [
+    {
+      "name": "foundation",
+      "state": "partial_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ]
+    },
+    {
+      "name": "schema_migrations",
+      "state": "partial_disposable_upgrade_tested",
+      "evidence": [
+        "server-rust/src/migrate.rs",
+        "server-rust/tests/migrations.rs",
+        "server-rust/baseline/migration-evidence-20261031.json",
+        "server-rust/src/data_hooks.rs",
+        "server-rust/tests/data_hooks.rs",
+        "server-rust/tests/historical_upgrade.rs",
+        "server-rust/baseline/migration-evidence-20261031-zbsi62.json",
+        "server-rust/baseline/managed-dev-gate-20261031.json"
+      ]
+    },
+    {
+      "name": "auth_cookie_pat_csrf",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/auth-read-inventory.md",
+        "server-rust/baseline/catalog-parity-20261031.json",
+        "server-rust/baseline/cookie-renewal-20261031.json"
+      ]
+    },
+    {
+      "name": "workspace_isolation",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/auth-read-inventory.md",
+        "server-rust/baseline/catalog-parity-20261031.json",
+        "server-rust/src/api/catalog.rs"
+      ]
+    },
+    {
+      "name": "users_members",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/auth-read-inventory.md"
+      ]
+    },
+    {
+      "name": "workspaces_projects_issues_comments",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/auth-read-inventory.md",
+        "server-rust/baseline/catalog-parity-20261031.json",
+        "server-rust/src/api/catalog.rs"
+      ]
+    },
+    {
+      "name": "agents_skills",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "chat_sessions_messages",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "files_attachments",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "tasks_claim_lease_terminal",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "websocket_user",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "websocket_daemon",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "scheduler_wakeups_autopilots",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "integrations_channels_webhooks",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "notifications_billing",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "storage_plugins",
+      "state": "unimplemented",
+      "evidence": []
+    },
+    {
+      "name": "operations",
+      "state": "unimplemented",
+      "evidence": []
+    }
+  ],
+  "handler_files": [
+    {
+      "name": "activity",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "actor_guards",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "admission",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_access",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_avatar",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_builder",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_env",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_permission",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_runtime_skills",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "agent_validation",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "attachment_capability",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "attachment_text_preview",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "auth",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "autopilot",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "autopilot_cron_preview",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "autopilot_webhook",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "avatar",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "chat",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "chat_history",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "chat_pinned_agent",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "chat_title",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "client_usage",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "cloud_billing",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "cloud_runtime",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "comment",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "comment_invocation_notice",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "config",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "contact_sales",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "daemon",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "daemon_rpc",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "daemon_workspace",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "daemon_ws",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "dashboard",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "dingtalk",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "feedback",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "file",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "github",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "guest_task_cancel",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "handler",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "heartbeat_scheduler",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "inbox",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "inbox_archive",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "integrations_composio",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "invitation",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "invitation_rate_limiter",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_child_event",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_duplicate",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_limit",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_metadata",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_move",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_reaction",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_snapshot",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_status",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "name": "issue_system_wakeup",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_table_facets",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_table_group",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_table_query",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_table_rows",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_triage_guard",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_trigger",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_view",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_view_preference",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_wakeup",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_workflow",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "issue_workflow_entry",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "label",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "name": "lark",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "mcp_overlay",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "mika_agent",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "mika_onboarding",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "mika_onboarding_opening",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "notification_preference",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "onboarding",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "personal_access_token",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "pin",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin_action",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin_agent_hook",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin_hook",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin_mcp",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin_package",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "plugin_surface",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "pr_auto_complete",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "project",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "name": "project_resource",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "property",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ]
+    },
+    {
+      "name": "qoder_catalog",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "qoder_cleanup",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "qoder_connection",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "qoder_disconnect",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "quick_action",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "reaction",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_blocking_agents",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_liveness_store",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_local_skills",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_local_skills_redis_store",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_model_catalog",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_model_catalog_redis_cache",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_models",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_models_redis_store",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_profile",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_sharing",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_unusable_notice",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_update",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "runtime_update_redis_store",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "search",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "search_index",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "seat_capacity",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "session",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "share_link",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "skill",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "skill_create",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "skill_import_archive",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "skill_refresh",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "slack",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "source_context",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "source_context_description",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "squad",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "squad_briefing",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "subscriber",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "task_cancellation_actor",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "task_lifecycle",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "task_supplement",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "telegram",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "vcs",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "vcs_webhook",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "wakeup_actor",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "webhook_delivery",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "webhook_delivery_worker",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "webhook_rate_limiter",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "wecom_web",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "workspace",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "workspace_mcp",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "workspace_mcp_api",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "workspace_reserved_slugs",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "workspace_revoke",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "zbs_access",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "zbs_chat_access",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "zbs_credential",
+      "state": "untriaged",
+      "evidence": []
+    },
+    {
+      "name": "zbs_guest_claim",
+      "state": "untriaged",
+      "evidence": []
+    }
+  ],
+  "warning": "Handler-file inventory is not proof of route or protocol parity; promote each domain only with independent evidence."
+}

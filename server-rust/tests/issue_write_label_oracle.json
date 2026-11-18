@@ -1,0 +1,116 @@
+[
+  {
+    "name": "missing",
+    "body_base64": "e30=",
+    "error": false,
+    "label_id": ""
+  },
+  {
+    "name": "top null",
+    "body_base64": "bnVsbA==",
+    "error": false,
+    "label_id": ""
+  },
+  {
+    "name": "string",
+    "body_base64": "eyJsYWJlbF9pZCI6ImZpcnN0In0=",
+    "error": false,
+    "label_id": "first"
+  },
+  {
+    "name": "casefold",
+    "body_base64": "eyJMYUJlTF9pRCI6ImZpcnN0In0=",
+    "error": false,
+    "label_id": "first"
+  },
+  {
+    "name": "unicode fold",
+    "body_base64": "eyJsYWJlbF/EsGQiOiJ4IiwiTEFCRUxfSUQiOiJsYXN0In0=",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "duplicate",
+    "body_base64": "eyJsYWJlbF9pZCI6ImZpcnN0IiwibGFiZWxfaWQiOiJsYXN0In0=",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "duplicate null",
+    "body_base64": "eyJsYWJlbF9pZCI6ImZpcnN0IiwiTEFCRUxfSUQiOm51bGx9",
+    "error": false,
+    "label_id": "first"
+  },
+  {
+    "name": "null then string",
+    "body_base64": "eyJsYWJlbF9pZCI6bnVsbCwiTEFCRUxfSUQiOiJsYXN0In0=",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "bad before duplicate",
+    "body_base64": "eyJsYWJlbF9pZCI6ZmFsc2UsImxhYmVsX2lkIjoibGFzdCJ9",
+    "error": true,
+    "label_id": "last"
+  },
+  {
+    "name": "bad after duplicate",
+    "body_base64": "eyJsYWJlbF9pZCI6ImZpcnN0IiwibGFiZWxfaWQiOmZhbHNlfQ==",
+    "error": true,
+    "label_id": "first"
+  },
+  {
+    "name": "unknown object",
+    "body_base64": "eyJpZ25vcmVkIjp7ImEiOjEsImEiOjJ9LCJsYWJlbF9pZCI6Imxhc3QifQ==",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "unknown exponent",
+    "body_base64": "eyJpZ25vcmVkIjoxZTQwMCwibGFiZWxfaWQiOiJsYXN0In0=",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "trailing garbage",
+    "body_base64": "eyJsYWJlbF9pZCI6Imxhc3QifSBnYXJiYWdl",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "scalar",
+    "body_base64": "W10=",
+    "error": true,
+    "label_id": ""
+  },
+  {
+    "name": "scalar string",
+    "body_base64": "ImhlbGxvIg==",
+    "error": true,
+    "label_id": ""
+  },
+  {
+    "name": "malformed",
+    "body_base64": "eyJsYWJlbF9pZCI6",
+    "error": true,
+    "label_id": ""
+  },
+  {
+    "name": "unknown invalid utf8",
+    "body_base64": "eyJpZ25vcmVkIjoi/yIsImxhYmVsX2lkIjoibGFzdCJ9",
+    "error": false,
+    "label_id": "last"
+  },
+  {
+    "name": "value invalid utf8",
+    "body_base64": "eyJsYWJlbF9pZCI6Iv8ifQ==",
+    "error": false,
+    "label_id": "�"
+  },
+  {
+    "name": "unpaired surrogate",
+    "body_base64": "eyJsYWJlbF9pZCI6Ilx1ZDgwMCJ9",
+    "error": false,
+    "label_id": "�"
+  }
+]

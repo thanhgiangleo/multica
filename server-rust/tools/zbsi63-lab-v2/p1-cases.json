@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "workspace-patch-empty-name",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}",
+      "status": 400,
+      "method": "PATCH",
+      "body": {
+        "name": "  "
+      },
+      "equals": {
+        "/error": "name is required"
+      }
+    },
+    {
+      "id": "workspace-patch-invalid-prefix",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}",
+      "status": 400,
+      "method": "PATCH",
+      "body": {
+        "issue_prefix": "bad-prefix"
+      }
+    },
+    {
+      "id": "workspace-patch-rename",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}",
+      "status": 200,
+      "method": "PATCH",
+      "body": {
+        "name": "P1 Synthetic Workspace"
+      },
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at"
+      ]
+    },
+    {
+      "id": "github-connect-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/github/connect",
+      "status": 200
+    },
+    {
+      "id": "github-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/github/installations",
+      "status": 200
+    },
+    {
+      "id": "github-repositories-missing",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/github/installations/00000000-0000-0000-0000-000000000011/repositories",
+      "status": 404
+    },
+    {
+      "id": "github-revoke-missing",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/github/installations/00000000-0000-0000-0000-000000000011",
+      "status": 204,
+      "method": "DELETE"
+    },
+    {
+      "id": "vcs-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/vcs/connections",
+      "status": 200
+    },
+    {
+      "id": "vcs-create-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/vcs/connections",
+      "status": 404,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "vcs-delete-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/vcs/connections/00000000-0000-0000-0000-000000000011",
+      "status": 204,
+      "method": "DELETE"
+    },
+    {
+      "id": "vcs-rotate-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/vcs/connections/00000000-0000-0000-0000-000000000011/rotate-webhook",
+      "status": 404,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "dingtalk-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/dingtalk/installations",
+      "status": 200
+    },
+    {
+      "id": "dingtalk-install-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/dingtalk/install/byo?agent_id={{AGENT_ID}}",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "dingtalk-revoke-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/dingtalk/installations/00000000-0000-0000-0000-000000000011",
+      "status": 403,
+      "method": "DELETE"
+    },
+    {
+      "id": "dingtalk-redeem-disabled",
+      "group": "p1",
+      "path": "/api/dingtalk/binding/redeem",
+      "status": 403,
+      "method": "POST",
+      "body": {
+        "token": "synthetic"
+      }
+    },
+    {
+      "id": "lark-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/lark/installations",
+      "status": 200
+    },
+    {
+      "id": "lark-install-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/lark/install/begin?agent_id={{AGENT_ID}}",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "lark-revoke-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/lark/installations/00000000-0000-0000-0000-000000000011",
+      "status": 403,
+      "method": "DELETE"
+    },
+    {
+      "id": "lark-redeem-disabled",
+      "group": "p1",
+      "path": "/api/lark/binding/redeem",
+      "status": 403,
+      "method": "POST",
+      "body": {
+        "token": "synthetic"
+      }
+    },
+    {
+      "id": "slack-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/slack/installations",
+      "status": 200
+    },
+    {
+      "id": "slack-install-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/slack/install/byo?agent_id={{AGENT_ID}}",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "slack-revoke-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/slack/installations/00000000-0000-0000-0000-000000000011",
+      "status": 403,
+      "method": "DELETE"
+    },
+    {
+      "id": "slack-redeem-disabled",
+      "group": "p1",
+      "path": "/api/slack/binding/redeem",
+      "status": 403,
+      "method": "POST",
+      "body": {
+        "token": "synthetic"
+      }
+    },
+    {
+      "id": "telegram-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/telegram/installations",
+      "status": 200
+    },
+    {
+      "id": "telegram-install-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/telegram/install?agent_id={{AGENT_ID}}",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "telegram-revoke-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/telegram/installations/00000000-0000-0000-0000-000000000011",
+      "status": 403,
+      "method": "DELETE"
+    },
+    {
+      "id": "telegram-redeem-disabled",
+      "group": "p1",
+      "path": "/api/telegram/binding/redeem",
+      "status": 403,
+      "method": "POST",
+      "body": {
+        "token": "synthetic"
+      }
+    },
+    {
+      "id": "wecom-list-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/wecom/installations",
+      "status": 200
+    },
+    {
+      "id": "wecom-install-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/wecom/install/byo?agent_id={{AGENT_ID}}",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "wecom-revoke-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/wecom/installations/00000000-0000-0000-0000-000000000011",
+      "status": 403,
+      "method": "DELETE"
+    },
+    {
+      "id": "wecom-redeem-disabled",
+      "group": "p1",
+      "path": "/api/wecom/binding/redeem",
+      "status": 403,
+      "method": "POST",
+      "body": {
+        "token": "synthetic"
+      }
+    },
+    {
+      "id": "lark-status-disabled",
+      "group": "p1",
+      "path": "/api/workspaces/{{WORKSPACE_ID}}/lark/install/synthetic-session/status",
+      "status": 403
+    },
+    {
+      "id": "billing-balance",
+      "group": "p1",
+      "path": "/api/cloud-billing/balance",
+      "status": 403
+    },
+    {
+      "id": "billing-batches",
+      "group": "p1",
+      "path": "/api/cloud-billing/batches",
+      "status": 403
+    },
+    {
+      "id": "billing-price-tiers",
+      "group": "p1",
+      "path": "/api/cloud-billing/price-tiers",
+      "status": 403
+    },
+    {
+      "id": "billing-topups",
+      "group": "p1",
+      "path": "/api/cloud-billing/topups",
+      "status": 403
+    },
+    {
+      "id": "billing-transactions",
+      "group": "p1",
+      "path": "/api/cloud-billing/transactions",
+      "status": 403
+    },
+    {
+      "id": "billing-checkout-sessions-cs-synthetic",
+      "group": "p1",
+      "path": "/api/cloud-billing/checkout-sessions/cs_synthetic",
+      "status": 403
+    },
+    {
+      "id": "billing-checkout-sessions",
+      "group": "p1",
+      "path": "/api/cloud-billing/checkout-sessions",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "billing-portal-sessions",
+      "group": "p1",
+      "path": "/api/cloud-billing/portal-sessions",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "subscription-prices",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/prices",
+      "status": 403
+    },
+    {
+      "id": "subscription-summary",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/summary",
+      "status": 403
+    },
+    {
+      "id": "subscription-checkout-sessions",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/checkout-sessions",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "subscription-portal-sessions",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/portal-sessions",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "subscription-seats-purchase-preview",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/seats/purchase-preview",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "subscription-seats-purchases",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/seats/purchases",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    },
+    {
+      "id": "subscription-seats-reconcile",
+      "group": "p1",
+      "path": "/api/cloud-subscriptions/seats/reconcile",
+      "status": 403,
+      "method": "POST",
+      "body": {}
+    }
+  ]
+}

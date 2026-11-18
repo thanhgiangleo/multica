@@ -1,0 +1,1 @@
+DROP INDEX CONCURRENTLY IF EXISTS zbs_telegram_issue_alert_delivery_key_idx;

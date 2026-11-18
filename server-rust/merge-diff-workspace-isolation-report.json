@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "baseline": {
+    "passed": true,
+    "selected": 2,
+    "executed": 2,
+    "unexecuted": 0,
+    "cases": [
+      {
+        "case": "nonmember-cross-workspace-session",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 6.577758584171534,
+        "contract_sha256": "a895f97edb021afc33c8bb20fa8bce042fda983461b17cde79491abc70e94623"
+      },
+      {
+        "case": "nonmember-cross-workspace-list",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 4.6679130755364895,
+        "contract_sha256": "a895f97edb021afc33c8bb20fa8bce042fda983461b17cde79491abc70e94623"
+      }
+    ]
+  },
+  "candidate": {
+    "passed": true,
+    "selected": 2,
+    "executed": 2,
+    "unexecuted": 0,
+    "cases": [
+      {
+        "case": "nonmember-cross-workspace-session",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 4.657670855522156,
+        "contract_sha256": "a895f97edb021afc33c8bb20fa8bce042fda983461b17cde79491abc70e94623"
+      },
+      {
+        "case": "nonmember-cross-workspace-list",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 5.588002968579531,
+        "contract_sha256": "a895f97edb021afc33c8bb20fa8bce042fda983461b17cde79491abc70e94623"
+      }
+    ]
+  },
+  "differences": {}
+}

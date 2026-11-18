@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-31",
+  "gate": "isolated-managed-dev",
+  "docker_default_pool_probe": "success",
+  "host_5432": "infra-postgres, untouched",
+  "isolated_port": 55432,
+  "make_up_api_passed": true,
+  "make_destroy_passed": true,
+  "steps": [
+    {
+      "step": "docker network create",
+      "exit_code": 0
+    },
+    {
+      "step": "docker volume create",
+      "exit_code": 0
+    },
+    {
+      "step": "docker run -d",
+      "exit_code": 0
+    },
+    {
+      "step": "make up C=api",
+      "exit_code": 0
+    },
+    {
+      "step": "bash scripts/dev-env.sh status",
+      "exit_code": 0
+    },
+    {
+      "step": "make destroy ARGS=--yes",
+      "exit_code": 0
+    },
+    {
+      "step": "docker rm -f",
+      "exit_code": 0
+    },
+    {
+      "step": "docker volume rm",
+      "exit_code": 0
+    },
+    {
+      "step": "docker network rm",
+      "exit_code": 0
+    }
+  ]
+}

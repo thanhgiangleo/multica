@@ -1,0 +1,88 @@
+{
+ "schema_version": 1,
+ "cases": [
+  {
+   "id": "anonymous-chat-list",
+   "group": "auth",
+   "path": "/api/chat/sessions",
+   "auth": false,
+   "workspace": false,
+   "status": 401,
+   "required": [
+    "/error"
+   ],
+   "content_type": "text/plain"
+  },
+  {
+   "id": "anonymous-task-messages",
+   "group": "auth",
+   "path": "/api/tasks/00000000-0000-0000-0000-000000000001/messages",
+   "auth": false,
+   "workspace": false,
+   "status": 401,
+   "required": [
+    "/error"
+   ],
+   "content_type": "text/plain"
+  },
+  {
+   "id": "read-agent",
+   "group": "resources",
+   "path": "/api/agents/{{AGENT_ID}}",
+   "status": 200,
+   "equals": {
+    "/id": "{{AGENT_ID}}",
+    "/workspace_id": "{{WORKSPACE_ID}}"
+   },
+   "required": [
+    "/name",
+    "/runtime_mode"
+   ],
+   "mask_timestamps": [
+    "/created_at",
+    "/updated_at"
+   ]
+  },
+  {
+   "id": "anonymous-agents",
+   "group": "auth",
+   "path": "/api/agents",
+   "auth": false,
+   "workspace": false,
+   "status": 401,
+   "required": [
+    "/error"
+   ],
+   "content_type": "text/plain"
+  },
+  {
+   "id": "quick-actions-unconfigured",
+   "group": "p0-chat",
+   "method": "POST",
+   "path": "/api/chat/sessions/{{SESSION_ID}}/quick-actions/regenerate",
+   "body": {
+    "message_id": "00000000-0000-0000-0000-0000000000b1"
+   },
+   "status": 403,
+   "equals": {
+    "/code": "suggestions_not_available",
+    "/error": "suggestions are not available on this deployment"
+   }
+  },
+  {
+   "id": "plugin-hooks-disabled",
+   "group": "p0-daemon",
+   "method": "POST",
+   "path": "/api/daemon/tasks/00000000-0000-0000-0000-0000000000b2/plugin-hooks",
+   "body": {
+    "installation_id": "synthetic",
+    "hook_key": "synthetic"
+   },
+   "status": 403,
+   "equals": {
+    "/code": "plugin_api_disabled",
+    "/error": "Plugin management is not enabled"
+   }
+  }
+ ]
+}

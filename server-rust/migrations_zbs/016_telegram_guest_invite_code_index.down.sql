@@ -1,0 +1,1 @@
+DROP INDEX CONCURRENTLY IF EXISTS zbs_telegram_guest_invite_code_uidx;

@@ -1,0 +1,1 @@
+ALTER TABLE zbs_zalo_guest_attempt DROP CONSTRAINT IF EXISTS zbs_zalo_guest_attempt_pkey;

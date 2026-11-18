@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS zbs_gateway_daily_telegram_rule_workspace_idx ON zbs_gateway_daily_telegram_rule (workspace_id);

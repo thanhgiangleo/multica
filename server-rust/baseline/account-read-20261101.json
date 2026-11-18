@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-01",
+  "reference": "verified 3830/3830 staged Go source-manifest.json entries; code contract for router.go, personal_access_token.go, invitation.go and corresponding sqlc queries",
+  "routes": [
+    "GET /api/tokens/",
+    "GET /api/invitations",
+    "GET /api/invitations/{id}"
+  ],
+  "inventory": {
+    "implemented_db_tested_partial_parity": 14,
+    "implemented_fake_tested": 3,
+    "unimplemented": 457,
+    "total_registrations": 474
+  },
+  "database": "run-owned postgres:16-alpine container on 127.0.0.1:55473, multica_zbsi63, removed by EXIT trap",
+  "migrations": {
+    "upstream_applied": 619,
+    "zbs_applied": 44,
+    "upstream_conditional": 5
+  },
+  "checks": {
+    "cargo_test_default": "21 pass, 16 ignored, 0 failed",
+    "account_db_test": "1 pass",
+    "prior_api_db_tests": "2 pass",
+    "clippy_all_targets_D_warnings": "pass",
+    "release_build": "pass",
+    "fmt": "pass"
+  },
+  "negative_cases": [
+    "missing auth",
+    "other-user PAT and invitation isolation",
+    "revoked PAT omitted and expired PAT listed",
+    "expired invitation omitted from list but detail can read",
+    "ID-bound invite with mismatched email",
+    "invalid and unknown invitation ID",
+    "other-user invitation 403",
+    "missing SQL tables yield Go-shaped errors",
+    "PAT hash not serialized and GET does not update PAT usage"
+  ],
+  "limitations": [
+    "No new Go/Rust differential test or deployed Go comparison",
+    "No pagination on these Go source GETs",
+    "No production configuration, full auth/read/WS/writes parity or benchmark",
+    "Existing PAT usage update on PAT-authenticated requests differs from Go cache; tested JWT GETs without such write"
+  ]
+}

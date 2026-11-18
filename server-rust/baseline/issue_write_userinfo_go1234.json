@@ -1,0 +1,106 @@
+[
+  {
+    "input": "https://user%ZZ@example.com/path",
+    "accepted": false
+  },
+  {
+    "input": "https://user%@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user%2@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user:pw%ZZ@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user name@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user|name@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user^name@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://ü@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user{a}@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user[a]@example.com/",
+    "accepted": false
+  },
+  {
+    "input": "https://user%41@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://user%25@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://user%40:pw%41@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://u%00@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://u%20@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://%C3%BC@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://user:pass@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://user:pass:extra@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://first@last@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://:pw@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://-._~!$\u0026'()*+,;=:@example.com/",
+    "accepted": true
+  },
+  {
+    "input": "https://user%ZZ@[fe80::1%25en0]:99999/",
+    "accepted": false
+  },
+  {
+    "input": "https://u%40@[fe80::1%25en0]:99999/",
+    "accepted": true
+  },
+  {
+    "input": "https://user%ZZ@:80/",
+    "accepted": false
+  },
+  {
+    "input": "https://u%40@:99999/",
+    "accepted": true
+  }
+]

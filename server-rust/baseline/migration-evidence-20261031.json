@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-31",
+  "scope": "schema runner checkpoint only; not full backend or production-safe",
+  "sources": {
+    "frozen_manifest": "baseline/source-manifest.json",
+    "sql_files": 1326,
+    "sql_sha256_mismatches": 0,
+    "upstream_up_files": 619,
+    "zbs_up_files": 44
+  },
+  "environment": {
+    "type": "run-owned pgvector/pgvector:pg17 container, host-network loopback-only PostgreSQL 127.0.0.1:15439; owned disposable multica_zbsi61* databases; removed after evidence capture",
+    "managed_attempt": "make up --ephemeral could not start because Docker predefined address pools were fully subnetted; managed workflow not verified",
+    "data": "empty disposable schemas only; no production database or copied secrets"
+  },
+  "fresh": {
+    "database": "multica_zbsi61_fresh",
+    "rust_migrate_up": {
+      "upstream_applied": 619,
+      "upstream_conditional": 5,
+      "zbs_applied": 44,
+      "zbs_conditional": 0
+    },
+    "second_up": {
+      "upstream_applied": 0,
+      "upstream_skipped": 619,
+      "zbs_applied": 0,
+      "zbs_skipped": 44
+    }
+  },
+  "upgrade_probe": {
+    "database": "multica_zbsi61_upgrade",
+    "setup": "Go runner applied full schema from frozen staged reference; completed successfully",
+    "rust_migrate_up": {
+      "upstream_applied": 0,
+      "upstream_skipped": 619,
+      "zbs_applied": 0,
+      "zbs_skipped": 44
+    },
+    "ledger_rows": {
+      "upstream": 619,
+      "zbs": 44
+    },
+    "limitation": "no-op on a Go-current schema; not a historic populated upgrade"
+  },
+  "schema_parity": {
+    "method": "pg_dump --schema-only for each disposable DB, remove pg_dump random \\restrict/\\unrestrict lines, compare exact content and SHA-256",
+    "normalized_lines_each": 8676,
+    "normalized_sha256_each": "99636f3af3df18690662947977f0353a1d35625cad8227c07e3be1cb0e7bf9a9"
+  },
+  "tests": {
+    "rust_cargo_test": {
+      "migration_units_passed": 2,
+      "health_fake_passed": 12,
+      "db_tests_ignored_without_database": 7
+    },
+    "rust_db_ignored_tests_explicit": {
+      "passed": 7,
+      "failed": 0,
+      "cases": [
+        "two-stream fresh/idempotent/down",
+        "mid-file transaction rollback and retry",
+        "invalid concurrent index cleanup and retry",
+        "unconverted fork and populated hook refusal",
+        "advisory lock concurrent runners",
+        "refuse non-index relation cleanup",
+        "conditional skip ledger and idempotency"
+      ]
+    },
+    "cargo_clippy_all_targets": "pass -D warnings",
+    "cargo_build_release": "pass",
+    "rustfmt_check": "pass",
+    "go_runner_hook_regression": "pass"
+  },
+  "gates": {
+    "unported": "historical-row data hooks for migrations 103,198,431; full historic upgrade/down behavior; production use",
+    "auth_reads": "not implemented or tested",
+    "benchmark": "not performed",
+    "real_agent_account": "not authorized and not invoked",
+    "commit_push_pr": "not performed"
+  },
+  "cleanup": {
+    "owned_databases": "multica_zbsi61, multica_zbsi61_fresh, multica_zbsi61_upgrade dropped",
+    "owned_postgres_container": "multica-rust-zbsi61 removed",
+    "managed_env": "azox_multica-225 stopped/profile deleted and .env.worktree removed; destroy failed because its separate configured localhost:5432 PostgreSQL did not answer, so manifest/slot retained for retry rather than claiming full cleanup"
+  }
+}

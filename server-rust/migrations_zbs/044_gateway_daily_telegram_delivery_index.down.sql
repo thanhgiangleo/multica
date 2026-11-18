@@ -1,0 +1,1 @@
+DROP INDEX CONCURRENTLY IF EXISTS zbs_gateway_daily_telegram_delivery_request_idx;

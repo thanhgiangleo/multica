@@ -1,0 +1,44 @@
+[package]
+name = "multica-server"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+async-trait = "0.1"
+base64 = "0.22.1"
+axum = { version = "0.8", features = ["ws", "multipart"] }
+hex = "0.4"
+getrandom = "0.4"
+hmac = "0.12"
+jsonwebtoken = "9.3"
+libc = "0.2"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+regex = "1"
+ring = "=0.17.14"
+sha1 = "0.10"
+sha2 = "0.10"
+uuid = { version = "1", features = ["serde", "v4", "v7"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+chrono-tz = "0.10"
+deadpool-postgres = "0.14"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["raw_value"] }
+form_urlencoded = "1"
+futures-util = "0.3"
+tokio-tungstenite = { version = "0.29", features = ["rustls-tls-webpki-roots"] }
+percent-encoding = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "signal", "sync", "time"] }
+tokio-postgres = { version = "0.7", features = ["with-chrono-0_4", "with-serde_json-1", "with-uuid-1"] }
+zip = { version = "=2.4.2", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+futures-util = "0.3"
+tokio-tungstenite = "0.29"
+http-body-util = "0.1"
+tokio = { version = "1", features = ["test-util"] }
+tower = { version = "0.5", features = ["util"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

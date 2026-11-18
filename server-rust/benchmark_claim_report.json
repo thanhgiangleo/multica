@@ -1,0 +1,789 @@
+{
+  "revision": "e8ae72c9dfc1b4474b61a9087f51b33cbee6a048",
+  "source_tree_note": "Binary digests identify exact compiled artifacts; HEAD alone does not describe uncommitted Go/Rust sources.",
+  "binary_sha256": {
+    "go_server": "5113e563252f438106b786e18540686074af205cde81fb4d499aa3e842480c5d",
+    "go_migrate": "9cbcd5f085d9a6855f055b21c7748cc4e96e93962d8a4fb2a40edcb2f438b574",
+    "rust_server": "09bf10964445deed271d8ec87b8a8b2d94a19532b2eb6752b9e408960af6ade9"
+  },
+  "samples_per_backend_scenario": 100,
+  "max_global_rps": 5.0,
+  "postgres_image": "postgres:17",
+  "task_kind": [
+    "synthetic_chat_session",
+    "synthetic_issue"
+  ],
+  "postgres_host_port": 40797,
+  "go_host_port": 42439,
+  "rust_host_port": 60153,
+  "migrations": {
+    "go": "server/migrations",
+    "rust": [
+      "server-rust/migrations",
+      "server-rust/migrations_zbs"
+    ]
+  },
+  "scenarios": {
+    "singular_empty": {
+      "status_counts": {
+        "go": {
+          "200": 100
+        },
+        "rust": {
+          "200": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "task": "null"
+        },
+        "rust": {
+          "task": "null"
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 1.779039,
+          "p95_ms": 3.458138,
+          "mean_ms": 2.093
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 4.961113,
+          "p95_ms": 6.558999,
+          "mean_ms": 5.11
+        }
+      }
+    },
+    "batch_empty": {
+      "status_counts": {
+        "go": {
+          "200": 100
+        },
+        "rust": {
+          "200": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "tasks": []
+        },
+        "rust": {
+          "tasks": []
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 2.027511,
+          "p95_ms": 4.206557,
+          "mean_ms": 2.46
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 5.027972,
+          "p95_ms": 6.238425,
+          "mean_ms": 5.139
+        }
+      }
+    },
+    "singular_unauthorized": {
+      "status_counts": {
+        "go": {
+          "401": 100
+        },
+        "rust": {
+          "401": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "error": "str"
+        },
+        "rust": {
+          "error": "str"
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 0.827604,
+          "p95_ms": 1.235026,
+          "mean_ms": 0.901
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 1.043679,
+          "p95_ms": 1.236661,
+          "mean_ms": 1.053
+        }
+      }
+    },
+    "batch_unauthorized": {
+      "status_counts": {
+        "go": {
+          "401": 100
+        },
+        "rust": {
+          "401": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "error": "str"
+        },
+        "rust": {
+          "error": "str"
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 0.865119,
+          "p95_ms": 1.299531,
+          "mean_ms": 0.921
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 1.118131,
+          "p95_ms": 1.34935,
+          "mean_ms": 1.112
+        }
+      }
+    },
+    "singular_bad_request": {
+      "status_counts": {
+        "go": {
+          "400": 100
+        },
+        "rust": {
+          "400": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "error": "str"
+        },
+        "rust": {
+          "error": "str"
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 0.98543,
+          "p95_ms": 1.356268,
+          "mean_ms": 1.022
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 2.16869,
+          "p95_ms": 2.839046,
+          "mean_ms": 2.21
+        }
+      }
+    },
+    "batch_bad_request": {
+      "status_counts": {
+        "go": {
+          "400": 100
+        },
+        "rust": {
+          "400": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "error": "str"
+        },
+        "rust": {
+          "error": "str"
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 1.037432,
+          "p95_ms": 1.297551,
+          "mean_ms": 1.043
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 2.303845,
+          "p95_ms": 2.84026,
+          "mean_ms": 2.272
+        }
+      }
+    },
+    "singular_claimed": {
+      "status_counts": {
+        "go": {
+          "200": 100
+        },
+        "rust": {
+          "200": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "task": {
+            "agent": {
+              "id": "str",
+              "instructions": "str",
+              "name": "str",
+              "skills": [
+                {
+                  "content": "str",
+                  "files": [
+                    {
+                      "content": "str",
+                      "path": "str"
+                    }
+                  ],
+                  "id": "str",
+                  "name": "str"
+                }
+              ]
+            },
+            "agent_id": "str",
+            "attempt": "number",
+            "attribution": {
+              "precise": "boolean",
+              "source": "str"
+            },
+            "auth_token": "str",
+            "chat_session_id": "str",
+            "completed_at": "null",
+            "created_at": "str",
+            "delivered_comment_ids": [],
+            "dispatched_at": "str",
+            "error": "null",
+            "id": "str",
+            "issue_id": "str",
+            "kind": "str",
+            "leader_role_resolved": "boolean",
+            "max_attempts": "number",
+            "priority": "number",
+            "requesting_user_name": "str",
+            "result": "null",
+            "runtime_id": "str",
+            "start_claim_supported": "boolean",
+            "started_at": "null",
+            "status": "str",
+            "thread_name": "str",
+            "workspace_id": "str",
+            "workspace_slug": "str"
+          }
+        },
+        "rust": {
+          "task": {
+            "agent": {
+              "id": "str",
+              "instructions": "str",
+              "name": "str",
+              "skills": [
+                {
+                  "content": "str",
+                  "files": [
+                    {
+                      "content": "str",
+                      "path": "str"
+                    }
+                  ],
+                  "id": "str",
+                  "name": "str"
+                }
+              ]
+            },
+            "agent_id": "str",
+            "attempt": "number",
+            "attribution": {
+              "precise": "boolean",
+              "source": "str"
+            },
+            "auth_token": "str",
+            "chat_session_id": "str",
+            "completed_at": "null",
+            "created_at": "str",
+            "delivered_comment_ids": [],
+            "dispatched_at": "str",
+            "error": "null",
+            "id": "str",
+            "issue_id": "str",
+            "kind": "str",
+            "leader_role_resolved": "boolean",
+            "max_attempts": "number",
+            "priority": "number",
+            "requesting_user_name": "str",
+            "result": "null",
+            "runtime_id": "str",
+            "start_claim_supported": "boolean",
+            "started_at": "null",
+            "status": "str",
+            "thread_name": "str",
+            "workspace_id": "str",
+            "workspace_slug": "str"
+          }
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 7.847139,
+          "p95_ms": 15.011756,
+          "mean_ms": 11.253
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 19.591697,
+          "p95_ms": 21.932379,
+          "mean_ms": 21.099
+        }
+      }
+    },
+    "batch_claimed": {
+      "status_counts": {
+        "go": {
+          "200": 100
+        },
+        "rust": {
+          "200": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "tasks": [
+            {
+              "agent": {
+                "id": "str",
+                "instructions": "str",
+                "name": "str",
+                "skills": [
+                  {
+                    "content": "str",
+                    "files": [
+                      {
+                        "content": "str",
+                        "path": "str"
+                      }
+                    ],
+                    "id": "str",
+                    "name": "str"
+                  }
+                ]
+              },
+              "agent_id": "str",
+              "attempt": "number",
+              "attribution": {
+                "precise": "boolean",
+                "source": "str"
+              },
+              "auth_token": "str",
+              "chat_session_id": "str",
+              "completed_at": "null",
+              "created_at": "str",
+              "delivered_comment_ids": [],
+              "dispatched_at": "str",
+              "error": "null",
+              "id": "str",
+              "issue_id": "str",
+              "kind": "str",
+              "leader_role_resolved": "boolean",
+              "max_attempts": "number",
+              "priority": "number",
+              "requesting_user_name": "str",
+              "result": "null",
+              "runtime_id": "str",
+              "start_claim_supported": "boolean",
+              "started_at": "null",
+              "status": "str",
+              "thread_name": "str",
+              "workspace_id": "str",
+              "workspace_slug": "str"
+            }
+          ]
+        },
+        "rust": {
+          "tasks": [
+            {
+              "agent": {
+                "id": "str",
+                "instructions": "str",
+                "name": "str",
+                "skills": [
+                  {
+                    "content": "str",
+                    "files": [
+                      {
+                        "content": "str",
+                        "path": "str"
+                      }
+                    ],
+                    "id": "str",
+                    "name": "str"
+                  }
+                ]
+              },
+              "agent_id": "str",
+              "attempt": "number",
+              "attribution": {
+                "precise": "boolean",
+                "source": "str"
+              },
+              "auth_token": "str",
+              "chat_session_id": "str",
+              "completed_at": "null",
+              "created_at": "str",
+              "delivered_comment_ids": [],
+              "dispatched_at": "str",
+              "error": "null",
+              "id": "str",
+              "issue_id": "str",
+              "kind": "str",
+              "leader_role_resolved": "boolean",
+              "max_attempts": "number",
+              "priority": "number",
+              "requesting_user_name": "str",
+              "result": "null",
+              "runtime_id": "str",
+              "start_claim_supported": "boolean",
+              "started_at": "null",
+              "status": "str",
+              "thread_name": "str",
+              "workspace_id": "str",
+              "workspace_slug": "str"
+            }
+          ]
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 7.732562,
+          "p95_ms": 12.748866,
+          "mean_ms": 8.354
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 20.034567,
+          "p95_ms": 22.00511,
+          "mean_ms": 20.025
+        }
+      }
+    },
+    "singular_claimed_issue": {
+      "status_counts": {
+        "go": {
+          "200": 100
+        },
+        "rust": {
+          "200": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "task": {
+            "agent": {
+              "id": "str",
+              "instructions": "str",
+              "name": "str",
+              "skills": [
+                {
+                  "content": "str",
+                  "files": [
+                    {
+                      "content": "str",
+                      "path": "str"
+                    }
+                  ],
+                  "id": "str",
+                  "name": "str"
+                }
+              ]
+            },
+            "agent_id": "str",
+            "attempt": "number",
+            "attribution": {
+              "precise": "boolean",
+              "source": "str"
+            },
+            "auth_token": "str",
+            "completed_at": "null",
+            "created_at": "str",
+            "delivered_comment_ids": [],
+            "dispatched_at": "str",
+            "error": "null",
+            "id": "str",
+            "issue_id": "str",
+            "issue_identifier": "str",
+            "issue_status": "str",
+            "kind": "str",
+            "leader_role_resolved": "boolean",
+            "max_attempts": "number",
+            "priority": "number",
+            "requesting_user_name": "str",
+            "result": "null",
+            "runtime_id": "str",
+            "start_claim_supported": "boolean",
+            "started_at": "null",
+            "status": "str",
+            "thread_name": "str",
+            "workspace_id": "str",
+            "workspace_slug": "str"
+          }
+        },
+        "rust": {
+          "task": {
+            "agent": {
+              "id": "str",
+              "instructions": "str",
+              "name": "str",
+              "skills": [
+                {
+                  "content": "str",
+                  "files": [
+                    {
+                      "content": "str",
+                      "path": "str"
+                    }
+                  ],
+                  "id": "str",
+                  "name": "str"
+                }
+              ]
+            },
+            "agent_id": "str",
+            "attempt": "number",
+            "attribution": {
+              "precise": "boolean",
+              "source": "str"
+            },
+            "auth_token": "str",
+            "completed_at": "null",
+            "created_at": "str",
+            "delivered_comment_ids": [],
+            "dispatched_at": "str",
+            "error": "null",
+            "id": "str",
+            "issue_id": "str",
+            "issue_identifier": "str",
+            "issue_status": "str",
+            "kind": "str",
+            "leader_role_resolved": "boolean",
+            "max_attempts": "number",
+            "priority": "number",
+            "requesting_user_name": "str",
+            "result": "null",
+            "runtime_id": "str",
+            "start_claim_supported": "boolean",
+            "started_at": "null",
+            "status": "str",
+            "thread_name": "str",
+            "workspace_id": "str",
+            "workspace_slug": "str"
+          }
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 7.800377,
+          "p95_ms": 11.484194,
+          "mean_ms": 8.31
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 19.46289,
+          "p95_ms": 21.934723,
+          "mean_ms": 20.373
+        }
+      }
+    },
+    "batch_claimed_issue": {
+      "status_counts": {
+        "go": {
+          "200": 100
+        },
+        "rust": {
+          "200": 100
+        }
+      },
+      "response_shape": {
+        "go": {
+          "tasks": [
+            {
+              "agent": {
+                "id": "str",
+                "instructions": "str",
+                "name": "str",
+                "skills": [
+                  {
+                    "content": "str",
+                    "files": [
+                      {
+                        "content": "str",
+                        "path": "str"
+                      }
+                    ],
+                    "id": "str",
+                    "name": "str"
+                  }
+                ]
+              },
+              "agent_id": "str",
+              "attempt": "number",
+              "attribution": {
+                "precise": "boolean",
+                "source": "str"
+              },
+              "auth_token": "str",
+              "completed_at": "null",
+              "created_at": "str",
+              "delivered_comment_ids": [],
+              "dispatched_at": "str",
+              "error": "null",
+              "id": "str",
+              "issue_id": "str",
+              "issue_identifier": "str",
+              "issue_status": "str",
+              "kind": "str",
+              "leader_role_resolved": "boolean",
+              "max_attempts": "number",
+              "priority": "number",
+              "requesting_user_name": "str",
+              "result": "null",
+              "runtime_id": "str",
+              "start_claim_supported": "boolean",
+              "started_at": "null",
+              "status": "str",
+              "thread_name": "str",
+              "workspace_id": "str",
+              "workspace_slug": "str"
+            }
+          ]
+        },
+        "rust": {
+          "tasks": [
+            {
+              "agent": {
+                "id": "str",
+                "instructions": "str",
+                "name": "str",
+                "skills": [
+                  {
+                    "content": "str",
+                    "files": [
+                      {
+                        "content": "str",
+                        "path": "str"
+                      }
+                    ],
+                    "id": "str",
+                    "name": "str"
+                  }
+                ]
+              },
+              "agent_id": "str",
+              "attempt": "number",
+              "attribution": {
+                "precise": "boolean",
+                "source": "str"
+              },
+              "auth_token": "str",
+              "completed_at": "null",
+              "created_at": "str",
+              "delivered_comment_ids": [],
+              "dispatched_at": "str",
+              "error": "null",
+              "id": "str",
+              "issue_id": "str",
+              "issue_identifier": "str",
+              "issue_status": "str",
+              "kind": "str",
+              "leader_role_resolved": "boolean",
+              "max_attempts": "number",
+              "priority": "number",
+              "requesting_user_name": "str",
+              "result": "null",
+              "runtime_id": "str",
+              "start_claim_supported": "boolean",
+              "started_at": "null",
+              "status": "str",
+              "thread_name": "str",
+              "workspace_id": "str",
+              "workspace_slug": "str"
+            }
+          ]
+        }
+      },
+      "status_or_shape_mismatches": 0,
+      "invalid_responses": 0,
+      "failed_examples": [],
+      "shape_diff_paths": [],
+      "latency": {
+        "go": {
+          "n": 100,
+          "p50_ms": 7.63072,
+          "p95_ms": 12.674808,
+          "mean_ms": 8.182
+        },
+        "rust": {
+          "n": 100,
+          "p50_ms": 19.509366,
+          "p95_ms": 21.812696,
+          "mean_ms": 19.564
+        }
+      }
+    }
+  },
+  "exit_codes": {
+    "build_go-server": 0,
+    "build_go-migrate": 0,
+    "build_rust": 0,
+    "migrate_go": 0,
+    "migrate_rust": 0,
+    "rust_server": 0,
+    "go_server_after_requested_stop": 0,
+    "benchmark": 0
+  },
+  "errors": [],
+  "lab_compare": "Not used: existing lab.py fixture/case sets target different APIs, not synthetic claim polling; status and JSON shape parity are checked directly here.",
+  "success": true
+}

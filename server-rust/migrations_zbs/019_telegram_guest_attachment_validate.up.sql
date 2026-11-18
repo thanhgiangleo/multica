@@ -1,0 +1,1 @@
+ALTER TABLE attachment VALIDATE CONSTRAINT attachment_uploader_type_check;

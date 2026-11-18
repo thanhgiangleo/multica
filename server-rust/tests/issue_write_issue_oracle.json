@@ -1,0 +1,1438 @@
+[
+  {
+    "name": "update-00",
+    "kind": "update",
+    "body_base64": "e30=",
+    "error": false,
+    "decoded": {
+      "raw": {},
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-01",
+    "kind": "update",
+    "body_base64": "bnVsbA==",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-02",
+    "kind": "update",
+    "body_base64": "W10=",
+    "error": true
+  },
+  {
+    "name": "update-03",
+    "kind": "update",
+    "body_base64": "InN0cmluZyI=",
+    "error": true
+  },
+  {
+    "name": "update-04",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOiJGaXJzdCIsICJUSVRMRSI6bnVsbCB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "TITLE": null,
+        "title": "First"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-05",
+    "kind": "update",
+    "body_base64": "eyAiVElUTEUiOiJGaXJzdCIsICJ0aXRsZSI6IlNlY29uZCIgfQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "TITLE": "First",
+        "title": "Second"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "Second",
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-06",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOiJGaXJzdCIsICJUSVRMRSI6IlNlY29uZCIsICJ0aXRsZSI6bnVsbCB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "TITLE": "Second",
+        "title": null
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-07",
+    "kind": "update",
+    "body_base64": "eyAic3RhdHVzIjpmYWxzZSB9",
+    "error": true
+  },
+  {
+    "name": "update-08",
+    "kind": "update",
+    "body_base64": "eyAicG9zaXRpb24iOjAuMjUsICJQT1NJVElPTiI6bnVsbCB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "POSITION": null,
+        "position": 0.25
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-09",
+    "kind": "update",
+    "body_base64": "eyAiZXhwZWN0ZWRfcmV2aXNpb24iOjcsICJFWFBFQ1RFRF9SRVZJU0lPTiI6bnVsbCB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "EXPECTED_REVISION": null,
+        "expected_revision": 7
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-10",
+    "kind": "update",
+    "body_base64": "eyAiZXhwZWN0ZWRfcmV2aXNpb24iOjcsICJFeHBlY3RlZF9SZXZpc2lvbiI6OCB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "Expected_Revision": 8,
+        "expected_revision": 7
+      },
+      "request": {
+        "expected_revision": 8,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-11",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOlsib25lIiwidHdvIl0sIkFUVEFDSE1FTlRfSURTIjpbbnVsbCwibmV3Il0gfQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "ATTACHMENT_IDS": [
+          null,
+          "new"
+        ],
+        "attachment_ids": [
+          "one",
+          "two"
+        ]
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": [
+          "one",
+          "new"
+        ],
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-12",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOlsib25lIiwidHdvIl0sImF0dGFjaG1lbnRfaWRzIjpbbnVsbF0gfQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "attachment_ids": [
+          null
+        ]
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": [
+          "one"
+        ],
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-13",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOlsib25lIl0sImF0dGFjaG1lbnRfaWRzIjpudWxsLCJhdHRhY2htZW50X2lkcyI6W251bGxdIH0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "attachment_ids": [
+          null
+        ]
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": [
+          ""
+        ],
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-14",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOltdLCAiYXR0YWNobWVudF9pZHMiOltudWxsXSB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "attachment_ids": [
+          null
+        ]
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": [
+          ""
+        ],
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-15",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOlsib25lIl0sICJhdHRhY2htZW50X2lkcyI6W2ZhbHNlXSB9",
+    "error": true
+  },
+  {
+    "name": "update-16",
+    "kind": "update",
+    "body_base64": "eyAic3VwcHJlc3NfcnVuIjp0cnVlLCAiU1VQUFJFU1NfUlVOIjpudWxsIH0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "SUPPRESS_RUN": null,
+        "suppress_run": true
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": true,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-17",
+    "kind": "update",
+    "body_base64": "eyAiaGFuZG9mZl9ub3RlIjoiZ28iLCAiSEFORE9GRl9OT1RFIjpudWxsIH0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "HANDOFF_NOTE": null,
+        "handoff_note": "go"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "go",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-18",
+    "kind": "update",
+    "body_base64": "eyAiZHVwbGljYXRlX29mX2lzc3VlX2lkIjoiYSIsICJEVVBMSUNBVEVfT0ZfSVNTVUVfSUQiOiJiIiB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "DUPLICATE_OF_ISSUE_ID": "b",
+        "duplicate_of_issue_id": "a"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": "b"
+      }
+    }
+  },
+  {
+    "name": "update-19",
+    "kind": "update",
+    "body_base64": "eyAiZHVwbGljYXRlX29mX2lzc3VlX2lkIjpudWxsLCAiRFVQTElDQVRFX09GX0lTU1VFX0lEIjoiYiIgfQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "DUPLICATE_OF_ISSUE_ID": "b",
+        "duplicate_of_issue_id": null
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": "b"
+      }
+    }
+  },
+  {
+    "name": "update-20",
+    "kind": "update",
+    "body_base64": "eyAicGFyZW50X2lzc3VlX2lkIjoiYSIsICJQQVJFTlRfSVNTVUVfSUQiOm51bGwsICJzdGFnZSI6MywgIlNUQUdFIjpudWxsIH0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "PARENT_ISSUE_ID": null,
+        "STAGE": null,
+        "parent_issue_id": "a",
+        "stage": 3
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-21",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOltudWxsLCAiYiJdLCAic3RhZ2UiOjIxNDc0ODM2NDggfQ==",
+    "error": true
+  },
+  {
+    "name": "update-22",
+    "kind": "update",
+    "body_base64": "eyAidW5rbm93biI6IFtmYWxzZSwgeyJ0aXRsZSI6ImFueXRoaW5nIn1dLCAidGl0bGUiOiJzYWZlIiB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "title": "safe",
+        "unknown": [
+          false,
+          {
+            "title": "anything"
+          }
+        ]
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "safe",
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-23",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOiJhIiB9IHsgInRpdGxlIjoiYiIgfQ==",
+    "error": true
+  },
+  {
+    "name": "update-24",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOiJhIiB9IHRyYWlsaW5n",
+    "error": true
+  },
+  {
+    "name": "update-25",
+    "kind": "update",
+    "body_base64": "eyAixb90YXR1cyI6InRvZG8iLCAixb91cHByZXNzX3J1biI6dHJ1ZSwgIuKEqmV5IjoidW51c2VkIiB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "ſtatus": "todo",
+        "ſuppress_run": true,
+        "Key": "unused"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": null,
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": "todo",
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": true,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-26",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOiJcdWQ4MDAiLCAiZGVzY3JpcHRpb24iOiJcdWRmZmYiIH0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "description": "�",
+        "title": "�"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "�",
+        "title_base": null,
+        "description": "�",
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-27",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOiJhXHUwMDAwYiIgfQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "title": "a\u0000b"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "a\u0000b",
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-28",
+    "kind": "update",
+    "body_base64": "eyAidGl0bGUiOjEgfQ==",
+    "error": true
+  },
+  {
+    "name": "update-29",
+    "kind": "update",
+    "body_base64": "eyAiYXR0YWNobWVudF9pZHMiOiJub3BlIiB9",
+    "error": true
+  },
+  {
+    "name": "update-bytes-00",
+    "kind": "update",
+    "body_base64": "eyJ0aXRsZSI6Iv8ifQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "title": "�"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "�",
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-bytes-01",
+    "kind": "update",
+    "body_base64": "eyJ0aXRsZSI6IuKCIn0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "title": "��"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "��",
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-bytes-02",
+    "kind": "update",
+    "body_base64": "eyJ0aXRsZSI6IsCvIn0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "title": "��"
+      },
+      "request": {
+        "expected_revision": null,
+        "title": "��",
+        "title_base": null,
+        "description": null,
+        "description_base": null,
+        "status": null,
+        "priority": null,
+        "assignee_type": null,
+        "assignee_id": null,
+        "position": null,
+        "start_date": null,
+        "due_date": null,
+        "parent_issue_id": null,
+        "project_id": null,
+        "stage": null,
+        "attachment_ids": null,
+        "suppress_run": false,
+        "handoff_note": "",
+        "stop_previous_assignee_runs": false,
+        "enter_workflow_step": false,
+        "duplicate_of_issue_id": null
+      }
+    }
+  },
+  {
+    "name": "update-bytes-03",
+    "kind": "update",
+    "body_base64": "eyJ0aXRsZSI6/30=",
+    "error": true
+  },
+  {
+    "name": "batch-00",
+    "kind": "batch",
+    "body_base64": "e30=",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "issue_ids": null,
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-01",
+    "kind": "batch",
+    "body_base64": "bnVsbA==",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "issue_ids": null,
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-02",
+    "kind": "batch",
+    "body_base64": "W10=",
+    "error": true
+  },
+  {
+    "name": "batch-03",
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsieCIsbnVsbCwieSJdLCJ1cGRhdGVzIjp7InN0YXR1cyI6InRvZG8ifX0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "status": "todo"
+      },
+      "request": {
+        "issue_ids": [
+          "x",
+          "",
+          "y"
+        ],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": "todo",
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-04",
+    "kind": "batch",
+    "body_base64": "eyAiaXNzdWVfaWRzIjpbIm9uZSIsInR3byJdLCAiSVNTVUVfSURTIjpbbnVsbF0gfQ==",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "issue_ids": [
+          "one"
+        ],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-05",
+    "kind": "batch",
+    "body_base64": "eyAiaXNzdWVfaWRzIjpbIm9uZSJdLCAiaXNzdWVfaWRzIjpudWxsLCAiaXNzdWVfaWRzIjpbbnVsbF0gfQ==",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "issue_ids": [
+          ""
+        ],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-06",
+    "kind": "batch",
+    "body_base64": "eyAidXBkYXRlcyI6eyJ0aXRsZSI6Im9sZCIsImF0dGFjaG1lbnRfaWRzIjpbIm9uZSIsInR3byJdfSwgIlVQREFURVMiOnsic3RhdHVzIjoidG9kbyIsImF0dGFjaG1lbnRfaWRzIjpbbnVsbCwibmV3Il19IH0=",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "attachment_ids": [
+          "one",
+          "two"
+        ],
+        "title": "old"
+      },
+      "request": {
+        "issue_ids": null,
+        "updates": {
+          "expected_revision": null,
+          "title": "old",
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": "todo",
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": [
+            "one",
+            "new"
+          ],
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-07",
+    "kind": "batch",
+    "body_base64": "eyAidXBkYXRlcyI6eyJ0aXRsZSI6Im9sZCIsInN1cHByZXNzX3J1biI6dHJ1ZX0sICJ1cGRhdGVzIjp7ImRlc2NyaXB0aW9uIjoibmV3IiwiU1VQUFJFU1NfUlVOIjpudWxsfSB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "SUPPRESS_RUN": null,
+        "description": "new"
+      },
+      "request": {
+        "issue_ids": null,
+        "updates": {
+          "expected_revision": null,
+          "title": "old",
+          "title_base": null,
+          "description": "new",
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": true,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-08",
+    "kind": "batch",
+    "body_base64": "eyAidXBkYXRlcyI6eyJ0aXRsZSI6Im9sZCJ9LCAiVVBEQVRFUyI6bnVsbCB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "title": "old"
+      },
+      "request": {
+        "issue_ids": null,
+        "updates": {
+          "expected_revision": null,
+          "title": "old",
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-09",
+    "kind": "batch",
+    "body_base64": "eyAidXBkYXRlcyI6bnVsbCwgIlVQREFURVMiOnsiZGVzY3JpcHRpb24iOiJuZXcifSB9",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "issue_ids": null,
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": "new",
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-10",
+    "kind": "batch",
+    "body_base64": "eyAidXBkYXRlcyI6eyJ0aXRsZSI6Im9sZCJ9LCAidXBkYXRlcyI6ZmFsc2UgfQ==",
+    "error": true
+  },
+  {
+    "name": "batch-11",
+    "kind": "batch",
+    "body_base64": "eyAidXBkYXRlcyI6eyJ0aXRsZSI6Mn0gfQ==",
+    "error": true
+  },
+  {
+    "name": "batch-12",
+    "kind": "batch",
+    "body_base64": "eyAiaXNzdWVfaWRzIjpbXSwgInVwZGF0ZXMiOnsiYXR0YWNobWVudF9pZHMiOltudWxsXX0gfQ==",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "attachment_ids": [
+          null
+        ]
+      },
+      "request": {
+        "issue_ids": [],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": [
+            ""
+          ],
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-13",
+    "kind": "batch",
+    "body_base64": "eyAiaXNzdWVfaWRzIjpbImEiXSwgInVwZGF0ZXMiOnsicGFyZW50X2lzc3VlX2lkIjoiZmlyc3QiLCAiUEFSRU5UX0lTU1VFX0lEIjpudWxsfSB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "PARENT_ISSUE_ID": null,
+        "parent_issue_id": "first"
+      },
+      "request": {
+        "issue_ids": [
+          "a"
+        ],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-14",
+    "kind": "batch",
+    "body_base64": "eyAiaXNzdWVfaWRzIjpbImEiXSwgInVwZGF0ZXMiOnsic3RhdHVzIjoidG9kbyJ9LCAidXBkYXRlIjp7InN0YXR1cyI6ImRvbmUifSB9",
+    "error": false,
+    "decoded": {
+      "raw": {
+        "status": "todo"
+      },
+      "request": {
+        "issue_ids": [
+          "a"
+        ],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": "todo",
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": null
+        }
+      }
+    }
+  },
+  {
+    "name": "batch-15",
+    "kind": "batch",
+    "body_base64": "eyAiaXNzdWVfaWRzIjpbImEiXSB9IHsgImlzc3VlX2lkcyI6WyJiIl0gfQ==",
+    "error": true
+  },
+  {
+    "name": "batch-16",
+    "kind": "batch",
+    "body_base64": "eyAiSVNTVUVfSURTIjpbImEiXSwgIlVQREFURVMiOnsiRFVQTElDQVRFX09GX0lTU1VFX0lEIjoiYiJ9IH0=",
+    "error": false,
+    "decoded": {
+      "raw": null,
+      "request": {
+        "issue_ids": [
+          "a"
+        ],
+        "updates": {
+          "expected_revision": null,
+          "title": null,
+          "title_base": null,
+          "description": null,
+          "description_base": null,
+          "status": null,
+          "priority": null,
+          "assignee_type": null,
+          "assignee_id": null,
+          "position": null,
+          "start_date": null,
+          "due_date": null,
+          "parent_issue_id": null,
+          "project_id": null,
+          "stage": null,
+          "attachment_ids": null,
+          "suppress_run": false,
+          "handoff_note": "",
+          "stop_previous_assignee_runs": false,
+          "enter_workflow_step": false,
+          "duplicate_of_issue_id": "b"
+        }
+      }
+    }
+  }
+]

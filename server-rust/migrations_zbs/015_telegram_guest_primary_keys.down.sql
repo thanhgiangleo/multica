@@ -1,0 +1,2 @@
+ALTER TABLE zbs_telegram_guest_grant DROP CONSTRAINT IF EXISTS zbs_telegram_guest_grant_pkey;
+ALTER TABLE zbs_telegram_guest_invite DROP CONSTRAINT IF EXISTS zbs_telegram_guest_invite_pkey;

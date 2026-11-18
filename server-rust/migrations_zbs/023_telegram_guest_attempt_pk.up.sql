@@ -1,0 +1,1 @@
+ALTER TABLE zbs_telegram_guest_attempt ADD CONSTRAINT zbs_telegram_guest_attempt_pkey PRIMARY KEY USING INDEX zbs_telegram_guest_attempt_key_uidx;

@@ -1,0 +1,662 @@
+{
+  "/api/projects/00000000-0000-0000-0000-0000000000a6": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/projects/00000000-0000-0000-0000-0000000000a6/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issues/00000000-0000-0000-0000-0000000000a7": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issues/00000000-0000-0000-0000-0000000000a7/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/labels": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/labels/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/squads": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/squads/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/skills": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/skills/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/runtimes": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/runtimes/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/inbox": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/inbox/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/pins": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/pins/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/properties": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/properties/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issue-views": {
+    "go": [
+      400,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      400,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issue-views/": {
+    "go": [
+      400,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      400,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issue-statuses": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issue-statuses/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/quick-actions": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/quick-actions/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/autopilots": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/autopilots/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/notification-preferences": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/notification-preferences/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/chat/sessions": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/chat/sessions/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/agents": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/agents/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/workspaces": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/workspaces/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/cloud-billing/balance": {
+    "go": [
+      403,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      403,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/cloud-billing/balance/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/agent-activity-30d": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/agent-activity-30d/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/me": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/me/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/inbox/unread-count": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/inbox/unread-count/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/chat/pending-tasks/has-any": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/chat/pending-tasks/has-any/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/issues/search?q=synthetic": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/projects/search": {
+    "go": [
+      400,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      400,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/projects/search/": {
+    "go": [
+      400,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      400,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issue-workflows": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/issue-workflows/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/tokens": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/tokens/": {
+    "go": [
+      200,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      200,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/limits": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/limits/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  },
+  "/api/cloud-subscriptions/prices": {
+    "go": [
+      403,
+      null,
+      "application/json"
+    ],
+    "rust": [
+      403,
+      null,
+      "application/json"
+    ]
+  },
+  "/api/cloud-subscriptions/prices/": {
+    "go": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ],
+    "rust": [
+      404,
+      null,
+      "text/plain; charset=utf-8"
+    ]
+  }
+}

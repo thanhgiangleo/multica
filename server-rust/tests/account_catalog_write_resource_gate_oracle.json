@@ -1,0 +1,651 @@
+[
+  {
+    "label": "unregistered",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "capable",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "downgrade",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": "2026-01-01T00:00:00Z"
+      },
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "upgrade",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-01T00:00:00Z"
+      },
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "equal-first-capable",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      },
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "equal-first-incapable",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      },
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "null-first-capable",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": null
+      },
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": null
+      }
+    ]
+  },
+  {
+    "label": "null-first-incapable",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": null
+      },
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": null
+      }
+    ]
+  },
+  {
+    "label": "seen-beats-null",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\"], \"cli_version\": \"0.4.24\"}",
+        "seen": null
+      },
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "version-skips-missing",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-01T00:00:00Z"
+      },
+      {
+        "metadata": "{}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "version-null-then-live",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "dev-v2",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": null
+      },
+      {
+        "metadata": "{\"cli_version\": \"dev-v2\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "version-empty-ignored",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-01T00:00:00Z"
+      },
+      {
+        "metadata": "{\"cli_version\": \"\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "version-number-ignored",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "0.4.23",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"cli_version\": \"0.4.23\"}",
+        "seen": "2026-01-01T00:00:00Z"
+      },
+      {
+        "metadata": "{\"cli_version\": 424}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "version-key-case-sensitive",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"CLI_VERSION\": \"0.9\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-0",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "null",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-1",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "[]",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-2",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "1",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-3",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "true",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-4",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": \"local-worktree-v1\"}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-5",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\", 1]}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-6",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\": [\"local-worktree-v1\", null]}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-7",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"CAPABILITIES\": [\"local-worktree-v1\"]}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-8",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"capabilitieſ\": [\"local-worktree-v1\"]}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-9",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": null,
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\":[\"local-worktree-v1\"],\"CAPABILITIES\":[null]}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-10",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\":[\"local-worktree-v1\"],\"CAPABILITIES\":null}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "metadata-11",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/repo"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/repo\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": [
+      {
+        "metadata": "{\"capabilities\":[\"local-worktree-v1\"],\"CAPABILITIES\":[]}",
+        "seen": "2026-01-02T00:00:00Z"
+      }
+    ]
+  },
+  {
+    "label": "path-26",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/\"quote\""
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/\\\"quote\\\"\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "path-27",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/\\backslash"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/\\\\backslash\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "path-28",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/Việt Nam"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/Việt Nam\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "path-29",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/日本語"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/日本語\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "path-30",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/😀"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/😀\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "path-31",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\a\\b\\t\\n\\v\\f\\r\\x0e\\x0f\\x10\\x11\\x12\\x13\\x14\\x15\\x16\\x17\\x18\\x19\\x1a\\x1b\\x1c\\x1d\\x1e\\x1f\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  },
+  {
+    "label": "path-32",
+    "reference": {
+      "daemon_id": "d",
+      "execution_mode": "worktree",
+      "local_path": "/tmp/ ­​ ﻿󠀁"
+    },
+    "rejection": {
+      "code": "daemon_version_unsupported",
+      "current_version": "",
+      "daemon_id": "d",
+      "error": "local_directory: \"/tmp/\\x7f\\u0085\\u00a0\\u00ad\\u200b\\u2028\\ufeff\\U000e0001\" is set to parallel (worktree) mode, but the Multica runtime on that machine does not support it. Update the Multica app on that machine to the latest version, or keep the resource on in_place.",
+      "min_version": "0.4.24"
+    },
+    "runtimes": []
+  }
+]

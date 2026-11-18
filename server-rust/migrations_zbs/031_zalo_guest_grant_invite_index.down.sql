@@ -1,0 +1,1 @@
+DROP INDEX CONCURRENTLY IF EXISTS zbs_zalo_guest_grant_invite_idx;

@@ -1,0 +1,158 @@
+[
+  {
+    "normalized": "https://github.com/acme/widgets/pull/42",
+    "raw": "https://github.com/acme/widgets/pull/42"
+  },
+  {
+    "normalized": "https://github.com/acme/widgets/pull/42",
+    "raw": "  HTTPS://GitHub.com/Acme/Widgets/pull/42/files?diff=1#x  "
+  },
+  {
+    "normalized": "https://github.com/acme/widgets/pull/42",
+    "raw": "github.com/acme/widgets/pull/42"
+  },
+  {
+    "normalized": "https://gitlab.com/grp/proj/-/merge_requests/7",
+    "raw": "https://gitlab.com/grp/proj/-/merge_requests/7"
+  },
+  {
+    "normalized": "http://localhost:8888/o/r/pulls/8",
+    "raw": "http://localhost:8888/o/r/pulls/8/"
+  },
+  {
+    "normalized": "https://example.com/o/r/pull/1",
+    "raw": "https://u:p@example.com/o/r/pull/1"
+  },
+  {
+    "normalized": "https://example.com:443/o/r/pull/001",
+    "raw": "https://example.com:443/o/r/pull/001"
+  },
+  {
+    "normalized": "https://example.com/o/r/../pull/1",
+    "raw": "https://example.com/o/r/../pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/r/%2e%2e/pull/1",
+    "raw": "https://example.com/o/r/%2e%2e/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o%2fr/pull/1",
+    "raw": "https://example.com/o%2Fr/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/vi%e1%bb%87t%20nam/pull/1",
+    "raw": "https://example.com/o/Việt Nam/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/vi%e1%bb%87t/pull/1",
+    "raw": "https://example.com/o/Việt/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/a%20b/pull/1",
+    "raw": "https://example.com/o/a%20b/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/a/b%20c/pull/1",
+    "raw": "https://example.com/o/a%2fb c/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/[x]/pull/1",
+    "raw": "https://example.com/o/[x]/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/x!$\u0026'()*+,;=:@/pull/1",
+    "raw": "https://example.com/o/x!$\u0026'()*+,;=:@/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/r/pull/1",
+    "raw": "https://example.com/o/r/pull/1/files/pull/2"
+  },
+  {
+    "normalized": "https://example.com/o/r/pull/1a/pull/2",
+    "raw": "https://example.com/o/r/pull/1a/pull/2"
+  },
+  {
+    "normalized": "https://example.com/o/r/pull/1",
+    "raw": "https://example.com/o/r/pull/1?bad=%zz"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/pull/1#bad%zz"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/%zz/pull/1"
+  },
+  {
+    "normalized": "https://example.com/o/r/pull/1",
+    "raw": "https://example.com/o/r/pull/1\n"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/pull/1\nx"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/PULL/1"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/pull/１２"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/pull/1abc"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/pull/1"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com//pull/1"
+  },
+  {
+    "normalized": "https://example.com///pull/1",
+    "raw": "https://example.com///pull/1"
+  },
+  {
+    "normalized": "https://example.com/o//pull/1",
+    "raw": "https://example.com/o//pull/1"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/pull/-1"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/pull/"
+  },
+  {
+    "normalized": null,
+    "raw": "ftp://example.com/o/r/pull/1"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com:bad/o/r/pull/1"
+  },
+  {
+    "normalized": "https://exa_mple.com/o/r/pull/1",
+    "raw": "https://exa_mple.com/o/r/pull/1"
+  },
+  {
+    "normalized": "https://[::1]:8080/o/r/pull/1",
+    "raw": "https://[::1]:8080/o/r/pull/1"
+  },
+  {
+    "normalized": "https://例.example/o/r/pull/1",
+    "raw": "https://例.example/o/r/pull/1"
+  },
+  {
+    "normalized": null,
+    "raw": "https://example.com/o/r/issues/1"
+  },
+  {
+    "normalized": null,
+    "raw": ""
+  }
+]

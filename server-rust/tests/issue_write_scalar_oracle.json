@@ -1,0 +1,562 @@
+[
+  {
+    "name": "metadata missing",
+    "kind": "metadata",
+    "body_base64": "e30=",
+    "error": false,
+    "decoded": null,
+    "decoded_base64": null,
+    "validation_error": "value is required"
+  },
+  {
+    "name": "metadata top null",
+    "kind": "metadata",
+    "body_base64": "bnVsbA==",
+    "error": false,
+    "decoded": null,
+    "decoded_base64": null,
+    "validation_error": "value is required"
+  },
+  {
+    "name": "metadata raw null",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6bnVsbH0=",
+    "error": false,
+    "decoded": "null",
+    "decoded_base64": "bnVsbA==",
+    "validation_error": "value cannot be null (use DELETE to remove a key)"
+  },
+  {
+    "name": "metadata string",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Im9rIn0=",
+    "error": false,
+    "decoded": "\"ok\"",
+    "decoded_base64": "Im9rIg=="
+  },
+  {
+    "name": "metadata string escapes",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6IkFcXHgifQ==",
+    "error": false,
+    "decoded": "\"A\\\\x\"",
+    "decoded_base64": "IkFcXHgi"
+  },
+  {
+    "name": "metadata negative zero",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6LTB9",
+    "error": false,
+    "decoded": "-0",
+    "decoded_base64": "LTA="
+  },
+  {
+    "name": "metadata decimal",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Mi4wMH0=",
+    "error": false,
+    "decoded": "2.00",
+    "decoded_base64": "Mi4wMA=="
+  },
+  {
+    "name": "metadata exponent",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6MWUrNTB9",
+    "error": false,
+    "decoded": "1e+50",
+    "decoded_base64": "MWUrNTA="
+  },
+  {
+    "name": "metadata large exponent raw",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6MWU0MDB9",
+    "error": false,
+    "decoded": "1e400",
+    "decoded_base64": "MWU0MDA=",
+    "validation_error": "value must be valid JSON: json: cannot unmarshal number 1e400 into Go value of type float64"
+  },
+  {
+    "name": "metadata nested overflow",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6eyJuIjoxZTQwMH19",
+    "error": false,
+    "decoded": "{\"n\":1e400}",
+    "decoded_base64": "eyJuIjoxZTQwMH0=",
+    "validation_error": "value must be valid JSON: json: cannot unmarshal number 1e400 into Go value of type float64"
+  },
+  {
+    "name": "metadata array overflow",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6WzAsMWU0MDBdfQ==",
+    "error": false,
+    "decoded": "[0,1e400]",
+    "decoded_base64": "WzAsMWU0MDBd",
+    "validation_error": "value must be valid JSON: json: cannot unmarshal number 1e400 into Go value of type float64"
+  },
+  {
+    "name": "metadata numeric string",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6IjFlNDAwIn0=",
+    "error": false,
+    "decoded": "\"1e400\"",
+    "decoded_base64": "IjFlNDAwIg=="
+  },
+  {
+    "name": "metadata large integer",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6OTAwNzE5OTI1NDc0MDk5M30=",
+    "error": false,
+    "decoded": "9007199254740993",
+    "decoded_base64": "OTAwNzE5OTI1NDc0MDk5Mw=="
+  },
+  {
+    "name": "metadata boolean",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6dHJ1ZX0=",
+    "error": false,
+    "decoded": "true",
+    "decoded_base64": "dHJ1ZQ=="
+  },
+  {
+    "name": "metadata array",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6WzEsMl19",
+    "error": false,
+    "decoded": "[1,2]",
+    "decoded_base64": "WzEsMl0=",
+    "validation_error": "value must be a primitive: string, number, or bool"
+  },
+  {
+    "name": "metadata nested",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6eyJhIjoxLCJhIjoyfX0=",
+    "error": false,
+    "decoded": "{\"a\":1,\"a\":2}",
+    "decoded_base64": "eyJhIjoxLCJhIjoyfQ==",
+    "validation_error": "value must be a primitive: string, number, or bool"
+  },
+  {
+    "name": "metadata exact duplicate",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6MSwidmFsdWUiOjJ9",
+    "error": false,
+    "decoded": "2",
+    "decoded_base64": "Mg=="
+  },
+  {
+    "name": "metadata case duplicate",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6MSwiVkFMVUUiOjJ9",
+    "error": false,
+    "decoded": "2",
+    "decoded_base64": "Mg=="
+  },
+  {
+    "name": "metadata casefold",
+    "kind": "metadata",
+    "body_base64": "eyJWYUx1RSI6NX0=",
+    "error": false,
+    "decoded": "5",
+    "decoded_base64": "NQ=="
+  },
+  {
+    "name": "metadata null then number",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6bnVsbCwidmFsdWUiOjV9",
+    "error": false,
+    "decoded": "5",
+    "decoded_base64": "NQ=="
+  },
+  {
+    "name": "metadata number then null",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6NSwidmFsdWUiOm51bGx9",
+    "error": false,
+    "decoded": "null",
+    "decoded_base64": "bnVsbA==",
+    "validation_error": "value cannot be null (use DELETE to remove a key)"
+  },
+  {
+    "name": "metadata bad first duplicate",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6W10sInZhbHVlIjo1fQ==",
+    "error": false,
+    "decoded": "5",
+    "decoded_base64": "NQ=="
+  },
+  {
+    "name": "metadata unknown nested",
+    "kind": "metadata",
+    "body_base64": "eyJpZ25vcmVkIjp7ImEiOjEsImEiOjJ9LCJ2YWx1ZSI6Mn0=",
+    "error": false,
+    "decoded": "2",
+    "decoded_base64": "Mg=="
+  },
+  {
+    "name": "metadata first JSON only",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6OH0gdHJhaWxpbmcganVuaw==",
+    "error": false,
+    "decoded": "8",
+    "decoded_base64": "OA=="
+  },
+  {
+    "name": "metadata scalar",
+    "kind": "metadata",
+    "body_base64": "MQ==",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "metadata empty",
+    "kind": "metadata",
+    "body_base64": "",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "metadata malformed",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "metadata surrogate raw",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Ilx1ZDgwMCJ9",
+    "error": false,
+    "decoded": "\"\\ud800\"",
+    "decoded_base64": "Ilx1ZDgwMCI="
+  },
+  {
+    "name": "metadata unknown surrogate key",
+    "kind": "metadata",
+    "body_base64": "eyJcdWQ4MDAiOjAsInZhbHVlIjozfQ==",
+    "error": false,
+    "decoded": "3",
+    "decoded_base64": "Mw=="
+  },
+  {
+    "name": "metadata unknown invalid utf8 key",
+    "kind": "metadata",
+    "body_base64": "eyL/IjowLCJ2YWx1ZSI6NH0=",
+    "error": false,
+    "decoded": "4",
+    "decoded_base64": "NA=="
+  },
+  {
+    "name": "metadata raw invalid utf8",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Iv/+In0=",
+    "error": false,
+    "decoded": "\"\ufffd\ufffd\"",
+    "decoded_base64": "Iv/+Ig=="
+  },
+  {
+    "name": "metadata raw invalid nested utf8",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6WyL/Il19",
+    "error": false,
+    "decoded": "[\"\ufffd\"]",
+    "decoded_base64": "WyL/Il0=",
+    "validation_error": "value must be a primitive: string, number, or bool"
+  },
+  {
+    "name": "metadata invalid unknown bytes",
+    "kind": "metadata",
+    "body_base64": "eyJpZ25vcmVkIjoi/yIsIlZBTFVFIjp0cnVlfQ==",
+    "error": false,
+    "decoded": "true",
+    "decoded_base64": "dHJ1ZQ=="
+  },
+  {
+    "name": "metadata raw nested punctuation",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6eyJhIjpbIlxcXCJ9Iix7ImIiOjJ9XX0gfQ==",
+    "error": false,
+    "decoded": "{\"a\":[\"\\\\\\\"}\",{\"b\":2}]}",
+    "decoded_base64": "eyJhIjpbIlxcXCJ9Iix7ImIiOjJ9XX0=",
+    "validation_error": "value must be a primitive: string, number, or bool"
+  },
+  {
+    "name": "metadata escaped key",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6NX0=",
+    "error": false,
+    "decoded": "5",
+    "decoded_base64": "NQ=="
+  },
+  {
+    "name": "metadata duplicate raw unicode",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Ilx1ZDgwMCIsIlZBTFVFIjoiXHVkYzAwIn0=",
+    "error": false,
+    "decoded": "\"\\udc00\"",
+    "decoded_base64": "Ilx1ZGMwMCI="
+  },
+  {
+    "name": "metadata invalid discarded raw",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Iv8iLCJWQUxVRSI6N30=",
+    "error": false,
+    "decoded": "7",
+    "decoded_base64": "Nw=="
+  },
+  {
+    "name": "metadata invalid raw syntax",
+    "kind": "metadata",
+    "body_base64": "eyJ2YWx1ZSI6Iv9ceCJ9",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "property missing",
+    "kind": "property",
+    "body_base64": "e30=",
+    "error": false,
+    "decoded": null,
+    "decoded_base64": null,
+    "validation_error": "value is required"
+  },
+  {
+    "name": "property top null",
+    "kind": "property",
+    "body_base64": "bnVsbA==",
+    "error": false,
+    "decoded": null,
+    "decoded_base64": null,
+    "validation_error": "value is required"
+  },
+  {
+    "name": "property null",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6bnVsbH0=",
+    "error": false,
+    "decoded": "null",
+    "decoded_base64": "bnVsbA==",
+    "validation_error": "value cannot be null (use DELETE to remove a key)"
+  },
+  {
+    "name": "property duplicate",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6ImZpcnN0IiwiVkFMVUUiOiJsYXN0In0=",
+    "error": false,
+    "decoded": "\"last\"",
+    "decoded_base64": "Imxhc3Qi"
+  },
+  {
+    "name": "property invalid raw utf8",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6Iv8ifQ==",
+    "error": false,
+    "decoded": "\"\ufffd\"",
+    "decoded_base64": "Iv8i"
+  },
+  {
+    "name": "property nested raw",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6eyJhIjpbMSx7ImIiOnRydWV9XX19",
+    "error": false,
+    "decoded": "{\"a\":[1,{\"b\":true}]}",
+    "decoded_base64": "eyJhIjpbMSx7ImIiOnRydWV9XX0=",
+    "validation_error": "value must be a primitive: string, number, or bool"
+  },
+  {
+    "name": "property unknown invalid utf8 key",
+    "kind": "property",
+    "body_base64": "eyL/IjowLCJ2YWx1ZSI6MX0=",
+    "error": false,
+    "decoded": "1",
+    "decoded_base64": "MQ=="
+  },
+  {
+    "name": "property surrogate key",
+    "kind": "property",
+    "body_base64": "eyJcdWQ4MDAiOjAsInZhbHVlIjoxfQ==",
+    "error": false,
+    "decoded": "1",
+    "decoded_base64": "MQ=="
+  },
+  {
+    "name": "property trailing json",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6MX0geyJ2YWx1ZSI6Mn0=",
+    "error": false,
+    "decoded": "1",
+    "decoded_base64": "MQ=="
+  },
+  {
+    "name": "property scalar invalid",
+    "kind": "property",
+    "body_base64": "WzFd",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "property unknown overflow",
+    "kind": "property",
+    "body_base64": "eyJpZ25vcmVkIjoxZTQwMCwidmFsdWUiOjJ9",
+    "error": false,
+    "decoded": "2",
+    "decoded_base64": "Mg=="
+  },
+  {
+    "name": "property numeric overflow",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6MWU0MDB9",
+    "error": false,
+    "decoded": "1e400",
+    "decoded_base64": "MWU0MDA=",
+    "validation_error": "value must be valid JSON: json: cannot unmarshal number 1e400 into Go value of type float64"
+  },
+  {
+    "name": "property invalid raw syntax",
+    "kind": "property",
+    "body_base64": "eyJ2YWx1ZSI6",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "reaction missing",
+    "kind": "reaction",
+    "body_base64": "e30=",
+    "error": false,
+    "decoded": "",
+    "decoded_base64": ""
+  },
+  {
+    "name": "reaction top null",
+    "kind": "reaction",
+    "body_base64": "bnVsbA==",
+    "error": false,
+    "decoded": "",
+    "decoded_base64": ""
+  },
+  {
+    "name": "reaction string",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6IvCfkY0ifQ==",
+    "error": false,
+    "decoded": "👍",
+    "decoded_base64": "8J+RjQ=="
+  },
+  {
+    "name": "reaction empty",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6IiJ9",
+    "error": false,
+    "decoded": "",
+    "decoded_base64": ""
+  },
+  {
+    "name": "reaction null",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6bnVsbH0=",
+    "error": false,
+    "decoded": "",
+    "decoded_base64": ""
+  },
+  {
+    "name": "reaction casefold",
+    "kind": "reaction",
+    "body_base64": "eyJFbU9qSSI6Im9rIn0=",
+    "error": false,
+    "decoded": "ok",
+    "decoded_base64": "b2s="
+  },
+  {
+    "name": "reaction duplicate",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6ImZpcnN0IiwiZW1vamkiOiJsYXN0In0=",
+    "error": false,
+    "decoded": "last",
+    "decoded_base64": "bGFzdA=="
+  },
+  {
+    "name": "reaction case duplicate",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6ImZpcnN0IiwiRU1PSkkiOiJsYXN0In0=",
+    "error": false,
+    "decoded": "last",
+    "decoded_base64": "bGFzdA=="
+  },
+  {
+    "name": "reaction duplicate null",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6ImZpcnN0IiwiZW1vamkiOm51bGx9",
+    "error": false,
+    "decoded": "first",
+    "decoded_base64": "Zmlyc3Q="
+  },
+  {
+    "name": "reaction null then string",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6bnVsbCwiZW1vamkiOiJsYXN0In0=",
+    "error": false,
+    "decoded": "last",
+    "decoded_base64": "bGFzdA=="
+  },
+  {
+    "name": "reaction bad first duplicate",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6MSwiZW1vamkiOiJsYXN0In0=",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "reaction unknown nested",
+    "kind": "reaction",
+    "body_base64": "eyJleHRyYSI6eyJ4IjoxLCJ4IjoyfSwiZW1vamkiOiJvayJ9",
+    "error": false,
+    "decoded": "ok",
+    "decoded_base64": "b2s="
+  },
+  {
+    "name": "reaction trailing junk",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6Im9rIn0gbm9uc2Vuc2U=",
+    "error": false,
+    "decoded": "ok",
+    "decoded_base64": "b2s="
+  },
+  {
+    "name": "reaction malformed",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "reaction scalar",
+    "kind": "reaction",
+    "body_base64": "W10=",
+    "error": true,
+    "decoded": null,
+    "decoded_base64": null
+  },
+  {
+    "name": "reaction escaped surrogate",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6Ilx1ZDgwMCJ9",
+    "error": false,
+    "decoded": "�",
+    "decoded_base64": "77+9"
+  },
+  {
+    "name": "reaction invalid utf8",
+    "kind": "reaction",
+    "body_base64": "eyJlbW9qaSI6Iv8ifQ==",
+    "error": false,
+    "decoded": "�",
+    "decoded_base64": "77+9"
+  }
+]

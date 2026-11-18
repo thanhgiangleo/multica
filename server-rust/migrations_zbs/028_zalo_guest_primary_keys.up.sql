@@ -1,0 +1,2 @@
+ALTER TABLE zbs_zalo_guest_invite ADD CONSTRAINT zbs_zalo_guest_invite_pkey PRIMARY KEY USING INDEX zbs_zalo_guest_invite_id_uidx;
+ALTER TABLE zbs_zalo_guest_grant ADD CONSTRAINT zbs_zalo_guest_grant_pkey PRIMARY KEY USING INDEX zbs_zalo_guest_grant_identity_uidx;

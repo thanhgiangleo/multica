@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "anonymous-chat-list",
+      "group": "auth",
+      "path": "/api/chat/sessions",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "anonymous-pending",
+      "group": "auth",
+      "path": "/api/chat/pending-tasks/has-any",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "anonymous-task-messages",
+      "group": "auth",
+      "path": "/api/tasks/00000000-0000-0000-0000-000000000001/messages",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "read-own-session",
+      "group": "read",
+      "path": "/api/chat/sessions/{{SESSION_ID}}",
+      "status": 200,
+      "required": [
+        "/id",
+        "/workspace_id",
+        "/agent_id",
+        "/creator_id",
+        "/title",
+        "/status",
+        "/project_id"
+      ],
+      "equals": {
+        "/id": "{{SESSION_ID}}",
+        "/workspace_id": "{{WORKSPACE_ID}}"
+      },
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at"
+      ]
+    },
+    {
+      "id": "missing-session",
+      "group": "read",
+      "path": "/api/chat/sessions/00000000-0000-0000-0000-000000000001",
+      "status": 404,
+      "equals": {
+        "/error": "chat session not found"
+      }
+    },
+    {
+      "id": "invalid-session-uuid",
+      "group": "read",
+      "path": "/api/chat/sessions/not-a-uuid",
+      "status": 400,
+      "required": [
+        "/error"
+      ]
+    },
+    {
+      "id": "invalid-page-limit",
+      "group": "read",
+      "path": "/api/chat/sessions/{{SESSION_ID}}/messages/page?limit=0",
+      "status": 400,
+      "equals": {
+        "/error": "invalid limit"
+      }
+    },
+    {
+      "id": "incomplete-page-cursor",
+      "group": "read",
+      "path": "/api/chat/sessions/{{SESSION_ID}}/messages/page?before_id=00000000-0000-0000-0000-000000000001",
+      "status": 400,
+      "equals": {
+        "/error": "invalid cursor"
+      }
+    },
+    {
+      "id": "create-missing-agent",
+      "group": "validation",
+      "method": "POST",
+      "path": "/api/chat/sessions",
+      "body": {},
+      "status": 400,
+      "equals": {
+        "/error": "agent_id is required"
+      }
+    },
+    {
+      "id": "create-invalid-agent-id",
+      "group": "validation",
+      "method": "POST",
+      "path": "/api/chat/sessions",
+      "body": {
+        "agent_id": "bad-uuid"
+      },
+      "status": 400,
+      "required": [
+        "/error"
+      ]
+    },
+    {
+      "id": "create-missing-agent-row",
+      "group": "validation",
+      "method": "POST",
+      "path": "/api/chat/sessions",
+      "body": {
+        "agent_id": "00000000-0000-0000-0000-000000000001"
+      },
+      "status": 404,
+      "equals": {
+        "/error": "agent not found"
+      }
+    },
+    {
+      "id": "empty-send",
+      "group": "validation",
+      "method": "POST",
+      "path": "/api/chat/sessions/{{SESSION_ID}}/messages",
+      "body": {
+        "content": ""
+      },
+      "status": 400,
+      "equals": {
+        "/error": "content is required"
+      }
+    },
+    {
+      "id": "invalid-attachment-id",
+      "group": "validation",
+      "method": "POST",
+      "path": "/api/chat/sessions/{{SESSION_ID}}/messages",
+      "body": {
+        "content": "backend-lab",
+        "attachment_ids": [
+          "bad-uuid"
+        ]
+      },
+      "status": 400,
+      "required": [
+        "/error"
+      ]
+    },
+    {
+      "id": "rename-missing-field",
+      "group": "validation",
+      "method": "PATCH",
+      "path": "/api/chat/sessions/{{SESSION_ID}}",
+      "body": {},
+      "status": 400,
+      "equals": {
+        "/error": "exactly one of title or project_id is required"
+      }
+    },
+    {
+      "id": "rename-empty-title",
+      "group": "validation",
+      "method": "PATCH",
+      "path": "/api/chat/sessions/{{SESSION_ID}}",
+      "body": {
+        "title": "   "
+      },
+      "status": 400,
+      "equals": {
+        "/error": "title is required"
+      }
+    },
+    {
+      "id": "other-member-cannot-send",
+      "group": "validation",
+      "method": "POST",
+      "path": "/api/chat/sessions/{{OTHER_SESSION_ID}}/messages",
+      "body": {
+        "content": "backend-lab denied write"
+      },
+      "status": 403,
+      "equals": {
+        "/error": "not your chat session"
+      }
+    },
+    {
+      "id": "read-project",
+      "group": "resources",
+      "path": "/api/projects/{{PROJECT_ID}}",
+      "status": 200,
+      "equals": {
+        "/id": "{{PROJECT_ID}}",
+        "/workspace_id": "{{WORKSPACE_ID}}"
+      },
+      "required": [
+        "/title"
+      ],
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at"
+      ]
+    },
+    {
+      "id": "read-issue",
+      "group": "resources",
+      "path": "/api/issues/{{ISSUE_ID}}",
+      "status": 200,
+      "equals": {
+        "/id": "{{ISSUE_ID}}",
+        "/workspace_id": "{{WORKSPACE_ID}}"
+      },
+      "required": [
+        "/title",
+        "/status",
+        "/priority",
+        "/last_activity_at"
+      ],
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at",
+        "/last_activity_at"
+      ]
+    },
+    {
+      "id": "read-agent",
+      "group": "resources",
+      "path": "/api/agents/{{AGENT_ID}}",
+      "status": 200,
+      "equals": {
+        "/id": "{{AGENT_ID}}",
+        "/workspace_id": "{{WORKSPACE_ID}}"
+      },
+      "required": [
+        "/name",
+        "/runtime_mode"
+      ],
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at"
+      ]
+    },
+    {
+      "id": "anonymous-issues",
+      "group": "auth",
+      "path": "/api/issues",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "anonymous-projects",
+      "group": "auth",
+      "path": "/api/projects",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "anonymous-agents",
+      "group": "auth",
+      "path": "/api/agents",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "create-session",
+      "group": "chat-flow",
+      "method": "POST",
+      "path": "/api/chat/sessions",
+      "body": {
+        "agent_id": "{{AGENT_ID}}",
+        "title": "backend-lab fixture"
+      },
+      "status": 201,
+      "required": [
+        "/id",
+        "/project_id",
+        "/created_at",
+        "/updated_at"
+      ],
+      "equals": {
+        "/title": "backend-lab fixture",
+        "/status": "active",
+        "/project_id": null
+      },
+      "capture": {
+        "CREATED_SESSION_ID": "/id"
+      },
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at"
+      ]
+    },
+    {
+      "id": "empty-page",
+      "group": "chat-flow",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}/messages/page?limit=1",
+      "status": 200,
+      "equals": {
+        "/messages": [],
+        "/has_more": false,
+        "/limit": 1
+      }
+    },
+    {
+      "id": "rename-created-session",
+      "group": "chat-flow",
+      "method": "PATCH",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}",
+      "body": {
+        "title": "backend-lab renamed"
+      },
+      "status": 200,
+      "equals": {
+        "/title": "backend-lab renamed"
+      },
+      "mask_timestamps": [
+        "/created_at",
+        "/updated_at"
+      ]
+    },
+    {
+      "id": "send-first-turn",
+      "group": "chat-flow",
+      "method": "POST",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}/messages",
+      "body": {
+        "content": "backend-lab first turn"
+      },
+      "status": 201,
+      "equals": {
+        "/supports_queue": true,
+        "/queued": false,
+        "/attachment_ids": null
+      },
+      "required": [
+        "/message_id",
+        "/task_id",
+        "/created_at"
+      ],
+      "capture": {
+        "FIRST_MESSAGE_ID": "/message_id",
+        "FIRST_TASK_ID": "/task_id"
+      },
+      "mask_timestamps": [
+        "/created_at"
+      ]
+    },
+    {
+      "id": "first-turn-page",
+      "group": "chat-flow",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}/messages/page?limit=1",
+      "status": 200,
+      "equals": {
+        "/limit": 1,
+        "/has_more": false,
+        "/messages/0/id": "{{FIRST_MESSAGE_ID}}",
+        "/messages/0/task_id": "{{FIRST_TASK_ID}}",
+        "/messages/0/role": "user",
+        "/messages/0/content": "backend-lab first turn"
+      },
+      "mask_timestamps": [
+        "/messages/0/created_at"
+      ]
+    },
+    {
+      "id": "send-queued-turn",
+      "group": "chat-flow",
+      "method": "POST",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}/messages",
+      "body": {
+        "content": "backend-lab queued turn"
+      },
+      "status": 201,
+      "equals": {
+        "/supports_queue": true,
+        "/queued": true
+      },
+      "capture": {
+        "SECOND_MESSAGE_ID": "/message_id",
+        "SECOND_TASK_ID": "/task_id"
+      },
+      "mask_timestamps": [
+        "/created_at"
+      ]
+    },
+    {
+      "id": "queued-turn-not-in-page",
+      "group": "chat-flow",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}/messages/page?limit=1",
+      "status": 200,
+      "equals": {
+        "/has_more": false,
+        "/messages/0/id": "{{FIRST_MESSAGE_ID}}",
+        "/limit": 1
+      },
+      "required": [],
+      "mask_timestamps": [
+        "/messages/0/created_at"
+      ]
+    },
+    {
+      "id": "pending-includes-queued-turn",
+      "group": "chat-flow",
+      "path": "/api/chat/sessions/{{CREATED_SESSION_ID}}/pending-task",
+      "status": 200,
+      "required": [
+        "/queued_tasks/0/created_at"
+      ],
+      "equals": {
+        "/task_id": "{{FIRST_TASK_ID}}",
+        "/supports_queue": true,
+        "/queued_tasks/0/task_id": "{{SECOND_TASK_ID}}",
+        "/queued_tasks/0/message_id": "{{SECOND_MESSAGE_ID}}",
+        "/queued_tasks/0/status": "queued",
+        "/queued_tasks/0/content": "backend-lab queued turn"
+      },
+      "mask_timestamps": [
+        "/created_at",
+        "/queued_tasks/0/created_at"
+      ]
+    }
+  ]
+}

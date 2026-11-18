@@ -1,0 +1,1 @@
+{"cases": [{"id": "nonmember-cross-workspace-session", "group": "workspace-isolation", "path": "/api/chat/sessions/{{SESSION_ID}}", "status": 404, "equals": {"/error": "workspace not found"}}, {"id": "nonmember-cross-workspace-list", "group": "workspace-isolation", "path": "/api/chat/sessions", "status": 404, "equals": {"/error": "workspace not found"}}]}

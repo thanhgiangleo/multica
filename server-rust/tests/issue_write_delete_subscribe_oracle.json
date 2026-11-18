@@ -1,0 +1,197 @@
+[
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwiVVNFUl9JRCI6InR3byJ9",
+    "decode_error": false,
+    "user_id": "two"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJVU0VSX0lEIjoidHdvIiwidXNlcl9pZCI6bnVsbH0=",
+    "decode_error": false
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwiVVNFUl9JRCI6NywidXNlcl90eXBlIjoiYWdlbnQifQ==",
+    "decode_error": true,
+    "user_id": "one",
+    "user_type": "agent"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX3R5cGUiOiJhZ2VudCIsInVzZXJfaWQiOjd9",
+    "decode_error": true,
+    "user_id": "",
+    "user_type": "agent"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjo3LCJ1c2VyX3R5cGUiOiJhZ2VudCJ9",
+    "decode_error": true,
+    "user_id": "",
+    "user_type": "agent"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwidXNlcl9pZCI6e30sInVzZXJfdHlwZSI6ImFnZW50In0=",
+    "decode_error": true,
+    "user_id": "one",
+    "user_type": "agent"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwiVVNFUl9JRCI6NywidXNlcl9pZCI6InR3byJ9",
+    "decode_error": true,
+    "user_id": "two"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwidXNlcl90eXBlIjoiYWdlbnQifSB0cmFpbGluZw==",
+    "decode_error": false,
+    "user_id": "one",
+    "user_type": "agent"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwgInVzZXJfdHlwZSI6ImFnZW50Iiw=",
+    "decode_error": true
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "bnVsbA==",
+    "decode_error": false
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "W10=",
+    "decode_error": true
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoiXHVkODAwIn0=",
+    "decode_error": false,
+    "user_id": "�"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoi4oSqIiwidXNlcl90eXBlIjoixb8ifQ==",
+    "decode_error": false,
+    "user_id": "K",
+    "user_type": "ſ"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoi/yJ9",
+    "decode_error": false,
+    "user_id": "�"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwiVVNFUl90eXBlIjpudWxsfQ==",
+    "decode_error": false,
+    "user_id": "one"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIn0=",
+    "decode_error": false,
+    "user_id": "one"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjp7fSwidXNlcl90eXBlIjoiYWdlbnQifQ==",
+    "decode_error": true,
+    "user_id": "",
+    "user_type": "agent"
+  },
+  {
+    "kind": "subscriber",
+    "body_base64": "eyJ1c2VyX2lkIjoib25lIiwiVVNFUl9JRCI6bnVsbCwidXNlcl90eXBlIjoibWVtYmVyIn0=",
+    "decode_error": false,
+    "user_type": "member"
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsiYSIsImIiXX0=",
+    "decode_error": false,
+    "issue_ids": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJJU1NVRV9JRFMiOlsiYSJdLCJpc3N1ZV9pZHMiOltudWxsLCJiIl19",
+    "decode_error": false,
+    "issue_ids": [
+      "a",
+      "b"
+    ]
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOm51bGx9",
+    "decode_error": false
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsiYSIsNV19",
+    "decode_error": true,
+    "issue_ids": [
+      "a",
+      ""
+    ]
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsiYSJdfSB0cmFpbGluZw==",
+    "decode_error": false,
+    "issue_ids": [
+      "a"
+    ]
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOltdfQ==",
+    "decode_error": false
+  },
+  {
+    "kind": "batch",
+    "body_base64": "bnVsbA==",
+    "decode_error": false
+  },
+  {
+    "kind": "batch",
+    "body_base64": "W10=",
+    "decode_error": true
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsiYSJdLCJJU1NVRV9JRFMiOlsiYyJdfQ==",
+    "decode_error": false,
+    "issue_ids": [
+      "c"
+    ]
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsiYSJdLA==",
+    "decode_error": true
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsiYSJdLCJ1bmtub3duIjoxZTEwMDAwfQ==",
+    "decode_error": false,
+    "issue_ids": [
+      "a"
+    ]
+  },
+  {
+    "kind": "batch",
+    "body_base64": "eyJpc3N1ZV9pZHMiOlsi/yJdfQ==",
+    "decode_error": false,
+    "issue_ids": [
+      "�"
+    ]
+  }
+]

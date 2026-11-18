@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-31",
+  "scope": "isolated authenticated GET behavior comparison, not full backend benchmark",
+  "go_reference": "frozen staged Go source, rebuilt locally; not deployed executable",
+  "rust_candidate": "standalone Rust server-rust read slice, debug build (no performance claim)",
+  "database": "PostgreSQL 16, task-owned disposable container, loopback 55464, isolated multica_parity_c9df7df25548 synthetic fixtures",
+  "migrations": {
+    "upstream_applied": 619,
+    "zbs_applied": 44
+  },
+  "paths_compared": [
+    "/api/me",
+    "/api/workspaces/",
+    "/api/workspaces/{id}/",
+    "/api/workspaces/{id}/members",
+    "/api/projects/",
+    "/api/projects/?status=planned",
+    "/api/projects/?priority=low",
+    "/api/projects/{id}/",
+    "/api/labels/",
+    "/api/labels/?resource_type=agent",
+    "/api/labels/?resource_type=invalid",
+    "/api/labels/{id}/",
+    "/api/properties/",
+    "/api/properties/{id}/",
+    "/api/issue-statuses/",
+    "/api/issue-statuses/?include_archived=true"
+  ],
+  "request_scenarios": 22,
+  "equal_status_and_json": 22,
+  "scenarios_include": [
+    "same-user PAT",
+    "matching workspace ID and slug",
+    "wrong workspace ID and slug",
+    "cross-workspace project detail",
+    "query selector overrides header",
+    "invalid UUID",
+    "filtered/empty result",
+    "status self-seeding on read"
+  ],
+  "tests": {
+    "cargo_test_default": "18 passed, 15 ignored (5 unit, 1 API, 12 health); doc/main 0",
+    "api_db_ignored": "2 passed, 0 failed on freshly migrated multica_zbsi63; focused additional catalog regression passed",
+    "cargo_fmt_check": "passed",
+    "cargo_clippy_all_targets_d_warnings": "passed",
+    "cargo_release_build": "passed"
+  },
+  "regressions": [
+    "one-connection catalog middleware deadlock reproduced with 3-second timeout then fixed by dropping DB guard before next.run",
+    "PAT usage UPDATE failure no longer converts valid credential into 503; test uses joined read-only PAT view"
+  ],
+  "limitations": [
+    "not compared to deployed Go binary",
+    "only synthetic fixture request/response JSON/status, not response headers or concurrent Go behavior",
+    "session renewal, task/cloud credential verifiers and avatar storage URL resolution missing",
+    "PAT SQL validity checked every request; last_used_at write remains synchronous and unthrottled, unlike Go cache-miss async refresh",
+    "remaining raw router registrations and both WebSocket protocols unimplemented",
+    "full backend benchmark not run"
+  ]
+}

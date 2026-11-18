@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS zbs_gateway_daily_telegram_delivery_request_idx ON zbs_gateway_daily_telegram_delivery (workspace_id, request_id);

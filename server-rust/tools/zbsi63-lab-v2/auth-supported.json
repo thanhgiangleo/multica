@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "anonymous-chat-list",
+      "group": "auth",
+      "path": "/api/chat/sessions",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    },
+    {
+      "id": "anonymous-pending",
+      "group": "auth",
+      "path": "/api/chat/pending-tasks/has-any",
+      "auth": false,
+      "workspace": false,
+      "status": 401,
+      "required": [
+        "/error"
+      ],
+      "content_type": "text/plain"
+    }
+  ]
+}

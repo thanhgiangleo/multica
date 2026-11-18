@@ -1,0 +1,440 @@
+{
+  "passed": true,
+  "baseline": {
+    "passed": true,
+    "selected": 30,
+    "executed": 30,
+    "unexecuted": 0,
+    "cases": [
+      {
+        "case": "anonymous-chat-list",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 6.594311911612749,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-pending",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 6.540366914123297,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-task-messages",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.962393384426832,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "read-own-session",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.638319369405508,
+        "contract_sha256": "7c1576d60b7aac8c0d2eaafb4869122b83f98b7a23f20f2cfe454e31c3bbaef1"
+      },
+      {
+        "case": "missing-session",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 3.8592470809817314,
+        "contract_sha256": "c1cf57165e1bfca26d65987cd7bbe0e90a1c7ed906f480586bbf112f07956c8c"
+      },
+      {
+        "case": "invalid-session-uuid",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.0725041180849075,
+        "contract_sha256": "d56843e9a1443f8ba3e7f91f5ba50fe0ec49beb512a858a87f55e2621d143352"
+      },
+      {
+        "case": "invalid-page-limit",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 3.9636599831283092,
+        "contract_sha256": "79d082ced216de6f31b63a65953967e711363c8b3e8d5a047b1e52c7177de323"
+      },
+      {
+        "case": "incomplete-page-cursor",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.481831099838018,
+        "contract_sha256": "df4b3e4bae3a347e590d964d7e874f1a9a1e6ba036d774be3e115bcdab5ccd2d"
+      },
+      {
+        "case": "create-missing-agent",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.551524296402931,
+        "contract_sha256": "1fc7c9f4fef116f858da938b726af143967a90bacd1c645e31338b0e0dbd76d9"
+      },
+      {
+        "case": "create-invalid-agent-id",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 3.9941701106727123,
+        "contract_sha256": "5eadca7d6726965680498c7c7e9fbba5b20dde44dc9e489dc140216a5cecd06c"
+      },
+      {
+        "case": "create-missing-agent-row",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 3.729236777871847,
+        "contract_sha256": "d767efb84f65224f58681aadc5494d1c9dd82460e4118fa4df0596047ace74b8"
+      },
+      {
+        "case": "empty-send",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 3.764125984162092,
+        "contract_sha256": "6f24dddfa44b45fa8366d688eb84892c5bf858daff178ccce3a66368cde1ac22"
+      },
+      {
+        "case": "invalid-attachment-id",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 3.9583276957273483,
+        "contract_sha256": "5082fdef05024db1e6280564265c94ab92d4102b9b57b77c1b93968fd81f3593"
+      },
+      {
+        "case": "rename-missing-field",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 3.771699033677578,
+        "contract_sha256": "4097fa505d198945cac7f73a03981a6cfe29ce7e6ba05864ea613c8cd6c8dad1"
+      },
+      {
+        "case": "rename-empty-title",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.051507916301489,
+        "contract_sha256": "9d1a91a382aca56c6612a0d858e6a053596a2a94a3e2e50ecaef918d3d28bd39"
+      },
+      {
+        "case": "other-member-cannot-send",
+        "passed": true,
+        "status": 403,
+        "elapsed_ms": 3.8549969904124737,
+        "contract_sha256": "565c449d76db881a93b41b3fe56afde6483eb652d3a9e17237d5ad37f7eaa2e3"
+      },
+      {
+        "case": "read-project",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.306610208004713,
+        "contract_sha256": "920825516d8b3d0d8cb6c6fa233f29c6036988c35f9e31c69c59b39c61cd67f2"
+      },
+      {
+        "case": "read-issue",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.121060948818922,
+        "contract_sha256": "ad72c799997c3acd47622c8c9bef43684f62717cc088fc68916633a59d629828"
+      },
+      {
+        "case": "read-agent",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.387927707284689,
+        "contract_sha256": "5dd01b577b8c7b94476b9157ad0b5f5735e7df9bb479902c67edb197b393779c"
+      },
+      {
+        "case": "anonymous-issues",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.697499167174101,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-projects",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.629240207374096,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-agents",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.610868938267231,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "create-session",
+        "passed": true,
+        "status": 201,
+        "elapsed_ms": 6.538671907037497,
+        "contract_sha256": "e30939f3f7ba8df20ae112eea6966da02608505bf1b96bafafa8557f24fdd2fa"
+      },
+      {
+        "case": "empty-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.889357835054398,
+        "contract_sha256": "1e1364272a1317fb23ce8dee7dbfb98c1233a4572867766df97636477bf88ef3"
+      },
+      {
+        "case": "rename-created-session",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 7.352893240749836,
+        "contract_sha256": "f765ebffa7bc8584a1a832e67ade554ac99d009bb61fcc1e43206dc50b80c4e9"
+      },
+      {
+        "case": "send-first-turn",
+        "passed": true,
+        "status": 201,
+        "elapsed_ms": 10.917066596448421,
+        "contract_sha256": "dcf122e685716d98341900f34184e9835f02cf32efa2ad954e7ae45ee655fe67"
+      },
+      {
+        "case": "first-turn-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 17.232087440788746,
+        "contract_sha256": "4f47180853d8ffac0d5bfc95a4ab89e66ea78b6c511ad37451794250cb6d29df"
+      },
+      {
+        "case": "send-queued-turn",
+        "passed": true,
+        "status": 201,
+        "elapsed_ms": 8.786666207015514,
+        "contract_sha256": "de9ebb605823c74769122930a5c816880e4f09151a81db05182e80dea36a62af"
+      },
+      {
+        "case": "queued-turn-not-in-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.783766344189644,
+        "contract_sha256": "4f47180853d8ffac0d5bfc95a4ab89e66ea78b6c511ad37451794250cb6d29df"
+      },
+      {
+        "case": "pending-includes-queued-turn",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 5.371890030801296,
+        "contract_sha256": "1506dce4603c9294911f635f22341fd2af44faafe56921b146d956a66c634ea0"
+      }
+    ]
+  },
+  "candidate": {
+    "passed": true,
+    "selected": 30,
+    "executed": 30,
+    "unexecuted": 0,
+    "cases": [
+      {
+        "case": "anonymous-chat-list",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.8254628889262676,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-pending",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.135386388748884,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-task-messages",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.3833221532404423,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "read-own-session",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 4.568056203424931,
+        "contract_sha256": "7c1576d60b7aac8c0d2eaafb4869122b83f98b7a23f20f2cfe454e31c3bbaef1"
+      },
+      {
+        "case": "missing-session",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 5.0710891373455524,
+        "contract_sha256": "c1cf57165e1bfca26d65987cd7bbe0e90a1c7ed906f480586bbf112f07956c8c"
+      },
+      {
+        "case": "invalid-session-uuid",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.812551196664572,
+        "contract_sha256": "d56843e9a1443f8ba3e7f91f5ba50fe0ec49beb512a858a87f55e2621d143352"
+      },
+      {
+        "case": "invalid-page-limit",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.962678998708725,
+        "contract_sha256": "79d082ced216de6f31b63a65953967e711363c8b3e8d5a047b1e52c7177de323"
+      },
+      {
+        "case": "incomplete-page-cursor",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.862699657678604,
+        "contract_sha256": "df4b3e4bae3a347e590d964d7e874f1a9a1e6ba036d774be3e115bcdab5ccd2d"
+      },
+      {
+        "case": "create-missing-agent",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.3910169042646885,
+        "contract_sha256": "1fc7c9f4fef116f858da938b726af143967a90bacd1c645e31338b0e0dbd76d9"
+      },
+      {
+        "case": "create-invalid-agent-id",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.616516176611185,
+        "contract_sha256": "5eadca7d6726965680498c7c7e9fbba5b20dde44dc9e489dc140216a5cecd06c"
+      },
+      {
+        "case": "create-missing-agent-row",
+        "passed": true,
+        "status": 404,
+        "elapsed_ms": 5.219750106334686,
+        "contract_sha256": "d767efb84f65224f58681aadc5494d1c9dd82460e4118fa4df0596047ace74b8"
+      },
+      {
+        "case": "empty-send",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 5.297211930155754,
+        "contract_sha256": "6f24dddfa44b45fa8366d688eb84892c5bf858daff178ccce3a66368cde1ac22"
+      },
+      {
+        "case": "invalid-attachment-id",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 5.039690062403679,
+        "contract_sha256": "5082fdef05024db1e6280564265c94ab92d4102b9b57b77c1b93968fd81f3593"
+      },
+      {
+        "case": "rename-missing-field",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 4.600356798619032,
+        "contract_sha256": "4097fa505d198945cac7f73a03981a6cfe29ce7e6ba05864ea613c8cd6c8dad1"
+      },
+      {
+        "case": "rename-empty-title",
+        "passed": true,
+        "status": 400,
+        "elapsed_ms": 5.437280051410198,
+        "contract_sha256": "9d1a91a382aca56c6612a0d858e6a053596a2a94a3e2e50ecaef918d3d28bd39"
+      },
+      {
+        "case": "other-member-cannot-send",
+        "passed": true,
+        "status": 403,
+        "elapsed_ms": 5.393097642809153,
+        "contract_sha256": "565c449d76db881a93b41b3fe56afde6483eb652d3a9e17237d5ad37f7eaa2e3"
+      },
+      {
+        "case": "read-project",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 5.479724612087011,
+        "contract_sha256": "920825516d8b3d0d8cb6c6fa233f29c6036988c35f9e31c69c59b39c61cd67f2"
+      },
+      {
+        "case": "read-issue",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 6.755686830729246,
+        "contract_sha256": "e7395cba37686c52d8f649fab53048be5431cf155de6ac077abfd5df3118b06a"
+      },
+      {
+        "case": "read-agent",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 5.4154000245034695,
+        "contract_sha256": "5dd01b577b8c7b94476b9157ad0b5f5735e7df9bb479902c67edb197b393779c"
+      },
+      {
+        "case": "anonymous-issues",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.6839242093265057,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-projects",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.8276719860732555,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "anonymous-agents",
+        "passed": true,
+        "status": 401,
+        "elapsed_ms": 3.7810266949236393,
+        "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
+      },
+      {
+        "case": "create-session",
+        "passed": true,
+        "status": 201,
+        "elapsed_ms": 15.1793179102242,
+        "contract_sha256": "e30939f3f7ba8df20ae112eea6966da02608505bf1b96bafafa8557f24fdd2fa"
+      },
+      {
+        "case": "empty-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 6.985052023082972,
+        "contract_sha256": "1e1364272a1317fb23ce8dee7dbfb98c1233a4572867766df97636477bf88ef3"
+      },
+      {
+        "case": "rename-created-session",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 9.544985834509134,
+        "contract_sha256": "f765ebffa7bc8584a1a832e67ade554ac99d009bb61fcc1e43206dc50b80c4e9"
+      },
+      {
+        "case": "send-first-turn",
+        "passed": true,
+        "status": 201,
+        "elapsed_ms": 13.054898008704185,
+        "contract_sha256": "dcf122e685716d98341900f34184e9835f02cf32efa2ad954e7ae45ee655fe67"
+      },
+      {
+        "case": "first-turn-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 27.54661999642849,
+        "contract_sha256": "4f47180853d8ffac0d5bfc95a4ab89e66ea78b6c511ad37451794250cb6d29df"
+      },
+      {
+        "case": "send-queued-turn",
+        "passed": true,
+        "status": 201,
+        "elapsed_ms": 11.231095064431429,
+        "contract_sha256": "de9ebb605823c74769122930a5c816880e4f09151a81db05182e80dea36a62af"
+      },
+      {
+        "case": "queued-turn-not-in-page",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 7.585720159113407,
+        "contract_sha256": "4f47180853d8ffac0d5bfc95a4ab89e66ea78b6c511ad37451794250cb6d29df"
+      },
+      {
+        "case": "pending-includes-queued-turn",
+        "passed": true,
+        "status": 200,
+        "elapsed_ms": 6.124129053205252,
+        "contract_sha256": "1506dce4603c9294911f635f22341fd2af44faafe56921b146d956a66c634ea0"
+      }
+    ]
+  },
+  "differences": {}
+}

@@ -1,0 +1,9 @@
+/target/
+/__pycache__/
+/tools/__pycache__/
+*.log
+*.tar.gz
+.test-migrations/
+.test-migrations-rust/
+*.pyc
+.DS_Store

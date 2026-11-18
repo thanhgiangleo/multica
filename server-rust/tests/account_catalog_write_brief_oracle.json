@@ -1,0 +1,270 @@
+[
+  {
+    "name": "handlerless_span",
+    "workflow": {
+      "name": "Default",
+      "steps": [
+        {
+          "status_key": "todo",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "in_progress",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "in_review",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "blocked",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "done",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "cancelled",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        }
+      ]
+    },
+    "project": "",
+    "status_key": "todo",
+    "identifier": "WS-123",
+    "status_names": {},
+    "handler_names": {},
+    "brief": "This project's workflow — Default\nYou are handling WS-123. Its \"todo\" step has no handler, so the work the issue asks for is yours to finish.\n\nStatuses in this workflow:\n- `todo`   ← current\n- `in_progress`\n- `in_review`\n- `blocked`\n- `done`\n- `cancelled`\n\nYour moves:\nStarting work  → multica issue status WS-123 in_progress\nStep done      → multica issue status WS-123 in_review\nCan't proceed  → multica issue status WS-123 blocked, then comment why\nSteps without a handler hand nothing off and start no run: finish all of the issue's work in this run before Step done.\nWhen the issue enters a step you handle, you get a run automatically — do not add a wakeup for that. Wakeups for anything else (a time, a PR, another issue, a step someone else handles) are fine.\n"
+  },
+  {
+    "name": "handoff_instructions",
+    "workflow": {
+      "name": "Flow",
+      "steps": [
+        {
+          "status_key": "todo",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "review",
+          "handler": {
+            "type": "member",
+            "id": "m"
+          },
+          "instructions": "Verify\r\nchecks\u001b",
+          "next_status_key": "done",
+          "back_status_key": "todo"
+        },
+        {
+          "status_key": "blocked",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "done",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        }
+      ]
+    },
+    "project": "Campaign",
+    "status_key": "review",
+    "identifier": "BRF-123",
+    "status_names": {
+      "review": "Review checks"
+    },
+    "handler_names": {
+      "member:m": "Sam\nReviewer"
+    },
+    "brief": "This project's workflow — Flow (Campaign)\nYou are handling the \"Review checks\" step of BRF-123.\n\nStep instructions:\n> Verify\n> checks\n\nStatuses in this workflow:\n- `todo`\n- `review` Review checks — hands off to Sam Reviewer   ← current\n- `blocked`\n- `done`\n\nYour moves:\nStep done      → multica issue status BRF-123 done\nNeeds changes  → multica issue status BRF-123 todo\nCan't proceed  → multica issue status BRF-123 blocked, then comment why\nWhen the issue enters a step you handle, you get a run automatically — do not add a wakeup for that. Wakeups for anything else (a time, a PR, another issue, a step someone else handles) are fine.\n"
+  },
+  {
+    "name": "cycle_without_handler",
+    "workflow": {
+      "name": "Cycle",
+      "steps": [
+        {
+          "status_key": "todo",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "qa",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "qa",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "todo",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "done",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        }
+      ]
+    },
+    "project": "",
+    "status_key": "todo",
+    "identifier": "CY-123",
+    "status_names": {
+      "qa": "Quality"
+    },
+    "handler_names": {},
+    "brief": "This project's workflow — Cycle\nYou are handling CY-123. Its \"todo\" step has no handler, so the work the issue asks for is yours to finish.\n\nStatuses in this workflow:\n- `todo`   ← current\n- `qa` Quality\n- `done`\n\nYour moves:\nStep done      → multica issue status CY-123 qa\nCan't proceed  → comment why and leave the status as it is\nSteps without a handler hand nothing off and start no run: finish all of the issue's work in this run before Step done.\nWhen the issue enters a step you handle, you get a run automatically — do not add a wakeup for that. Wakeups for anything else (a time, a PR, another issue, a step someone else handles) are fine.\n"
+  },
+  {
+    "name": "project_lead_unicode",
+    "workflow": {
+      "name": "フロー",
+      "steps": [
+        {
+          "status_key": "todo",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "in_progress",
+          "handler": {
+            "type": "project_lead",
+            "id": ""
+          },
+          "instructions": "  检查\t­ 完成  ",
+          "next_status_key": "done",
+          "back_status_key": "todo"
+        },
+        {
+          "status_key": "done",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        }
+      ]
+    },
+    "project": "開発\nTeam",
+    "status_key": "in_progress",
+    "identifier": "WS-123",
+    "status_names": {},
+    "handler_names": {},
+    "brief": "This project's workflow — フロー (開発 Team)\nYou are handling the \"in_progress\" step of WS-123.\n\nStep instructions:\n> 检查\t­完成\n\nStatuses in this workflow:\n- `todo`\n- `in_progress` — hands off to the project lead   ← current\n- `done`\n\nYour moves:\nStep done      → multica issue status WS-123 done\nNeeds changes  → multica issue status WS-123 todo\nCan't proceed  → comment why, then run Needs changes\nWhen the issue enters a step you handle, you get a run automatically — do not add a wakeup for that. Wakeups for anything else (a time, a PR, another issue, a step someone else handles) are fine.\n"
+  },
+  {
+    "name": "quoted_format_character",
+    "workflow": {
+      "name": "Flow",
+      "steps": [
+        {
+          "status_key": "todo",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "review",
+          "handler": {
+            "type": "project_lead",
+            "id": ""
+          },
+          "instructions": "Check",
+          "next_status_key": "done",
+          "back_status_key": ""
+        },
+        {
+          "status_key": "done",
+          "handler": {
+            "type": "none",
+            "id": ""
+          },
+          "instructions": "",
+          "next_status_key": "",
+          "back_status_key": ""
+        }
+      ]
+    },
+    "project": "",
+    "status_key": "review",
+    "identifier": "WS-123",
+    "status_names": {
+      "review": "Q​A \"review\""
+    },
+    "handler_names": {},
+    "brief": "This project's workflow — Flow\nYou are handling the \"Q\\u200bA \\\"review\\\"\" step of WS-123.\n\nStep instructions:\n> Check\n\nStatuses in this workflow:\n- `todo`\n- `review` Q​A \"review\" — hands off to the project lead   ← current\n- `done`\n\nYour moves:\nStep done      → multica issue status WS-123 done\nCan't proceed  → comment why and leave the status as it is\nWhen the issue enters a step you handle, you get a run automatically — do not add a wakeup for that. Wakeups for anything else (a time, a PR, another issue, a step someone else handles) are fine.\n"
+  }
+]

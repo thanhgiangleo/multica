@@ -1,0 +1,40 @@
+{
+  "owner": "merge-diff-1794218165-1202510",
+  "ports": {
+    "pg": 51091,
+    "go": 45481,
+    "rust": 41929
+  },
+  "reports": {
+    "base-all": {
+      "exit": 0,
+      "stdout": "{\"passed\": true, \"report\": \"/home/zbstech/multica_workspaces_autonomous/zbs-innovat-5220c9b94740/task-c9df7df25548/workdir/azox-multica/server-rust/merge-diff-base-all-report.json\"}",
+      "stderr": "",
+      "report": "merge-diff-base-all-report.json"
+    },
+    "read-supplemental": {
+      "exit": 0,
+      "stdout": "{\"passed\": true, \"report\": \"/home/zbstech/multica_workspaces_autonomous/zbs-innovat-5220c9b94740/task-c9df7df25548/workdir/azox-multica/server-rust/merge-diff-read-supplemental-report.json\"}",
+      "stderr": "",
+      "report": "merge-diff-read-supplemental-report.json"
+    },
+    "workspace-isolation": {
+      "exit": 0,
+      "stdout": "{\"passed\": true, \"report\": \"/home/zbstech/multica_workspaces_autonomous/zbs-innovat-5220c9b94740/task-c9df7df25548/workdir/azox-multica/server-rust/merge-diff-workspace-isolation-report.json\"}",
+      "stderr": "",
+      "report": "merge-diff-workspace-isolation-report.json"
+    },
+    "p0": {
+      "exit": 0,
+      "stdout": "{\"passed\": true, \"report\": \"/home/zbstech/multica_workspaces_autonomous/zbs-innovat-5220c9b94740/task-c9df7df25548/workdir/azox-multica/server-rust/merge-diff-p0-report.json\"}",
+      "stderr": "",
+      "report": "merge-diff-p0-report.json"
+    },
+    "p1": {
+      "exit": 0,
+      "stdout": "{\"passed\": true, \"report\": \"/home/zbstech/multica_workspaces_autonomous/zbs-innovat-5220c9b94740/task-c9df7df25548/workdir/azox-multica/server-rust/merge-diff-p1-report.json\"}",
+      "stderr": "",
+      "report": "merge-diff-p1-report.json"
+    }
+  }
+}

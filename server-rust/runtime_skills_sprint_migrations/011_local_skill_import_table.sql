@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS runtime_rpc_local_skill_import (
+    id UUID NOT NULL,
+    runtime_id UUID NOT NULL,
+    workspace_id UUID NOT NULL,
+    creator_id UUID NOT NULL,
+    skill_key TEXT NOT NULL,
+    name TEXT,
+    description TEXT,
+    action TEXT NOT NULL DEFAULT '' CHECK (action IN ('', 'overwrite')),
+    target_skill_id UUID,
+    supports_conflict BOOLEAN NOT NULL DEFAULT FALSE,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'running', 'completed', 'failed', 'timeout', 'conflict')),
+    skill JSONB,
+    conflict JSONB,
+    error TEXT NOT NULL DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    started_at TIMESTAMPTZ,
+    expires_at TIMESTAMPTZ NOT NULL DEFAULT (now() + interval '5 minutes')
+);

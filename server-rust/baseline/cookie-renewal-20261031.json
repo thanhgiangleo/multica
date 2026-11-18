@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-31",
+  "scope": "isolated safe-method JWT cookie renewal, not whole auth or HTTP parity",
+  "source": "server-rust/src/api.rs",
+  "reference": "frozen staged Go session_renewal.go, session.go and cookie.go",
+  "tests": {
+    "default_rust": "21 passed, 15 ignored",
+    "api_db_ignored": "2 passed on freshly migrated disposable multica_zbsi63 after cookie change",
+    "clippy_all_targets_d_warnings": "passed",
+    "fmt_check": "passed"
+  },
+  "migrations": {
+    "upstream": 619,
+    "zbs": 44
+  },
+  "resource_cleanup": "owned postgres container and anonymous volume removed",
+  "limits": [
+    "CloudFront signer missing; configured key-pair ID refuses startup",
+    "invalid or unsupported nonempty TTL refuses startup unlike Go fallback",
+    "no deployed Go oracle or cookie-header differential test",
+    "remaining task/cloud auth and avatar storage unresolved",
+    "prior 22 JSON response parity comparisons pre-date cookie renewal"
+  ]
+}
