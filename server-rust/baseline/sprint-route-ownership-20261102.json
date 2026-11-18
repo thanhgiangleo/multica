@@ -1,0 +1,5924 @@
+{
+  "version": 1,
+  "deadline": "2026-11-02T23:59:59+07:00",
+  "base_attachment_id": "01a19be8-8758-783d-bd61-5bf9961ed425",
+  "base_sha256": "364e1746763729ecd00b06d10ed1d9c925e5796eb0a965d42f49a7d7a655a381",
+  "warning": "Raw router registrations, not unique URLs; nested paths must be resolved against frozen Go. Implementation states are partial and are not parity claims. Ownership is behavioral; existing shared modules still require integrator review.",
+  "routes": [
+    {
+      "line": 109,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathContext",
+      "handler_expression": "h.GetPluginContext)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetPluginContext",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 110,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssue",
+      "handler_expression": "h.GetPluginIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetPluginIssue",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 111,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssue",
+      "handler_expression": "h.PatchPluginIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PatchPluginIssue",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 112,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssueComments",
+      "handler_expression": "h.ListPluginComments)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPluginComments",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 113,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "publicapiv1.PathIssueComments",
+      "handler_expression": "h.CreatePluginComment)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreatePluginComment",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 114,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageScope",
+      "handler_expression": "h.ListPluginStorage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPluginStorage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 115,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageValue",
+      "handler_expression": "h.GetPluginStorage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetPluginStorage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 116,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageValue",
+      "handler_expression": "h.PutPluginStorage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PutPluginStorage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 117,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "publicapiv1.PathStorageValue",
+      "handler_expression": "h.DeletePluginStorage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeletePluginStorage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1462,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/health\"",
+      "handler_expression": "health.liveHandler)",
+      "state": "implemented_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ],
+      "handler": "liveHandler",
+      "sprint_owner": "integration"
+    },
+    {
+      "line": 1463,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/readyz\"",
+      "handler_expression": "health.readyHandler)",
+      "state": "implemented_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ],
+      "handler": "readyHandler",
+      "sprint_owner": "integration"
+    },
+    {
+      "line": 1464,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/healthz\"",
+      "handler_expression": "health.readyHandler)",
+      "state": "implemented_fake_tested",
+      "evidence": [
+        "server-rust/tests/health.rs"
+      ],
+      "handler": "readyHandler",
+      "sprint_owner": "integration"
+    },
+    {
+      "line": 1475,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/health/realtime\"",
+      "handler_expression": "realtimeMetricsHandler(os.Getenv(\"REALTIME_METRICS_TOKEN\")))",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "realtimeMetricsHandler(os.Getenv(\"REALTIME_METRICS_TOKEN\")))",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1488,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/ws\"",
+      "handler_expression": "func(w http.ResponseWriter, r *http.Request) {",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "func(w http.ResponseWriter, r *http.Request) {",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1495,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/uploads/*\"",
+      "handler_expression": "h.ServeLocalUpload)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ServeLocalUpload",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1507,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/signed-download\"",
+      "handler_expression": "h.DownloadAttachmentWithCapability)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DownloadAttachmentWithCapability",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1516,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/avatars/{sig}/*\"",
+      "handler_expression": "h.ServeAvatar)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ServeAvatar",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1522,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugin-surfaces/{token}\"",
+      "handler_expression": "h.ServePluginSurface)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ServePluginSurface",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1535,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/auth/logout\"",
+      "handler_expression": "h.Logout)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "Logout",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1538,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/config\"",
+      "handler_expression": "h.GetConfig)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetConfig",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1542,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/share-links/{code}\"",
+      "handler_expression": "h.GetShareLinkInfo)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "src/api/workspace_read.rs",
+        "tests/workspace_reads.rs",
+        "baseline/workspace-read-20261101.json"
+      ],
+      "handler": "GetShareLinkInfo",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1547,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/autopilots/{token}\"",
+      "handler_expression": "h.HandleAutopilotWebhook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "HandleAutopilotWebhook",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 1550,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/github\"",
+      "handler_expression": "h.HandleGitHubWebhook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "HandleGitHubWebhook",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1551,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/github/setup\"",
+      "handler_expression": "h.GitHubSetupCallback)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GitHubSetupCallback",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1560,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/vcs/{connectionId}\"",
+      "handler_expression": "h.HandleVCSWebhook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "HandleVCSWebhook",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1565,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/webhooks/stripe\"",
+      "handler_expression": "h.HandleCloudBillingStripeWebhook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "HandleCloudBillingStripeWebhook",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1577,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/integrations/composio/callback\"",
+      "handler_expression": "h.ComposioCallback)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ComposioCallback",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1583,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/register\"",
+      "handler_expression": "h.DaemonRegister)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DaemonRegister",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1584,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/deregister\"",
+      "handler_expression": "h.DaemonDeregister)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DaemonDeregister",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1585,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/heartbeat\"",
+      "handler_expression": "h.DaemonHeartbeat)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DaemonHeartbeat",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1586,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/ws\"",
+      "handler_expression": "h.DaemonWebSocket)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DaemonWebSocket",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1587,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workspaces\"",
+      "handler_expression": "h.ListDaemonWorkspaces)",
+      "state": "implemented_disposable_db_tested_differential_subset_security_divergence",
+      "evidence": [
+        "server-rust/src/api/daemon.rs",
+        "server-rust/tests/daemon.rs",
+        "server-rust/baseline/machine-auth-20261101.json"
+      ],
+      "handler": "ListDaemonWorkspaces",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1588,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workspaces/{workspaceId}/repos\"",
+      "handler_expression": "h.GetDaemonWorkspaceRepos)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetDaemonWorkspaceRepos",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1589,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workspaces/{workspaceId}/runtime-profiles\"",
+      "handler_expression": "h.DaemonListRuntimeProfiles)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/daemon.rs",
+        "server-rust/src/api/workspace_read.rs",
+        "server-rust/tests/daemon_profiles.rs",
+        "server-rust/baseline/daemon-profiles-20261101.json"
+      ],
+      "handler": "DaemonListRuntimeProfiles",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1594,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{id}/plugin-hooks\"",
+      "handler_expression": "h.InvokeAgentPluginHook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InvokeAgentPluginHook",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1597,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{id}/plugin-mcp/{contributionId}/credential\"",
+      "handler_expression": "h.ResolvePluginMCPCredential)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ResolvePluginMCPCredential",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1599,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/claim\"",
+      "handler_expression": "h.ClaimTaskByRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ClaimTaskByRuntime",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1603,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/claim\"",
+      "handler_expression": "h.ClaimTasksByRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ClaimTasksByRuntime",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1604,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/claim\"",
+      "handler_expression": "h.ClaimTasksByRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ClaimTasksByRuntime",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1605,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/{taskId}/prepare-lease\"",
+      "handler_expression": "h.ExtendTaskPrepareLease)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_chat_daemon.rs",
+        "server-rust/tests/runtime_chat_daemon.rs",
+        "server-rust/baseline/verification-v12/db67.json"
+      ],
+      "handler": "ExtendTaskPrepareLease",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1606,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/{taskId}/skill-bundles/resolve\"",
+      "handler_expression": "h.ResolveTaskSkillBundles)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ResolveTaskSkillBundles",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 1607,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/tasks/pending\"",
+      "handler_expression": "h.ListPendingTasksByRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPendingTasksByRuntime",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1608,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/update/{updateId}/result\"",
+      "handler_expression": "h.ReportUpdateResult)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReportUpdateResult",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 1609,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/models/{requestId}/result\"",
+      "handler_expression": "h.ReportModelListResult)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReportModelListResult",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 1610,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/local-skills/{requestId}/result\"",
+      "handler_expression": "h.ReportLocalSkillListResult)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReportLocalSkillListResult",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 1611,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/local-skills/import/{requestId}/result\"",
+      "handler_expression": "h.ReportLocalSkillImportResult)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReportLocalSkillImportResult",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 1613,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/status\"",
+      "handler_expression": "h.GetTaskStatus)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/daemon.rs",
+        "server-rust/tests/daemon_status.rs",
+        "server-rust/baseline/daemon-status-20261101.json",
+        "server-rust/baseline/daemon-status-20261101-asia-ho_chi_minh.json",
+        "server-rust/baseline/daemon-status-20261101-america-new_york.json"
+      ],
+      "handler": "GetTaskStatus",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1614,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/start\"",
+      "handler_expression": "h.StartTask)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "StartTask",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1615,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/supplements/claim\"",
+      "handler_expression": "h.ClaimTaskSupplement)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ClaimTaskSupplement",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1616,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/supplements/{commentId}/ack\"",
+      "handler_expression": "h.AckTaskSupplement)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AckTaskSupplement",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1617,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/wait-local-directory\"",
+      "handler_expression": "h.MarkTaskWaitingLocalDirectory)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_chat_daemon.rs",
+        "server-rust/tests/runtime_chat_daemon.rs",
+        "server-rust/baseline/verification-v12/db67.json"
+      ],
+      "handler": "MarkTaskWaitingLocalDirectory",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1618,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/progress\"",
+      "handler_expression": "h.ReportTaskProgress)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_chat_daemon.rs",
+        "server-rust/src/api/runtime_chat_events.rs",
+        "server-rust/tests/runtime_chat_daemon.rs",
+        "server-rust/baseline/verification-v12/db67.json"
+      ],
+      "handler": "ReportTaskProgress",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1619,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/complete\"",
+      "handler_expression": "h.CompleteTask)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CompleteTask",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1620,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/fail\"",
+      "handler_expression": "h.FailTask)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "FailTask",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1621,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/usage\"",
+      "handler_expression": "h.ReportTaskUsage)",
+      "state": "implemented_disposable_db_tested_partial_lifecycle_metrics_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat_stream.rs",
+        "server-rust/src/api/runtime_chat_usage.rs",
+        "server-rust/src/api/runtime_chat_redact.rs",
+        "server-rust/tests/runtime_chat_daemon.rs",
+        "server-rust/baseline/child-integration-v14.json",
+        "server-rust/baseline/verification-v14/db67.json"
+      ],
+      "handler": "ReportTaskUsage",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1622,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/messages\"",
+      "handler_expression": "h.ReportTaskMessages)",
+      "state": "implemented_disposable_db_tested_partial_lifecycle_metrics_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat_stream.rs",
+        "server-rust/src/api/runtime_chat_usage.rs",
+        "server-rust/src/api/runtime_chat_redact.rs",
+        "server-rust/tests/runtime_chat_daemon.rs",
+        "server-rust/baseline/child-integration-v14.json",
+        "server-rust/baseline/verification-v14/db67.json"
+      ],
+      "handler": "ReportTaskMessages",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1623,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/messages\"",
+      "handler_expression": "h.ListTaskMessages)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListTaskMessages",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1624,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/cancel-ack\"",
+      "handler_expression": "h.AckTaskCancelled)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AckTaskCancelled",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1626,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/workspaces/{workspaceId}/issues/gc-check\"",
+      "handler_expression": "h.BatchIssueGCCheck)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "BatchIssueGCCheck",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1627,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/issues/{issueId}/gc-check\"",
+      "handler_expression": "h.GetIssueGCCheck)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "src/api/daemon.rs",
+        "tests/daemon_gc.rs",
+        "baseline/issue-gc-20261101.json"
+      ],
+      "handler": "GetIssueGCCheck",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 1628,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/chat-sessions/{sessionId}/gc-check\"",
+      "handler_expression": "h.GetChatSessionGCCheck)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetChatSessionGCCheck",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1629,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/autopilot-runs/{runId}/gc-check\"",
+      "handler_expression": "h.GetAutopilotRunGCCheck)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAutopilotRunGCCheck",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 1630,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/gc-check\"",
+      "handler_expression": "h.GetTaskGCCheck)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/daemon.rs",
+        "server-rust/tests/daemon_task_gc.rs",
+        "server-rust/tools/check_daemon_task_gc.py",
+        "server-rust/baseline/daemon-task-gc-20261101.json"
+      ],
+      "handler": "GetTaskGCCheck",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1632,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtimes/{runtimeId}/recover-orphans\"",
+      "handler_expression": "h.RecoverOrphanedTasks)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RecoverOrphanedTasks",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1633,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/session\"",
+      "handler_expression": "h.PinTaskSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PinTaskSession",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 1660,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/hooks/{key}\"",
+      "handler_expression": "h.InvokePluginHook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InvokePluginHook",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1677,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/me\"",
+      "handler_expression": "h.GetMe)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ],
+      "handler": "GetMe",
+      "sprint_owner": "integration"
+    },
+    {
+      "line": 1678,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/api/me\"",
+      "handler_expression": "h.UpdateMe)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "src/api/account_catalog_write_profile.rs",
+        "tests/account_catalog_write_profile.rs",
+        "baseline/account-profile-merged-20261102.json"
+      ],
+      "handler": "UpdateMe",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1679,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/api/me/onboarding\"",
+      "handler_expression": "h.PatchOnboarding)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PatchOnboarding",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1680,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/me/onboarding/complete\"",
+      "handler_expression": "h.CompleteOnboarding)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CompleteOnboarding",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1681,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/me/onboarding/cloud-waitlist\"",
+      "handler_expression": "h.JoinCloudWaitlist)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "JoinCloudWaitlist",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1690,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/auth/refresh\"",
+      "handler_expression": "h.RefreshSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RefreshSession",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1691,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/upload-file\"",
+      "handler_expression": "h.UploadFile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UploadFile",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1692,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/feedback\"",
+      "handler_expression": "h.CreateFeedback)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateFeedback",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1713,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/download\"",
+      "handler_expression": "h.DownloadAttachment)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DownloadAttachment",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1717,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/download-metadata\"",
+      "handler_expression": "h.GetAttachmentForDownload)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAttachmentForDownload",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 1720,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListWorkspaces)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ],
+      "handler": "ListWorkspaces",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 1721,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateWorkspace)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_workspaces.rs",
+        "server-rust/tests/account_catalog_write_workspaces.rs",
+        "server-rust/baseline/account_catalog_write-workspace-contract.md"
+      ],
+      "handler": "CreateWorkspace",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1726,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetWorkspace)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ],
+      "handler": "GetWorkspace",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 1727,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.ListMembersWithUser)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api.rs",
+        "server-rust/tests/api.rs"
+      ],
+      "handler": "ListMembersWithUser",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 1728,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/leave\"",
+      "handler_expression": "h.LeaveWorkspace)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_members.rs",
+        "server-rust/tests/account_catalog_write_departures.rs",
+        "server-rust/baseline/account_catalog_write-departures-contract.md",
+        "server-rust/baseline/verification-v12/db65.json"
+      ],
+      "handler": "LeaveWorkspace",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1729,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/invitations\"",
+      "handler_expression": "h.ListWorkspaceInvitations)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "src/api/workspace_read.rs",
+        "tests/workspace_reads.rs",
+        "baseline/workspace-read-20261101.json"
+      ],
+      "handler": "ListWorkspaceInvitations",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1734,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/github/installations\"",
+      "handler_expression": "h.ListGitHubInstallations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListGitHubInstallations",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1738,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/vcs/connections\"",
+      "handler_expression": "h.ListVCSConnections)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListVCSConnections",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1739,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/qoder\"",
+      "handler_expression": "h.GetQoderConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetQoderConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1740,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/qoder/agents\"",
+      "handler_expression": "h.ListQoderAgents)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListQoderAgents",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1744,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles\"",
+      "handler_expression": "h.ListRuntimeProfiles)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "src/api/workspace_read.rs",
+        "tests/workspace_reads.rs",
+        "baseline/workspace-read-20261101.json"
+      ],
+      "handler": "ListRuntimeProfiles",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1745,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.GetRuntimeProfile)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "src/api/workspace_read.rs",
+        "tests/workspace_reads.rs",
+        "baseline/workspace-read-20261101.json"
+      ],
+      "handler": "GetRuntimeProfile",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1750,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.ListWorkspaceMcpServers)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "src/api/workspace_read.rs",
+        "tests/workspace_reads.rs",
+        "baseline/workspace-read-20261101.json"
+      ],
+      "handler": "ListWorkspaceMcpServers",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1754,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins\"",
+      "handler_expression": "h.ListPlugins)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPlugins",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1758,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/surfaces/{surfaceKey}/launch\"",
+      "handler_expression": "h.GetPluginSurfaceLaunch)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetPluginSurfaceLaunch",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1763,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateWorkspace)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_workspaces.rs",
+        "server-rust/tests/account_catalog_write_workspaces.rs",
+        "server-rust/baseline/account_catalog_write-workspace-contract.md"
+      ],
+      "handler": "UpdateWorkspace",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1764,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateWorkspace)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_workspaces.rs",
+        "server-rust/tests/account_catalog_write_workspaces.rs",
+        "server-rust/baseline/account_catalog_write-workspace-contract.md"
+      ],
+      "handler": "UpdateWorkspace",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1765,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.CreateInvitation)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_invitations.rs",
+        "server-rust/src/api/account_catalog_write_invitation_admission.rs",
+        "server-rust/tests/account_catalog_write_invitations.rs",
+        "server-rust/baseline/verification-v11/db65.json"
+      ],
+      "handler": "CreateInvitation",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1767,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateMember)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_members.rs",
+        "server-rust/tests/account_catalog_write_workspaces.rs",
+        "server-rust/baseline/account_catalog_write-workspace-contract.md"
+      ],
+      "handler": "UpdateMember",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1768,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteMember)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_members.rs",
+        "server-rust/tests/account_catalog_write_departures.rs",
+        "server-rust/baseline/account_catalog_write-departures-contract.md",
+        "server-rust/baseline/verification-v12/db65.json"
+      ],
+      "handler": "DeleteMember",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1770,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/invitations/{invitationId}\"",
+      "handler_expression": "h.RevokeInvitation)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_invitations.rs",
+        "server-rust/baseline/zbsi63-v10-db65.log",
+        "server-rust/baseline/account_catalog_write-invitation-contract.md"
+      ],
+      "handler": "RevokeInvitation",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1774,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.CreateWorkspaceMcpServer)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateWorkspaceMcpServer",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1775,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}\"",
+      "handler_expression": "h.UpdateWorkspaceMcpServer)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateWorkspaceMcpServer",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1776,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}\"",
+      "handler_expression": "h.DeleteWorkspaceMcpServer)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteWorkspaceMcpServer",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1777,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/share-links\"",
+      "handler_expression": "h.CreateShareLink)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateShareLink",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1778,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/share-links/{linkId}\"",
+      "handler_expression": "h.RevokeShareLink)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeShareLink",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1779,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/share-links\"",
+      "handler_expression": "h.ListShareLinks)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "src/api/workspace_read.rs",
+        "tests/workspace_reads.rs",
+        "baseline/workspace-read-20261101.json"
+      ],
+      "handler": "ListShareLinks",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1781,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles\"",
+      "handler_expression": "h.CreateRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateRuntimeProfile",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1782,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.UpdateRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateRuntimeProfile",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1783,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.UpdateRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateRuntimeProfile",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1784,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/runtime-profiles/{profileId}\"",
+      "handler_expression": "h.DeleteRuntimeProfile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteRuntimeProfile",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1788,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/packages\"",
+      "handler_expression": "h.ListPluginPackages)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPluginPackages",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1789,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/packages\"",
+      "handler_expression": "h.PublishPluginPackage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PublishPluginPackage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1790,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/packages/local\"",
+      "handler_expression": "h.PublishLocalPluginPackage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PublishLocalPluginPackage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1791,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/plugins/packages/{packageId}\"",
+      "handler_expression": "h.DeletePluginPackage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeletePluginPackage",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1799,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/preview\"",
+      "handler_expression": "h.PreviewPlugin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PreviewPlugin",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1800,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins\"",
+      "handler_expression": "h.InstallPlugin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InstallPlugin",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1801,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/invocations\"",
+      "handler_expression": "h.ListPluginInvocations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPluginInvocations",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1802,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/token\"",
+      "handler_expression": "h.RotatePluginToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RotatePluginToken",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1803,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/token\"",
+      "handler_expression": "h.RevokePluginToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokePluginToken",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1806,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/mcp/{hookKey}/tools\"",
+      "handler_expression": "h.ListPluginMCPTools)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPluginMCPTools",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1807,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/mcp/{hookKey}/tools\"",
+      "handler_expression": "h.ApprovePluginMCPTools)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ApprovePluginMCPTools",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1808,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/config\"",
+      "handler_expression": "h.ConfigurePlugin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ConfigurePlugin",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1809,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/enable\"",
+      "handler_expression": "h.EnablePlugin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "EnablePlugin",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1810,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}/disable\"",
+      "handler_expression": "h.DisablePlugin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DisablePlugin",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1811,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/plugins/{installationId}\"",
+      "handler_expression": "h.UninstallPlugin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UninstallPlugin",
+      "sprint_owner": "extensions"
+    },
+    {
+      "line": 1821,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/github/connect\"",
+      "handler_expression": "h.GitHubConnect)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GitHubConnect",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1822,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/github/installations/{installationId}/repositories\"",
+      "handler_expression": "h.ListGitHubInstallationRepositories)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListGitHubInstallationRepositories",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1823,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/github/installations/{installationId}\"",
+      "handler_expression": "h.DeleteGitHubInstallation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteGitHubInstallation",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1825,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/vcs/connections\"",
+      "handler_expression": "h.ConnectVCS)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ConnectVCS",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1826,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/qoder\"",
+      "handler_expression": "h.SaveQoderConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SaveQoderConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1827,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/check\"",
+      "handler_expression": "h.CheckQoderConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CheckQoderConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1828,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/environments\"",
+      "handler_expression": "h.ListQoderEnvironments)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListQoderEnvironments",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1829,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/stop\"",
+      "handler_expression": "h.StopQoderConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "StopQoderConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1830,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/qoder/resume\"",
+      "handler_expression": "h.ResumeQoderConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ResumeQoderConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1831,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/qoder\"",
+      "handler_expression": "h.DisconnectQoderConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DisconnectQoderConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1832,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/vcs/connections/{connectionId}/rotate-webhook\"",
+      "handler_expression": "h.RotateVCSConnectionWebhook)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RotateVCSConnectionWebhook",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1833,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/vcs/connections/{connectionId}\"",
+      "handler_expression": "h.DeleteVCSConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteVCSConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1853,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/lark/installations\"",
+      "handler_expression": "h.ListLarkInstallations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListLarkInstallations",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1854,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/lark/installations/{installationId}\"",
+      "handler_expression": "h.RevokeLarkInstallation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeLarkInstallation",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1860,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/lark/install/begin\"",
+      "handler_expression": "h.BeginLarkInstall)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "BeginLarkInstall",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1861,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/lark/install/{sessionId}/status\"",
+      "handler_expression": "h.GetLarkInstallStatus)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetLarkInstallStatus",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1871,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/slack/installations\"",
+      "handler_expression": "h.ListSlackInstallations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListSlackInstallations",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1872,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/wecom/installations\"",
+      "handler_expression": "h.ListWecomInstallations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListWecomInstallations",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1876,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/slack/installations/{installationId}\"",
+      "handler_expression": "h.RevokeSlackInstallation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeSlackInstallation",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1877,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/slack/install/byo\"",
+      "handler_expression": "h.RegisterSlackBYO)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RegisterSlackBYO",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1878,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/wecom/installations/{installationId}\"",
+      "handler_expression": "h.RevokeWecomInstallation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeWecomInstallation",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1879,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wecom/install/byo\"",
+      "handler_expression": "h.RegisterWecomBYO)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RegisterWecomBYO",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1884,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/dingtalk/installations\"",
+      "handler_expression": "h.ListDingTalkInstallations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListDingTalkInstallations",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1885,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/dingtalk/groups\"",
+      "handler_expression": "h.ListDingTalkGroups)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListDingTalkGroups",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1886,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/dingtalk/installations/{installationId}/groups/{conversationId}\"",
+      "handler_expression": "h.ForgetDingTalkGroup)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ForgetDingTalkGroup",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1887,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/dingtalk/installations/{installationId}\"",
+      "handler_expression": "h.RevokeDingTalkInstallation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeDingTalkInstallation",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1888,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/dingtalk/install/byo\"",
+      "handler_expression": "h.RegisterDingTalkBYO)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RegisterDingTalkBYO",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1895,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/telegram/installations\"",
+      "handler_expression": "h.ListTelegramInstallations)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListTelegramInstallations",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1899,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/telegram/installations/{installationId}\"",
+      "handler_expression": "h.RevokeTelegramInstallation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeTelegramInstallation",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1900,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/telegram/install\"",
+      "handler_expression": "h.RegisterTelegramBot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RegisterTelegramBot",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1912,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/lark/binding/redeem\"",
+      "handler_expression": "h.RedeemLarkBindingToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RedeemLarkBindingToken",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1918,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/slack/binding/redeem\"",
+      "handler_expression": "h.RedeemSlackBindingToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RedeemSlackBindingToken",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1921,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/dingtalk/binding/redeem\"",
+      "handler_expression": "h.RedeemDingTalkBindingToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RedeemDingTalkBindingToken",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1925,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/wecom/binding/redeem\"",
+      "handler_expression": "h.RedeemWecomBindingToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RedeemWecomBindingToken",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1929,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/telegram/binding/redeem\"",
+      "handler_expression": "h.RedeemTelegramBindingToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RedeemTelegramBindingToken",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1930,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/zalo/binding/redeem\"",
+      "handler_expression": "zbs.New(h).RedeemZaloBindingToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RedeemZaloBindingToken",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 1938,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/connect/init\"",
+      "handler_expression": "h.ComposioConnectInit)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ComposioConnectInit",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1939,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/toolkits\"",
+      "handler_expression": "h.ListComposioToolkits)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListComposioToolkits",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1940,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/connections\"",
+      "handler_expression": "h.ListComposioConnections)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListComposioConnections",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1941,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/connections/{id}\"",
+      "handler_expression": "h.DeleteComposioConnection)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteComposioConnection",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1945,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/invitations\"",
+      "handler_expression": "h.ListMyInvitations)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/account.rs",
+        "baseline/account-read-20261101.json"
+      ],
+      "handler": "ListMyInvitations",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 1946,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/invitations/{id}\"",
+      "handler_expression": "h.GetMyInvitation)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/account.rs",
+        "baseline/account-read-20261101.json"
+      ],
+      "handler": "GetMyInvitation",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1947,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/invitations/{id}/accept\"",
+      "handler_expression": "h.AcceptInvitation)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_invitations.rs",
+        "server-rust/baseline/zbsi63-v10-db65.log",
+        "server-rust/baseline/account_catalog_write-invitation-contract.md"
+      ],
+      "handler": "AcceptInvitation",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1948,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/invitations/{id}/decline\"",
+      "handler_expression": "h.DeclineInvitation)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_invitations.rs",
+        "server-rust/baseline/zbsi63-v10-db65.log",
+        "server-rust/baseline/account_catalog_write-invitation-contract.md"
+      ],
+      "handler": "DeclineInvitation",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1949,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/share-links/join\"",
+      "handler_expression": "h.JoinByShareLink)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "JoinByShareLink",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1957,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListPersonalAccessTokens)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/account.rs",
+        "baseline/account-read-20261101.json"
+      ],
+      "handler": "ListPersonalAccessTokens",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1958,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreatePersonalAccessToken)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write.rs",
+        "server-rust/tests/account_catalog_write.rs",
+        "ZBSI-65/01a19777-cbae-7597-ae31-7bc539c65a23",
+        "server-rust/tools/check_integrated_child_writes.py",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "CreatePersonalAccessToken",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1959,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/current/renew\"",
+      "handler_expression": "h.RenewCurrentPersonalAccessToken)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write.rs",
+        "server-rust/tests/account_catalog_write.rs",
+        "ZBSI-65/01a19777-cbae-7597-ae31-7bc539c65a23",
+        "server-rust/tools/check_integrated_child_writes.py",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "RenewCurrentPersonalAccessToken",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1960,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/{id}\"",
+      "handler_expression": "h.RevokePersonalAccessToken)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write.rs",
+        "server-rust/tests/account_catalog_write.rs",
+        "ZBSI-65/01a19777-cbae-7597-ae31-7bc539c65a23",
+        "server-rust/tools/check_integrated_child_writes.py",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "RevokePersonalAccessToken",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 1990,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/balance\"",
+      "handler_expression": "h.GetCloudBillingBalance)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudBillingBalance",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1991,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/transactions\"",
+      "handler_expression": "h.ListCloudBillingTransactions)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListCloudBillingTransactions",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1992,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/batches\"",
+      "handler_expression": "h.ListCloudBillingBatches)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListCloudBillingBatches",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1993,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/topups\"",
+      "handler_expression": "h.ListCloudBillingTopups)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListCloudBillingTopups",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1994,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/price-tiers\"",
+      "handler_expression": "h.ListCloudBillingPriceTiers)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListCloudBillingPriceTiers",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1995,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/checkout-sessions\"",
+      "handler_expression": "h.CreateCloudBillingCheckoutSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateCloudBillingCheckoutSession",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1996,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/checkout-sessions/{sessionId}\"",
+      "handler_expression": "h.GetCloudBillingCheckoutSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudBillingCheckoutSession",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 1997,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/portal-sessions\"",
+      "handler_expression": "h.CreateCloudBillingPortalSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateCloudBillingPortalSession",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2011,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/summary\"",
+      "handler_expression": "h.GetCloudWorkspaceSubscriptionSummary)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudWorkspaceSubscriptionSummary",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2012,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/prices\"",
+      "handler_expression": "h.GetCloudWorkspaceSubscriptionPrices)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudWorkspaceSubscriptionPrices",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2016,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/checkout-sessions\"",
+      "handler_expression": "h.CreateCloudWorkspaceSubscriptionCheckout)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateCloudWorkspaceSubscriptionCheckout",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2017,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/seats/purchase-preview\"",
+      "handler_expression": "h.PreviewCloudWorkspaceSubscriptionSeatPurchase)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PreviewCloudWorkspaceSubscriptionSeatPurchase",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2018,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/seats/purchases\"",
+      "handler_expression": "h.PurchaseCloudWorkspaceSubscriptionSeats)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PurchaseCloudWorkspaceSubscriptionSeats",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2019,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/seats/reconcile\"",
+      "handler_expression": "h.ReconcileCloudWorkspaceSubscriptionSeats)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReconcileCloudWorkspaceSubscriptionSeats",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2020,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/portal-sessions\"",
+      "handler_expression": "h.CreateCloudWorkspaceSubscriptionPortal)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateCloudWorkspaceSubscriptionPortal",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2029,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/assignee-frequency\"",
+      "handler_expression": "h.GetAssigneeFrequency)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "baseline/assignee-frequency-20261101.json"
+      ],
+      "handler": "GetAssigneeFrequency",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2036,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/manifest\"",
+      "handler_expression": "h.GetSearchIndexManifest)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetSearchIndexManifest",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2037,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/snapshot\"",
+      "handler_expression": "h.GetSearchIndexSnapshot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetSearchIndexSnapshot",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2038,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/changes\"",
+      "handler_expression": "h.ListSearchIndexChanges)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListSearchIndexChanges",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2043,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/limit-usage\"",
+      "handler_expression": "h.GetIssueLimitUsage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetIssueLimitUsage",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2044,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/table/groups\"",
+      "handler_expression": "h.ListIssueTableGroups)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListIssueTableGroups",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2045,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/table/rows\"",
+      "handler_expression": "h.ListIssueTableRows)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListIssueTableRows",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2046,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/table/facets\"",
+      "handler_expression": "h.ListIssueTableFacets)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListIssueTableFacets",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2047,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/search\"",
+      "handler_expression": "h.SearchIssues)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SearchIssues",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2048,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/child-progress\"",
+      "handler_expression": "h.ChildIssueProgress)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "src/api/child_progress.rs",
+        "tests/child_progress.rs",
+        "baseline/child-progress-20261101.json"
+      ],
+      "handler": "ChildIssueProgress",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2049,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/children\"",
+      "handler_expression": "h.ListChildrenByParents)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/issue_relations_read.rs",
+        "server-rust/tests/issue_relations_read.rs",
+        "server-rust/baseline/issue-relations-read-20261102.json",
+        "server-rust/baseline/issue-relations-differential-20261102.json"
+      ],
+      "handler": "ListChildrenByParents",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2050,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/grouped\"",
+      "handler_expression": "h.ListGroupedIssues)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListGroupedIssues",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2051,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssues)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListIssues",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2054,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/query\"",
+      "handler_expression": "h.QueryIssues)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "QueryIssues",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2055,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2056,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-create\"",
+      "handler_expression": "h.QuickCreateIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "QuickCreateIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2057,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/preview-trigger\"",
+      "handler_expression": "h.PreviewIssueTrigger)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PreviewIssueTrigger",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2058,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/batch-update\"",
+      "handler_expression": "h.BatchUpdateIssues)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "BatchUpdateIssues",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2059,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/batch-delete\"",
+      "handler_expression": "h.BatchDeleteIssues)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "BatchDeleteIssues",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2061,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetIssue",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2062,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssue)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_update.rs",
+        "server-rust/src/api/issue_write_update.sql",
+        "server-rust/tests/issue_write_update_subscriber.rs",
+        "server-rust/baseline/verification-v11/db66.json"
+      ],
+      "handler": "UpdateIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2063,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/move\"",
+      "handler_expression": "h.MoveIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "MoveIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2064,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2065,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/comments/trigger-preview\"",
+      "handler_expression": "h.PreviewCommentTriggers)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PreviewCommentTriggers",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2066,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/comments\"",
+      "handler_expression": "h.CreateComment)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_comment.rs",
+        "server-rust/tests/issue_write_comment.rs",
+        "server-rust/baseline/zbsi63-v10-db66.log"
+      ],
+      "handler": "CreateComment",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2067,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/comments\"",
+      "handler_expression": "h.ListComments)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListComments",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2068,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/timeline\"",
+      "handler_expression": "h.ListTimeline)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListTimeline",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2069,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/workflow-handoff\"",
+      "handler_expression": "h.PreviewWorkflowHandoff)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PreviewWorkflowHandoff",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2070,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/subscribers\"",
+      "handler_expression": "h.ListIssueSubscribers)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/issue_read.rs",
+        "server-rust/tests/issue_reads.rs",
+        "server-rust/baseline/issue-reads-20261101.json"
+      ],
+      "handler": "ListIssueSubscribers",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2071,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/subscribe\"",
+      "handler_expression": "h.SubscribeToIssue)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_subscriber.rs",
+        "server-rust/tests/issue_write_update_subscriber.rs",
+        "server-rust/baseline/verification-v11/db66.json"
+      ],
+      "handler": "SubscribeToIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2072,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/unsubscribe\"",
+      "handler_expression": "h.UnsubscribeFromIssue)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_subscriber.rs",
+        "server-rust/tests/issue_write_update_subscriber.rs",
+        "server-rust/baseline/verification-v11/db66.json"
+      ],
+      "handler": "UnsubscribeFromIssue",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2073,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/unsubscribe/subtree\"",
+      "handler_expression": "h.UnsubscribeFromIssueSubtree)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_subscriber.rs",
+        "server-rust/src/api/issue_write_subscriber_subtree.sql",
+        "server-rust/tests/issue_write_update_subscriber.rs",
+        "server-rust/baseline/verification-v11/db66.json"
+      ],
+      "handler": "UnsubscribeFromIssueSubtree",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2074,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/wakeups\"",
+      "handler_expression": "h.ListIssueWakeups)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/issue_wakeup.rs",
+        "server-rust/tests/issue_wakeups.rs",
+        "server-rust/baseline/issue-wakeups-20261101.json"
+      ],
+      "handler": "ListIssueWakeups",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2075,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups\"",
+      "handler_expression": "h.CreateIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2076,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}\"",
+      "handler_expression": "h.CreateIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2077,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/disable\"",
+      "handler_expression": "h.DisableIssueWakeup)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_manage.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DisableIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2078,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/enable\"",
+      "handler_expression": "h.EnableIssueWakeup)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "EnableIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2079,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/instruction\"",
+      "handler_expression": "h.EditIssueWakeupInstruction)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_manage.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "EditIssueWakeupInstruction",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2080,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}\"",
+      "handler_expression": "h.DeleteIssueWakeup)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_manage.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DeleteIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2081,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/trigger\"",
+      "handler_expression": "h.TriggerIssueWakeup)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "ZBSI-66 trigger delta 2026-11-02; merged HTTP/DB suite passed; real scheduler/dispatcher unavailable so write routes unregistered"
+      ],
+      "handler": "TriggerIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2082,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/checkin\"",
+      "handler_expression": "h.CheckInIssueWakeup)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_wakeup.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "CheckInIssueWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2083,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/wakeups/{wakeupID}/runs\"",
+      "handler_expression": "h.ListIssueWakeupRuns)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/wakeup_runs.rs",
+        "baseline/wakeup-runs-20261101.json"
+      ],
+      "handler": "ListIssueWakeupRuns",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2084,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/system-wakeups\"",
+      "handler_expression": "h.ListIssueSystemWakeups)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "src/api/issue_system_wakeup.rs",
+        "tests/issue_system_wakeups.rs",
+        "baseline/issue-system-wakeups-20261101.json"
+      ],
+      "handler": "ListIssueSystemWakeups",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2085,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/system-wakeups/{rule}\"",
+      "handler_expression": "h.UpdateIssueSystemWakeup)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateIssueSystemWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2086,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/active-task\"",
+      "handler_expression": "h.GetActiveTaskForIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetActiveTaskForIssue",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2087,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/tasks/{taskId}/cancel\"",
+      "handler_expression": "h.CancelTask)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CancelTask",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2090,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/rerun\"",
+      "handler_expression": "h.RerunIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RerunIssue",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2091,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-actions/{quickActionId}/run\"",
+      "handler_expression": "h.RunQuickAction)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RunQuickAction",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2092,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-actions/{quickActionId}/render\"",
+      "handler_expression": "h.RenderQuickAction)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RenderQuickAction",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2093,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/task-runs\"",
+      "handler_expression": "h.ListTasksByIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListTasksByIssue",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2094,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage\"",
+      "handler_expression": "h.GetIssueUsage)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "tests/issue_usage.rs",
+        "baseline/issue-usage-20261101.json"
+      ],
+      "handler": "GetIssueUsage",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2095,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.AddIssueReaction)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "AddIssueReaction",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2096,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.RemoveIssueReaction)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "RemoveIssueReaction",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2097,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/attachments\"",
+      "handler_expression": "h.ListAttachments)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListAttachments",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 2098,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/children\"",
+      "handler_expression": "h.ListChildIssues)",
+      "state": "implemented_disposable_db_tested_differential_subset_security_divergence",
+      "evidence": [
+        "server-rust/src/api/issue_relations_read.rs",
+        "server-rust/tests/issue_relations_read.rs",
+        "server-rust/baseline/issue-relations-read-20261102.json",
+        "server-rust/baseline/issue-relations-differential-20261102.json"
+      ],
+      "handler": "ListChildIssues",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2099,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/duplicates\"",
+      "handler_expression": "h.ListIssueDuplicates)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/issue_relations_read.rs",
+        "server-rust/tests/issue_relations_read.rs",
+        "server-rust/baseline/issue-relations-read-20261102.json",
+        "server-rust/baseline/issue-relations-differential-20261102.json"
+      ],
+      "handler": "ListIssueDuplicates",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2100,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.ListLabelsForIssue)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/issue_read.rs",
+        "server-rust/tests/issue_reads.rs",
+        "server-rust/baseline/issue-reads-20261101.json"
+      ],
+      "handler": "ListLabelsForIssue",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2101,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.AttachLabel)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "AttachLabel",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2102,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/labels/{labelId}\"",
+      "handler_expression": "h.DetachLabel)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DetachLabel",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2103,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/metadata\"",
+      "handler_expression": "h.ListIssueMetadata)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/issue_read.rs",
+        "server-rust/tests/issue_reads.rs",
+        "server-rust/baseline/issue-reads-20261101.json"
+      ],
+      "handler": "ListIssueMetadata",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2104,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/metadata/{key}\"",
+      "handler_expression": "h.SetIssueMetadataKey)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/src/api/issue_write_reaction.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/issue_write_handoff.md",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "SetIssueMetadataKey",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2105,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/metadata/{key}\"",
+      "handler_expression": "h.DeleteIssueMetadataKey)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/src/api/issue_write_reaction.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/issue_write_handoff.md",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DeleteIssueMetadataKey",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2106,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/properties/{propertyId}\"",
+      "handler_expression": "h.SetIssueProperty)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "SetIssueProperty",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2107,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/properties/{propertyId}\"",
+      "handler_expression": "h.DeleteIssueProperty)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DeleteIssueProperty",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2108,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/pull-requests\"",
+      "handler_expression": "h.ListPullRequestsForIssue)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPullRequestsForIssue",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2109,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/pull-requests\"",
+      "handler_expression": "h.LinkIssuePullRequest)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "LinkIssuePullRequest",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2110,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/pull-requests/{prId}\"",
+      "handler_expression": "h.UnlinkIssuePullRequest)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UnlinkIssuePullRequest",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2111,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/pr-auto-complete\"",
+      "handler_expression": "h.SetIssuePRAutoComplete)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetIssuePRAutoComplete",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2116,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/tasks/{taskId}/messages\"",
+      "handler_expression": "h.ListTaskMessagesByUser)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListTaskMessagesByUser",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2122,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListQuickActions)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/quick_action.rs",
+        "server-rust/src/api/personal_read.rs",
+        "server-rust/tests/quick_actions.rs",
+        "server-rust/tools/check_quick_actions.py",
+        "server-rust/baseline/personal-catalog-20261101-utc.json",
+        "server-rust/baseline/personal-catalog-20261101-asia-ho_chi_minh.json",
+        "server-rust/baseline/personal-catalog-20261101-america-new_york.json"
+      ],
+      "handler": "ListQuickActions",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2123,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateQuickAction)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateQuickAction",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2125,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateQuickAction)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateQuickAction",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2126,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteQuickAction)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteQuickAction",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2132,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListProperties)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "ListProperties",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2133,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateProperty)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "ZBSI-65 property definitions delta 2026-11-02; ZBSI-63 merged and reran HTTP/DB role, workspace, CSRF and concurrency matrix; shared property event publisher absent"
+      ],
+      "handler": "CreateProperty",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2135,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetProperty)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "GetProperty",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2136,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateProperty)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "ZBSI-65 property definitions delta 2026-11-02; ZBSI-63 merged and reran HTTP/DB role, workspace, CSRF and concurrency matrix; shared property event publisher absent"
+      ],
+      "handler": "UpdateProperty",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2142,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListLabels)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "ListLabels",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2143,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateLabel)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_labels.rs",
+        "server-rust/src/api/account_catalog_write_resources.rs",
+        "server-rust/tests/account_catalog_write_labels.rs",
+        "server-rust/tests/account_catalog_write_resources.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "CreateLabel",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2145,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetLabel)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "GetLabel",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2146,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateLabel)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_labels.rs",
+        "server-rust/src/api/account_catalog_write_resources.rs",
+        "server-rust/tests/account_catalog_write_labels.rs",
+        "server-rust/tests/account_catalog_write_resources.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "UpdateLabel",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2147,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteLabel)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_labels.rs",
+        "server-rust/src/api/account_catalog_write_resources.rs",
+        "server-rust/tests/account_catalog_write_labels.rs",
+        "server-rust/tests/account_catalog_write_resources.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DeleteLabel",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2155,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssueStatuses)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "ListIssueStatuses",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2156,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssueStatus)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateIssueStatus",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2157,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/reorder\"",
+      "handler_expression": "h.ReorderIssueStatuses)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReorderIssueStatuses",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2159,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssueStatus)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateIssueStatus",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2160,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ArchiveIssueStatus)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ArchiveIssueStatus",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2169,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssueWorkflows)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/workflow.rs",
+        "server-rust/tests/workflow_reads.rs",
+        "server-rust/baseline/workflow-read-20261101-utc.json"
+      ],
+      "handler": "ListIssueWorkflows",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2170,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateIssueWorkflow",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2172,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetIssueWorkflow)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/workflow.rs",
+        "server-rust/tests/workflow_reads.rs",
+        "server-rust/baseline/workflow-read-20261101-utc.json"
+      ],
+      "handler": "GetIssueWorkflow",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2173,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateIssueWorkflow",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2174,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteIssueWorkflow)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteIssueWorkflow",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2175,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/handoffs/{status}\"",
+      "handler_expression": "h.SetIssueWorkflowHandoff)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetIssueWorkflowHandoff",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2176,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/brief\"",
+      "handler_expression": "h.PreviewIssueWorkflowBrief)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PreviewIssueWorkflowBrief",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2182,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/search\"",
+      "handler_expression": "h.SearchProjects)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/project_search.rs",
+        "server-rust/baseline/project-search-20261101.json"
+      ],
+      "handler": "SearchProjects",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2183,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListProjects)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "ListProjects",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2184,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateProject)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateProject",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2186,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetProject)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/catalog.rs",
+        "server-rust/tests/api.rs",
+        "server-rust/baseline/catalog-parity-20261031.json"
+      ],
+      "handler": "GetProject",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2187,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateProject)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateProject",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2188,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteProject)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteProject",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2189,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/workflow\"",
+      "handler_expression": "h.SetProjectWorkflow)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetProjectWorkflow",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2190,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/resources\"",
+      "handler_expression": "h.ListProjectResources)",
+      "state": "implemented_disposable_db_tested_differential_subset_security_divergence",
+      "evidence": [
+        "server-rust/src/api/workflow.rs",
+        "server-rust/tests/workflow_reads.rs",
+        "server-rust/baseline/workflow-read-20261101-utc.json",
+        "server-rust/src/api/catalog.rs"
+      ],
+      "handler": "ListProjectResources",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2191,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/resources\"",
+      "handler_expression": "h.CreateProjectResource)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_labels.rs",
+        "server-rust/src/api/account_catalog_write_resources.rs",
+        "server-rust/tests/account_catalog_write_labels.rs",
+        "server-rust/tests/account_catalog_write_resources.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "CreateProjectResource",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2192,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/resources/{resourceId}\"",
+      "handler_expression": "h.UpdateProjectResource)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_labels.rs",
+        "server-rust/src/api/account_catalog_write_resources.rs",
+        "server-rust/tests/account_catalog_write_labels.rs",
+        "server-rust/tests/account_catalog_write_resources.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "UpdateProjectResource",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2193,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/resources/{resourceId}\"",
+      "handler_expression": "h.DeleteProjectResource)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_labels.rs",
+        "server-rust/src/api/account_catalog_write_resources.rs",
+        "server-rust/tests/account_catalog_write_labels.rs",
+        "server-rust/tests/account_catalog_write_resources.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DeleteProjectResource",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2199,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListSquads)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/squad.rs",
+        "server-rust/tests/squad_reads.rs",
+        "server-rust/baseline/squad-read-20261101-utc.json"
+      ],
+      "handler": "ListSquads",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2200,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateSquad)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateSquad",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2202,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetSquad)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/squad.rs",
+        "server-rust/tests/squad_reads.rs",
+        "server-rust/baseline/squad-read-20261101-utc.json"
+      ],
+      "handler": "GetSquad",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2203,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateSquad)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateSquad",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2204,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteSquad)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteSquad",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2205,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.ListSquadMembers)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/squad.rs",
+        "server-rust/tests/squad_reads.rs",
+        "server-rust/baseline/squad-read-20261101-utc.json"
+      ],
+      "handler": "ListSquadMembers",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2206,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/members/status\"",
+      "handler_expression": "h.ListSquadMemberStatus)",
+      "state": "partial_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/squad.rs",
+        "server-rust/tests/squad_reads.rs",
+        "server-rust/baseline/squad-status-20261101-utc.json",
+        "server-rust/baseline/squad-status-20261101-asia-ho_chi_minh.json",
+        "server-rust/baseline/squad-status-20261101-america-new_york.json"
+      ],
+      "handler": "ListSquadMemberStatus",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2207,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.AddSquadMember)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AddSquadMember",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2208,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/members\"",
+      "handler_expression": "h.RemoveSquadMember)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RemoveSquadMember",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2209,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/members/role\"",
+      "handler_expression": "h.UpdateSquadMemberRole)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateSquadMemberRole",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2214,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/issues/{id}/squad-evaluated\"",
+      "handler_expression": "h.RecordSquadLeaderEvaluation)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RecordSquadLeaderEvaluation",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2218,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAutopilots)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListAutopilots",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2219,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateAutopilot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateAutopilot",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2220,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/cron-preview\"",
+      "handler_expression": "h.CronPreview)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CronPreview",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2221,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage\"",
+      "handler_expression": "h.GetAutopilotQuotaUsage)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAutopilotQuotaUsage",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2223,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetAutopilot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAutopilot",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2224,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAutopilot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateAutopilot",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2225,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteAutopilot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteAutopilot",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2226,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/trigger\"",
+      "handler_expression": "h.TriggerAutopilot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "TriggerAutopilot",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2227,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runs\"",
+      "handler_expression": "h.ListAutopilotRuns)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/autopilot_history_read.rs",
+        "server-rust/tests/autopilot_history_read.rs",
+        "server-rust/baseline/autopilot-history-gate-v14.json",
+        "server-rust/baseline/autopilot-history-differential-v14.json"
+      ],
+      "handler": "ListAutopilotRuns",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2228,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runs/{runId}\"",
+      "handler_expression": "h.GetAutopilotRun)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/autopilot_history_read.rs",
+        "server-rust/tests/autopilot_history_read.rs",
+        "server-rust/baseline/autopilot-history-gate-v14.json",
+        "server-rust/baseline/autopilot-history-differential-v14.json"
+      ],
+      "handler": "GetAutopilotRun",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2229,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/deliveries\"",
+      "handler_expression": "h.ListAutopilotDeliveries)",
+      "state": "implemented_disposable_db_tested_differential_subset_security_divergence",
+      "evidence": [
+        "server-rust/src/api/autopilot_history_read.rs",
+        "server-rust/tests/autopilot_history_read.rs",
+        "server-rust/baseline/autopilot-history-gate-v14.json",
+        "server-rust/baseline/autopilot-history-differential-v14.json"
+      ],
+      "handler": "ListAutopilotDeliveries",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2230,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/deliveries/{deliveryId}\"",
+      "handler_expression": "h.GetAutopilotDelivery)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/autopilot_history_read.rs",
+        "server-rust/tests/autopilot_history_read.rs",
+        "server-rust/baseline/autopilot-history-gate-v14.json",
+        "server-rust/baseline/autopilot-history-differential-v14.json"
+      ],
+      "handler": "GetAutopilotDelivery",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2231,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/deliveries/{deliveryId}/replay\"",
+      "handler_expression": "h.ReplayAutopilotDelivery)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReplayAutopilotDelivery",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2232,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/triggers\"",
+      "handler_expression": "h.CreateAutopilotTrigger)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateAutopilotTrigger",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2234,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAutopilotTrigger)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateAutopilotTrigger",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2235,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteAutopilotTrigger)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteAutopilotTrigger",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2236,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/rotate-webhook-token\"",
+      "handler_expression": "h.RotateAutopilotTriggerWebhookToken)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RotateAutopilotTriggerWebhookToken",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2237,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/signing-secret\"",
+      "handler_expression": "h.SetAutopilotTriggerSigningSecret)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetAutopilotTriggerSigningSecret",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2239,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/collaborators\"",
+      "handler_expression": "h.AddAutopilotCollaborator)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AddAutopilotCollaborator",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2240,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/collaborators/{userId}\"",
+      "handler_expression": "h.RemoveAutopilotCollaborator)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RemoveAutopilotCollaborator",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2246,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListPins)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/quick_action.rs",
+        "server-rust/src/api/personal_read.rs",
+        "server-rust/tests/quick_actions.rs",
+        "server-rust/tools/check_quick_actions.py",
+        "server-rust/baseline/personal-catalog-20261101-utc.json",
+        "server-rust/baseline/personal-catalog-20261101-asia-ho_chi_minh.json",
+        "server-rust/baseline/personal-catalog-20261101-america-new_york.json"
+      ],
+      "handler": "ListPins",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2247,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreatePin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreatePin",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2248,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/reorder\"",
+      "handler_expression": "h.ReorderPins)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ReorderPins",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2249,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/{itemType}/{itemId}\"",
+      "handler_expression": "h.DeletePin)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeletePin",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2253,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-view-preferences\"",
+      "handler_expression": "h.GetIssueViewPreference)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/quick_action.rs",
+        "server-rust/src/api/personal_read.rs",
+        "server-rust/tests/quick_actions.rs",
+        "server-rust/tools/check_quick_actions.py",
+        "server-rust/baseline/personal-catalog-20261101-utc.json",
+        "server-rust/baseline/personal-catalog-20261101-asia-ho_chi_minh.json",
+        "server-rust/baseline/personal-catalog-20261101-america-new_york.json"
+      ],
+      "handler": "GetIssueViewPreference",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2254,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/api/issue-view-preferences\"",
+      "handler_expression": "h.PutIssueViewPreference)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write.rs",
+        "server-rust/tests/account_catalog_write_preferences.rs",
+        "server-rust/tools/check_integrated_child_writes.py",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "PutIssueViewPreference",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2256,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListIssueViews)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/issue_view.rs",
+        "server-rust/tests/issue_views.rs",
+        "server-rust/tools/check_issue_views.py",
+        "server-rust/baseline/issue-views-20261101.json"
+      ],
+      "handler": "ListIssueViews",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2257,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateIssueView)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_views.rs",
+        "server-rust/tests/account_catalog_write_views.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "CreateIssueView",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2259,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetIssueViewByID)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/issue_view.rs",
+        "server-rust/tests/issue_views.rs",
+        "server-rust/tools/check_issue_views.py",
+        "server-rust/baseline/issue-views-20261101.json"
+      ],
+      "handler": "GetIssueViewByID",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2260,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateIssueView)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_views.rs",
+        "server-rust/tests/account_catalog_write_views.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "UpdateIssueView",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2261,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteIssueView)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write_views.rs",
+        "server-rust/tests/account_catalog_write_views.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "DeleteIssueView",
+      "sprint_owner": "account_catalog"
+    },
+    {
+      "line": 2266,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}\"",
+      "handler_expression": "h.GetAttachmentByID)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAttachmentByID",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 2272,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}/content\"",
+      "handler_expression": "h.GetAttachmentContent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAttachmentContent",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 2273,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/api/attachments/{id}\"",
+      "handler_expression": "h.DeleteAttachment)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteAttachment",
+      "sprint_owner": "files_ops"
+    },
+    {
+      "line": 2279,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateComment)",
+      "state": "partial_unverified_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_comment_mutate.rs"
+      ],
+      "handler": "UpdateComment",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2280,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteComment)",
+      "state": "partial_unverified_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write_comment_mutate.rs"
+      ],
+      "handler": "DeleteComment",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2286,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/keep-replies\"",
+      "handler_expression": "h.DeleteComment)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteComment",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2287,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/resolve\"",
+      "handler_expression": "h.ResolveComment)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "ResolveComment",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2288,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/resolve\"",
+      "handler_expression": "h.UnresolveComment)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "UnresolveComment",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2289,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.AddReaction)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/src/api/issue_write_reaction.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/issue_write_handoff.md",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "AddReaction",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2290,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/reactions\"",
+      "handler_expression": "h.RemoveReaction)",
+      "state": "implemented_test_only_event_sink_unregistered",
+      "evidence": [
+        "server-rust/src/api/issue_write.rs",
+        "server-rust/src/api/issue_write_reaction.rs",
+        "server-rust/tests/issue_write_metadata.rs",
+        "server-rust/baseline/issue_write_handoff.md",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "RemoveReaction",
+      "sprint_owner": "issue_write"
+    },
+    {
+      "line": 2295,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAgents)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListAgents",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2296,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2301,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mika\"",
+      "handler_expression": "h.CreateMikaAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateMikaAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2303,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2304,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2305,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive\"",
+      "handler_expression": "h.ArchiveAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ArchiveAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2306,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/restore\"",
+      "handler_expression": "h.RestoreAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RestoreAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2307,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/cancel-tasks\"",
+      "handler_expression": "h.CancelAgentTasks)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CancelAgentTasks",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2308,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/tasks\"",
+      "handler_expression": "h.ListAgentTasks)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListAgentTasks",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2309,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/dingtalk/groups\"",
+      "handler_expression": "h.ListDingTalkGroupsForAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListDingTalkGroupsForAgent",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 2310,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/skills\"",
+      "handler_expression": "h.ListAgentSkills)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/agent-skill-20261101-utc.json"
+      ],
+      "handler": "ListAgentSkills",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2311,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/skills\"",
+      "handler_expression": "h.SetAgentSkills)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetAgentSkills",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2312,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/skills/add\"",
+      "handler_expression": "h.AddAgentSkills)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AddAgentSkills",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2313,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.ListLabelsForAgent)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/label-read-20261101-utc.json"
+      ],
+      "handler": "ListLabelsForAgent",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2314,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.AttachLabelToAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AttachLabelToAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2315,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/labels/{labelId}\"",
+      "handler_expression": "h.DetachLabelFromAgent)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DetachLabelFromAgent",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2316,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/skills/{skillId}/enabled\"",
+      "handler_expression": "h.SetAgentSkillEnabled)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetAgentSkillEnabled",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2317,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/runtime-skills/enabled\"",
+      "handler_expression": "h.SetAgentRuntimeSkillEnabled)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetAgentRuntimeSkillEnabled",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2318,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/skills/{skillId}\"",
+      "handler_expression": "h.RemoveAgentSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RemoveAgentSkill",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2323,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.ListAgentMcpServers)",
+      "state": "implemented_disposable_db_tested_differential_subset_security_divergence",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/agent-mcp-read-20261101-utc.json"
+      ],
+      "handler": "ListAgentMcpServers",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2324,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mcp-servers\"",
+      "handler_expression": "h.AddAgentMcpServer)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AddAgentMcpServer",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2325,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}/enabled\"",
+      "handler_expression": "h.SetAgentMcpServerEnabled)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetAgentMcpServerEnabled",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2326,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/mcp-servers/{serverId}\"",
+      "handler_expression": "h.RemoveAgentMcpServer)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RemoveAgentMcpServer",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2332,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/env\"",
+      "handler_expression": "h.GetAgentEnv)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetAgentEnv",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2333,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/env\"",
+      "handler_expression": "h.UpdateAgentEnv)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateAgentEnv",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2341,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAgentBuilderSessions)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListAgentBuilderSessions",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2342,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateAgentBuilderSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateAgentBuilderSession",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2343,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/{sessionId}/runtime\"",
+      "handler_expression": "h.SwitchAgentBuilderRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SwitchAgentBuilderRuntime",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2346,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/{sessionId}/draft\"",
+      "handler_expression": "h.SaveAgentBuilderDraft)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SaveAgentBuilderDraft",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2351,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListSkills)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/skill-read-20261101-utc.json"
+      ],
+      "handler": "ListSkills",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2352,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2353,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/search\"",
+      "handler_expression": "h.SearchSkills)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SearchSkills",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2354,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/import\"",
+      "handler_expression": "h.ImportSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ImportSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2356,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetSkill)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/skill-read-20261101-utc.json"
+      ],
+      "handler": "GetSkill",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2357,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2358,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2359,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/refresh\"",
+      "handler_expression": "h.RefreshSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RefreshSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2360,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.ListLabelsForSkill)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/label-read-20261101-utc.json"
+      ],
+      "handler": "ListLabelsForSkill",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2361,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/labels\"",
+      "handler_expression": "h.AttachLabelToSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "AttachLabelToSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2362,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/labels/{labelId}\"",
+      "handler_expression": "h.DetachLabelFromSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DetachLabelFromSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2363,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/files\"",
+      "handler_expression": "h.ListSkillFiles)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "tests/skill_reads.rs",
+        "baseline/skill-read-20261101-utc.json"
+      ],
+      "handler": "ListSkillFiles",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2364,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/files\"",
+      "handler_expression": "h.UpsertSkillFile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpsertSkillFile",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2365,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/files/{fileId}\"",
+      "handler_expression": "h.DeleteSkillFile)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteSkillFile",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2373,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/daily\"",
+      "handler_expression": "h.GetDashboardUsageDaily)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/dashboard_daily.rs",
+        "server-rust/tests/dashboard_daily.rs",
+        "server-rust/baseline/dashboard-rollups-20261101.json"
+      ],
+      "handler": "GetDashboardUsageDaily",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2374,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/by-agent\"",
+      "handler_expression": "h.GetDashboardUsageByAgent)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/dashboard_agents.rs",
+        "server-rust/tests/dashboard_rollups.rs",
+        "server-rust/baseline/dashboard-rollups-20261101.json"
+      ],
+      "handler": "GetDashboardUsageByAgent",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2375,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/agent-runtime\"",
+      "handler_expression": "h.GetDashboardAgentRunTime)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/dashboard_agents.rs",
+        "server-rust/tests/dashboard_rollups.rs",
+        "server-rust/baseline/dashboard-rollups-20261101.json"
+      ],
+      "handler": "GetDashboardAgentRunTime",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2376,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/runtime/daily\"",
+      "handler_expression": "h.GetDashboardRunTimeDaily)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/dashboard_daily.rs",
+        "server-rust/tests/dashboard_rollups.rs",
+        "server-rust/baseline/dashboard-rollups-20261101.json"
+      ],
+      "handler": "GetDashboardRunTimeDaily",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2377,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/failures/daily\"",
+      "handler_expression": "h.GetDashboardFailuresDaily)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/dashboard_daily.rs",
+        "server-rust/tests/dashboard_daily.rs",
+        "server-rust/baseline/dashboard-rollups-20261101.json"
+      ],
+      "handler": "GetDashboardFailuresDaily",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2378,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/failures/by-agent\"",
+      "handler_expression": "h.GetDashboardFailuresByAgent)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/dashboard_agents.rs",
+        "server-rust/tests/dashboard_rollups.rs",
+        "server-rust/baseline/dashboard-rollups-20261101.json"
+      ],
+      "handler": "GetDashboardFailuresByAgent",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2383,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListAgentRuntimes)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/runtime.rs",
+        "server-rust/tests/runtime_reads.rs",
+        "server-rust/tools/check_runtime_reads.py",
+        "server-rust/baseline/runtime-reads-20261101.json",
+        "server-rust/tools/check_runtime_merged_differential.py",
+        "server-rust/baseline/runtime-merged-differential-20261101.json"
+      ],
+      "handler": "ListAgentRuntimes",
+      "sprint_owner": "agents_squads"
+    },
+    {
+      "line": 2385,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateAgentRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateAgentRuntime",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2386,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage\"",
+      "handler_expression": "h.GetRuntimeUsage)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_usage.rs",
+        "server-rust/tests/runtime_usage.rs",
+        "server-rust/baseline/runtime-usage-differential-v10/result.json"
+      ],
+      "handler": "GetRuntimeUsage",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2387,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/by-agent\"",
+      "handler_expression": "h.GetRuntimeUsageByAgent)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_usage.rs",
+        "server-rust/tests/runtime_usage.rs",
+        "server-rust/baseline/runtime-usage-differential-v10/result.json"
+      ],
+      "handler": "GetRuntimeUsageByAgent",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2388,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/usage/by-hour\"",
+      "handler_expression": "h.GetRuntimeUsageByHour)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_usage.rs",
+        "server-rust/tests/runtime_usage.rs",
+        "server-rust/baseline/runtime-usage-differential-v10/result.json"
+      ],
+      "handler": "GetRuntimeUsageByHour",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2389,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/activity\"",
+      "handler_expression": "h.GetRuntimeTaskActivity)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_usage.rs",
+        "server-rust/tests/runtime_usage.rs",
+        "server-rust/baseline/runtime-usage-differential-v10/result.json"
+      ],
+      "handler": "GetRuntimeTaskActivity",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2390,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/update\"",
+      "handler_expression": "h.InitiateUpdate)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InitiateUpdate",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2391,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/update/{updateId}\"",
+      "handler_expression": "h.GetUpdate)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetUpdate",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2392,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/models\"",
+      "handler_expression": "h.InitiateListModels)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InitiateListModels",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2393,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/models/{requestId}\"",
+      "handler_expression": "h.GetModelListRequest)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetModelListRequest",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2394,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/local-skills\"",
+      "handler_expression": "h.InitiateListLocalSkills)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InitiateListLocalSkills",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2395,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/local-skills/{requestId}\"",
+      "handler_expression": "h.GetLocalSkillListRequest)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetLocalSkillListRequest",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2396,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/local-skills/import\"",
+      "handler_expression": "h.InitiateImportLocalSkill)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "InitiateImportLocalSkill",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2397,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/local-skills/import/{requestId}\"",
+      "handler_expression": "h.GetLocalSkillImportRequest)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetLocalSkillImportRequest",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2398,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteAgentRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteAgentRuntime",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2406,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/unbind-agents-and-delete\"",
+      "handler_expression": "h.UnbindAgentsAndDeleteRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UnbindAgentsAndDeleteRuntime",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2411,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/revoke-workspace-access\"",
+      "handler_expression": "h.RevokeRuntimeWorkspaceAccess)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RevokeRuntimeWorkspaceAccess",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2415,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-agents-and-delete\"",
+      "handler_expression": "h.UnbindAgentsAndDeleteRuntime)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UnbindAgentsAndDeleteRuntime",
+      "sprint_owner": "runtime_skills"
+    },
+    {
+      "line": 2422,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetCloudRuntimeService)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudRuntimeService",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2423,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/healthz\"",
+      "handler_expression": "h.GetCloudRuntimeHealth)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudRuntimeHealth",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2424,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/readyz\"",
+      "handler_expression": "h.GetCloudRuntimeReady)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudRuntimeReady",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2425,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/nodes\"",
+      "handler_expression": "h.ListCloudRuntimeNodes)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListCloudRuntimeNodes",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2426,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes\"",
+      "handler_expression": "h.CreateCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CreateCloudRuntimeNode",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2427,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/nodes\"",
+      "handler_expression": "h.DeleteCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteCloudRuntimeNode",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2428,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/start\"",
+      "handler_expression": "h.StartCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "StartCloudRuntimeNode",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2429,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/stop\"",
+      "handler_expression": "h.StopCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "StopCloudRuntimeNode",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2430,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/reboot\"",
+      "handler_expression": "h.RebootCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RebootCloudRuntimeNode",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2431,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/status\"",
+      "handler_expression": "h.GetCloudRuntimeNodeStatus)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetCloudRuntimeNodeStatus",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2432,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/nodes/exec\"",
+      "handler_expression": "h.ExecCloudRuntimeNode)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ExecCloudRuntimeNode",
+      "sprint_owner": "external_cloud"
+    },
+    {
+      "line": 2436,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/tasks/{taskId}/cancel\"",
+      "handler_expression": "h.CancelTaskByUser)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "CancelTaskByUser",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2437,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/tasks/{taskId}/rerun\"",
+      "handler_expression": "h.RerunTaskByUser)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RerunTaskByUser",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2441,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/agent-task-snapshot\"",
+      "handler_expression": "h.ListWorkspaceAgentTaskSnapshot)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListWorkspaceAgentTaskSnapshot",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2442,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-wakeup-summaries\"",
+      "handler_expression": "h.ListWorkspaceWakeupSummaries)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "src/api/wakeup_summary.rs",
+        "src/api/wakeup_summary.sql",
+        "tests/wakeup_summary.rs",
+        "baseline/wakeup-summary-20261101.json"
+      ],
+      "handler": "ListWorkspaceWakeupSummaries",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2443,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-wakeups\"",
+      "handler_expression": "h.ListWorkspaceWakeups)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "src/api/workspace_wakeup.rs",
+        "tests/workspace_wakeups.rs",
+        "baseline/workspace-wakeups-20261101.json"
+      ],
+      "handler": "ListWorkspaceWakeups",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2444,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/issue-wakeup-paused\"",
+      "handler_expression": "h.ListPausedWakeups)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListPausedWakeups",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2445,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/system-wakeups\"",
+      "handler_expression": "h.ListWorkspaceSystemWakeups)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/tests/system_wakeups.rs",
+        "server-rust/baseline/system-wakeups-20261101.json"
+      ],
+      "handler": "ListWorkspaceSystemWakeups",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2446,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/api/system-wakeups/{rule}\"",
+      "handler_expression": "h.UpdateWorkspaceSystemWakeup)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UpdateWorkspaceSystemWakeup",
+      "sprint_owner": "automation"
+    },
+    {
+      "line": 2450,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/working-agents\"",
+      "handler_expression": "h.ListWorkspaceWorkingAgents)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "server-rust/src/api/agent_activity.rs",
+        "server-rust/tests/agent_activity.rs",
+        "server-rust/baseline/working-agents-20261101.json"
+      ],
+      "handler": "ListWorkspaceWorkingAgents",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2455,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/agent-activity-30d\"",
+      "handler_expression": "h.GetWorkspaceAgentActivity30d)",
+      "state": "implemented_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/agent_activity.rs",
+        "server-rust/tests/agent_activity.rs",
+        "server-rust/tools/check_agent_activity.py",
+        "server-rust/baseline/agent-activity-20261101.json"
+      ],
+      "handler": "GetWorkspaceAgentActivity30d",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2458,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/agent-run-counts\"",
+      "handler_expression": "h.GetWorkspaceAgentRunCounts)",
+      "state": "implemented_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/agent_activity.rs",
+        "server-rust/tests/agent_activity.rs",
+        "server-rust/tools/check_agent_activity.py",
+        "server-rust/baseline/agent-activity-20261101.json"
+      ],
+      "handler": "GetWorkspaceAgentRunCounts",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2461,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.CreateChatSession)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/tools/check_runtime_chat_merged.py",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "CreateChatSession",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2462,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListChatSessions)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/tools/check_runtime_chat_merged.py",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "ListChatSessions",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2464,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetChatSession)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/tools/check_runtime_chat_merged.py",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "GetChatSession",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2465,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateChatSession)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/tools/check_runtime_chat_merged.py",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "UpdateChatSession",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2466,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/pin\"",
+      "handler_expression": "h.SetChatSessionPinned)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/tools/check_runtime_chat_merged.py",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "SetChatSessionPinned",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2467,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/archive\"",
+      "handler_expression": "h.SetChatSessionArchived)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "SetChatSessionArchived",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2468,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.DeleteChatSession)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "DeleteChatSession",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2469,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/messages\"",
+      "handler_expression": "h.SendChatMessage)",
+      "state": "partial_disposable_db_tested",
+      "evidence": [
+        "server-rust/src/api/runtime_chat_send.rs",
+        "server-rust/tests/runtime_chat_send.rs",
+        "server-rust/baseline/zbsi63-v10-db67.log"
+      ],
+      "handler": "SendChatMessage",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2470,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/onboarding\"",
+      "handler_expression": "h.StartMikaOnboarding)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "StartMikaOnboarding",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2473,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/quick-actions/regenerate\"",
+      "handler_expression": "h.RegenerateChatQuickActions)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "RegenerateChatQuickActions",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2474,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/messages\"",
+      "handler_expression": "h.ListChatMessages)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "ListChatMessages",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2475,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/messages/page\"",
+      "handler_expression": "h.ListChatMessagesPage)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "ListChatMessagesPage",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2476,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/pending-task\"",
+      "handler_expression": "h.GetPendingChatTask)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "server-rust/src/api/chat_pending.rs",
+        "server-rust/src/api/chat_session_pending.sql",
+        "server-rust/tests/chat_session_pending.rs",
+        "server-rust/baseline/session-pending-20261101.json"
+      ],
+      "handler": "GetPendingChatTask",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2477,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/queued-tasks\"",
+      "handler_expression": "h.ClearQueuedChatTasks)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ClearQueuedChatTasks",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2478,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/queued-tasks/{taskId}/prioritize\"",
+      "handler_expression": "h.PrioritizeQueuedChatTask)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "PrioritizeQueuedChatTask",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2479,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/read\"",
+      "handler_expression": "h.MarkChatSessionRead)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "MarkChatSessionRead",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2482,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/draft-restores\"",
+      "handler_expression": "h.ListChatDraftRestores)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "tests/chat_draft_restore.rs",
+        "baseline/chat-draft-restore-20261101.json"
+      ],
+      "handler": "ListChatDraftRestores",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2483,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/draft-restores/{restoreId}\"",
+      "handler_expression": "h.ConsumeChatDraftRestore)",
+      "state": "implemented_disposable_db_tested_partial_parity_chat_events_missing",
+      "evidence": [
+        "server-rust/src/api/runtime_chat.rs",
+        "server-rust/tests/runtime_chat_create.rs",
+        "server-rust/baseline/runtime-chat-merged-20261101.json"
+      ],
+      "handler": "ConsumeChatDraftRestore",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2486,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/pending-tasks\"",
+      "handler_expression": "h.ListPendingChatTasks)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/chat_pending.rs",
+        "server-rust/tests/chat_pending.rs",
+        "server-rust/tools/check_chat_pending.py",
+        "server-rust/baseline/chat-pending-20261101.json"
+      ],
+      "handler": "ListPendingChatTasks",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2487,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/pending-tasks/has-any\"",
+      "handler_expression": "h.HasPendingChatTasks)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/chat_pending.rs",
+        "server-rust/tests/chat_pending.rs",
+        "server-rust/tools/check_chat_pending.py",
+        "server-rust/baseline/chat-pending-20261101.json"
+      ],
+      "handler": "HasPendingChatTasks",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2490,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/pinned-agents\"",
+      "handler_expression": "h.ListChatPinnedAgents)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ListChatPinnedAgents",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2491,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/api/chat/pinned-agents\"",
+      "handler_expression": "h.PinChatAgent)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "ZBSI-67 pinned delta 2026-11-02; merged HTTP/DB test passed, runtime event fanout absent"
+      ],
+      "handler": "PinChatAgent",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2492,
+      "method": "DELETE",
+      "router": "r",
+      "path_expression": "\"/api/chat/pinned-agents/{agentId}\"",
+      "handler_expression": "h.UnpinChatAgent)",
+      "state": "implemented_disposable_db_tested_partial_parity_events_missing",
+      "evidence": [
+        "ZBSI-67 pinned delta 2026-11-02; merged HTTP/DB test passed, runtime event fanout absent"
+      ],
+      "handler": "UnpinChatAgent",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2499,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/history\"",
+      "handler_expression": "h.GetChatChannelHistory)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetChatChannelHistory",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2500,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/api/chat/thread\"",
+      "handler_expression": "h.GetChatThread)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "GetChatThread",
+      "sprint_owner": "runtime_chat"
+    },
+    {
+      "line": 2504,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.ListInbox)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "server-rust/src/api/inbox.rs",
+        "server-rust/tests/inbox.rs",
+        "server-rust/baseline/inbox-20261101.json"
+      ],
+      "handler": "ListInbox",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2508,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/archived\"",
+      "handler_expression": "h.ListArchivedInbox)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "baseline/archived-legacy-20261101.json",
+        "src/api/archived_legacy.sql",
+        "src/api/inbox.rs",
+        "tests/archived_legacy.rs"
+      ],
+      "handler": "ListArchivedInbox",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2509,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/archived/page\"",
+      "handler_expression": "h.ListArchivedInboxPage)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "baseline/archived-page-20261101.json",
+        "src/api/archived_page.rs",
+        "src/api/archived_page.sql",
+        "tests/archived_page.rs"
+      ],
+      "handler": "ListArchivedInboxPage",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2510,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/archived/facets\"",
+      "handler_expression": "h.GetArchivedInboxFacets)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "baseline/archived-facets-20261101.json",
+        "src/api/archived_facets.rs",
+        "tests/archived_facets.rs"
+      ],
+      "handler": "GetArchivedInboxFacets",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2511,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/unread-count\"",
+      "handler_expression": "h.CountUnreadInbox)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "server-rust/src/api/inbox.rs",
+        "server-rust/tests/inbox.rs",
+        "server-rust/baseline/inbox-20261101.json"
+      ],
+      "handler": "CountUnreadInbox",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2514,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/unread-summary\"",
+      "handler_expression": "h.UnreadInboxSummary)",
+      "state": "partial_postgresql_tested",
+      "evidence": [
+        "server-rust/src/api/inbox.rs",
+        "server-rust/tests/inbox.rs",
+        "server-rust/baseline/inbox-20261101.json"
+      ],
+      "handler": "UnreadInboxSummary",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2515,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/mark-all-read\"",
+      "handler_expression": "h.MarkAllInboxRead)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "MarkAllInboxRead",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2516,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-all\"",
+      "handler_expression": "h.ArchiveAllInbox)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ArchiveAllInbox",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2517,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-all-read\"",
+      "handler_expression": "h.ArchiveAllReadInbox)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ArchiveAllReadInbox",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2518,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/archive-completed\"",
+      "handler_expression": "h.ArchiveCompletedInbox)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ArchiveCompletedInbox",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2519,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/read\"",
+      "handler_expression": "h.MarkInboxRead)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "MarkInboxRead",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2520,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/unread\"",
+      "handler_expression": "h.MarkInboxUnread)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "MarkInboxUnread",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2521,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/archive\"",
+      "handler_expression": "h.ArchiveInboxItem)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "ArchiveInboxItem",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2522,
+      "method": "POST",
+      "router": "r",
+      "path_expression": "\"/{id}/unarchive\"",
+      "handler_expression": "h.UnarchiveInboxItem)",
+      "state": "unimplemented",
+      "evidence": [],
+      "handler": "UnarchiveInboxItem",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2527,
+      "method": "GET",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.GetNotificationPreferences)",
+      "state": "implemented_disposable_db_tested_differential_subset",
+      "evidence": [
+        "server-rust/src/api/quick_action.rs",
+        "server-rust/src/api/personal_read.rs",
+        "server-rust/tests/quick_actions.rs",
+        "server-rust/tools/check_quick_actions.py",
+        "server-rust/baseline/personal-catalog-20261101-utc.json",
+        "server-rust/baseline/personal-catalog-20261101-asia-ho_chi_minh.json",
+        "server-rust/baseline/personal-catalog-20261101-america-new_york.json"
+      ],
+      "handler": "GetNotificationPreferences",
+      "sprint_owner": "queries"
+    },
+    {
+      "line": 2528,
+      "method": "PATCH",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.PatchNotificationPreferences)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write.rs",
+        "server-rust/tests/account_catalog_write_preferences.rs",
+        "server-rust/tools/check_integrated_child_writes.py",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "PatchNotificationPreferences",
+      "sprint_owner": "channels"
+    },
+    {
+      "line": 2529,
+      "method": "PUT",
+      "router": "r",
+      "path_expression": "\"/\"",
+      "handler_expression": "h.UpdateNotificationPreferences)",
+      "state": "implemented_disposable_db_tested_partial_parity",
+      "evidence": [
+        "server-rust/src/api/account_catalog_write.rs",
+        "server-rust/tests/account_catalog_write_preferences.rs",
+        "server-rust/tools/check_integrated_child_writes.py",
+        "server-rust/baseline/integrated-child-writes-20261101.json"
+      ],
+      "handler": "UpdateNotificationPreferences",
+      "sprint_owner": "channels"
+    }
+  ],
+  "background_owners": {
+    "scheduler_autopilot_issue_workspace_wakeup": "automation",
+    "task_dispatch_claim_lease_terminal_recovery_user_daemon_ws": "runtime_chat",
+    "channel_installations_delivery_bindings_notifications": "channels",
+    "vcs_composio_cloud_billing_cloud_runtime_webhooks": "external_cloud",
+    "plugin_hooks_mcp_public_api": "extensions",
+    "file_storage_signing_cleanup_observability": "files_ops",
+    "search_index_read_models_inbox_personal_mutations": "queries",
+    "agent_squad_management_assignment_and_membership": "agents_squads",
+    "skills_import_bundles_runtime_configuration_and_rpc": "runtime_skills",
+    "central_startup_shutdown_auth_shared_adapter_wiring": "integration"
+  }
+}
