@@ -5,20 +5,15 @@ import { RefreshCw } from "@multica/ui/icons";
 import { useQueries, useQueryClient } from "@tanstack/react-query";
 import { IconButton } from "@multica/ui/components/common/icon-button";
 import { TooltipHint } from "@multica/ui/components/common/tooltip-hint";
-import {
-  CompactNumberFlow,
-  CurrencyNumberFlow,
-} from "@multica/ui/components/ui/number-flow";
+import { CompactNumberFlow } from "@multica/ui/components/ui/number-flow";
 import { useWorkspaceId } from "@multica/core/hooks";
 import {
   dashboardKeys,
   dashboardUsageDailyOptions,
 } from "@multica/core/dashboard";
-import { useCustomPricingStore } from "@multica/core/runtimes/custom-pricing-store";
 import { cn } from "@multica/ui/lib/utils";
 import { useViewingTimezone } from "../../common/use-viewing-timezone";
-import { computeDailyTotals } from "../../dashboard/utils";
-import { addDaysIso, formatTokens, todayIso } from "../../runtimes/utils";
+import { addDaysIso, todayIso } from "../../runtimes/utils";
 import { useT } from "../../i18n";
 
 // Only the three short windows the chat header has room for. The full
@@ -31,10 +26,10 @@ type UsageRange = (typeof RANGES)[number];
  * Workspace usage at a glance, inside the conversation header.
  *
  * Reads the same `/usage` daily rollup the dashboard page does — same query
- * options, same tz, same client-side cost math — so the number here can never
- * disagree with the dashboard. One row of range buttons with the selected
- * window's cost beside them, plus a refresh that invalidates only these three
- * keys rather than the whole dashboard scope.
+ * options, same tz — and shows the token total only: no price table, no cost
+ * estimate. One row of range buttons with the selected window's token count
+ * beside them, plus a refresh that invalidates only these three keys rather
+ * than the whole dashboard scope.
  *
  * Every range is fetched up front so switching windows is instant; the queries
  * share the dashboard's five-minute refetch and are deduped per range, so this
@@ -49,10 +44,6 @@ export function ChatUsageWidget() {
   const locales = i18n.resolvedLanguage ?? i18n.language;
   const [days, setDays] = useState<UsageRange>(1);
 
-  // Custom model rates are saved elsewhere in the app; re-render so the
-  // estimate below picks them up without a reload.
-  useCustomPricingStore((s) => s.pricings);
-
   const queries = useQueries({
     queries: RANGES.map((range) =>
       dashboardUsageDailyOptions(wsId, range, null, viewTZ),
@@ -64,15 +55,23 @@ export function ChatUsageWidget() {
   // The API returns headroom days beyond the requested window (the dashboard
   // does the same trim); anchor the cutoff on the viewer's tz so 1d really is
   // "today" in the same calendar the backend slices on.
-  const totals = useMemo(() => {
+  // Every token type counts, the same sum the dashboard's "Tokens" KPI shows;
+  // cache reads/writes are usage too and dropping them would disagree with it.
+  const tokenCount = useMemo(() => {
     if (!data) return null;
     const cutoff = addDaysIso(todayIso(viewTZ), -(days - 1));
-    return computeDailyTotals(data.filter((row) => row.date >= cutoff));
+    return data
+      .filter((row) => row.date >= cutoff)
+      .reduce(
+        (sum, row) =>
+          sum +
+          row.input_tokens +
+          row.output_tokens +
+          row.cache_read_tokens +
+          row.cache_write_tokens,
+        0,
+      );
   }, [data, days, viewTZ]);
-
-  const tokenCount = totals
-    ? totals.input + totals.output + totals.cacheRead + totals.cacheWrite
-    : 0;
   const isFetching = queries.some((q) => q.isFetching);
 
   const refresh = () => {
@@ -117,28 +116,26 @@ export function ChatUsageWidget() {
         })}
       </div>
 
-      {/* The figure the selected range resolves to. `null` totals means the
-          rollup has not arrived yet — a dash reads as "not loaded", where a
-          zero would read as "nothing was spent". */}
+      {/* The token total for the selected range; the tooltip spells out the
+          exact number the compact form rounds. `null` means the rollup has not
+          arrived yet — a dash reads as "not loaded", where a zero would read
+          as "no usage". */}
       <TooltipHint
         label={
-          totals
-            ? t(($) => $.usage.tokens_hint, { tokens: formatTokens(tokenCount) })
-            : null
+          tokenCount === null
+            ? null
+            : t(($) => $.usage.tokens_hint, {
+                tokens: tokenCount.toLocaleString(locales),
+              })
         }
       >
-        <span className="inline-flex min-w-[3.5rem] items-center justify-end gap-1 text-caption font-medium tabular-nums">
-          {totals ? (
-            <>
-              <CurrencyNumberFlow value={totals.cost} locales={locales} />
-              <span className="hidden text-muted-foreground @[34rem]:inline">
-                <CompactNumberFlow value={tokenCount} locales={locales} />
-              </span>
-            </>
-          ) : (
+        <span className="inline-flex min-w-[3rem] items-center justify-end text-caption font-medium tabular-nums">
+          {tokenCount === null ? (
             <span aria-hidden className="text-muted-foreground">
               {"—"}
             </span>
+          ) : (
+            <CompactNumberFlow value={tokenCount} locales={locales} />
           )}
         </span>
       </TooltipHint>
