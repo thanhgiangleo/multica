@@ -254,5 +254,13 @@
     "delete": "チャットを削除",
     "archive": "チャットをアーカイブ",
     "unarchive": "アーカイブを解除"
+  },
+  "usage": {
+    "range_label": "利用期間",
+    "range_1d": "1日",
+    "range_3d": "3日",
+    "range_7d": "7日",
+    "tokens_hint": "この期間のトークン {{tokens}}",
+    "refresh": "利用状況を更新"
   }
 }

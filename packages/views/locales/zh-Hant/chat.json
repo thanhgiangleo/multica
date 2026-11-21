@@ -254,5 +254,13 @@
     "delete": "刪除會話",
     "archive": "歸檔會話",
     "unarchive": "取消歸檔"
+  },
+  "usage": {
+    "range_label": "用量區間",
+    "range_1d": "1天",
+    "range_3d": "3天",
+    "range_7d": "7天",
+    "tokens_hint": "該區間共 {{tokens}} 個 token",
+    "refresh": "重新整理用量"
   }
 }

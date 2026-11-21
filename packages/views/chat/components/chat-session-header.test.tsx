@@ -25,6 +25,10 @@ vi.mock("../../common/actor-avatar", () => ({
   ActorAvatar: () => null,
 }));
 
+// The usage strip owns its own queries and workspace context; this suite is
+// about the rename editor, so keep the header's DOM focused on that.
+vi.mock("./chat-usage-widget", () => ({ ChatUsageWidget: () => null }));
+
 vi.mock("../../navigation", () => ({
   AppLink: ({ children }: { children: React.ReactNode }) => <a>{children}</a>,
 }));

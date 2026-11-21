@@ -254,5 +254,13 @@
     "delete": "채팅 삭제",
     "archive": "채팅 보관",
     "unarchive": "채팅 보관 해제"
+  },
+  "usage": {
+    "range_label": "사용 기간",
+    "range_1d": "1일",
+    "range_3d": "3일",
+    "range_7d": "7일",
+    "tokens_hint": "이 기간의 토큰 {{tokens}}",
+    "refresh": "사용량 새로고침"
   }
 }
