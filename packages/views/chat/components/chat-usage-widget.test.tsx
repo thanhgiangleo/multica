@@ -21,11 +21,6 @@ vi.mock("@multica/core/hooks", () => ({ useWorkspaceId: () => "ws-1" }));
 vi.mock("../../common/use-viewing-timezone", () => ({
   useViewingTimezone: () => "UTC",
 }));
-vi.mock("@multica/core/runtimes/custom-pricing-store", () => ({
-  useCustomPricingStore: (selector: (s: { pricings: Record<string, never> }) => unknown) =>
-    selector({ pricings: {} }),
-  getCustomPricing: () => undefined,
-}));
 vi.mock("@tanstack/react-query", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@tanstack/react-query")>();
   return {
@@ -43,7 +38,8 @@ import { ChatUsageWidget } from "./chat-usage-widget";
 const TODAY = todayIso("UTC");
 const YESTERDAY = addDaysIso(TODAY, -1);
 
-function row(date: string, ticks: number, inputTokens: number): DashboardUsageDaily {
+// No pricing, no cost ticks: the widget reports tokens only.
+function row(date: string, inputTokens: number): DashboardUsageDaily {
   return {
     date,
     provider: "anthropic",
@@ -52,24 +48,18 @@ function row(date: string, ticks: number, inputTokens: number): DashboardUsageDa
     output_tokens: 0,
     cache_read_tokens: 0,
     cache_write_tokens: 0,
-    cost_usd_ticks: ticks,
     task_count: 1,
   };
 }
 
-// 300_000_000 ticks = $0.03; 700_000_000 = $0.07. The server returns the extra
-// day of headroom, so yesterday's row must be dropped at 1d and kept at 3d.
-const ROWS: DashboardUsageDaily[] = [
-  row(TODAY, 300_000_000, 1_000),
-  row(YESTERDAY, 700_000_000, 2_000),
-];
+// The server returns the extra day of headroom, so yesterday's row must be
+// dropped at 1d and kept at 3d.
+const ROWS: DashboardUsageDaily[] = [row(TODAY, 1_000), row(YESTERDAY, 2_000)];
 
-// The token counter renders its own number-flow inside the same strip; the
-// cost assertions want only the currency figure.
-function renderedCosts(): string[] {
-  return Array.from(document.querySelectorAll("number-flow-react"))
-    .map((el) => el.getAttribute("aria-label") ?? "")
-    .filter((label) => label.startsWith("$"));
+function renderedFigures(): string[] {
+  return Array.from(document.querySelectorAll("number-flow-react")).map(
+    (el) => el.getAttribute("aria-label") ?? "",
+  );
 }
 
 beforeEach(() => {
@@ -103,19 +93,27 @@ describe("ChatUsageWidget", () => {
     expect(useQueriesMock).toHaveBeenCalled();
   });
 
-  it("shows only today's spend at 1d, dropping the server's headroom day", () => {
+  it("shows only today's tokens at 1d, dropping the server's headroom day", () => {
     renderWithI18n(<ChatUsageWidget />);
 
-    expect(renderedCosts()).toEqual(["$0.03"]);
+    expect(renderedFigures()).toEqual(["1K"]);
   });
 
-  it("adds the previous day once the 3d window is selected", () => {
+  it("adds the previous day's tokens once the 3d window is selected", () => {
     renderWithI18n(<ChatUsageWidget />);
 
     fireEvent.click(screen.getByRole("button", { name: "3d" }));
 
     expect(screen.getByRole("button", { name: "3d" })).toHaveAttribute("aria-pressed", "true");
-    expect(renderedCosts()).toEqual(["$0.10"]);
+    expect(renderedFigures()).toEqual(["3K"]);
+  });
+
+  it("reports no cost, only tokens", () => {
+    renderWithI18n(<ChatUsageWidget />);
+
+    const labels = renderedFigures();
+    expect(labels.every((label) => !label.startsWith("$"))).toBe(true);
+    expect(screen.queryByText(/\$/)).toBeNull();
   });
 
   it("shows a dash instead of a zero while the rollup is still loading", () => {
@@ -123,7 +121,7 @@ describe("ChatUsageWidget", () => {
     renderWithI18n(<ChatUsageWidget />);
 
     // A zero would claim "nothing was spent"; the dash says "not loaded yet".
-    expect(renderedCosts()).toEqual([]);
+    expect(renderedFigures()).toEqual([]);
   });
 
   it("refreshes only the three windows it reads", () => {
