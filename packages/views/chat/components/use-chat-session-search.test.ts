@@ -87,7 +87,11 @@ describe("filterSessionsByQuery", () => {
       title: "Untitled",
       last_message: { content: "da fix xong loi", role: "user", created_at: "2026-01-01T00:00:00Z" },
     }),
-    session({ id: "s-other", title: "Weekly sync" }),
+    session({
+      id: "s-other",
+      title: "Untitled",
+      last_message: { content: "weekly sync notes", role: "user", created_at: "2026-01-02T00:00:00Z" },
+    }),
   ];
 
   it("keeps a session the transcript search matched, even when its title does not", () => {
@@ -96,13 +100,12 @@ describe("filterSessionsByQuery", () => {
     ).toEqual(["s-remote"]);
   });
 
-  it("matches titles without diacritics, and titles with them", () => {
-    expect(
-      filterSessionsByQuery(sessions, "khong chay", null).map((s) => s.id),
-    ).toEqual(["s-title"]);
-    expect(
-      filterSessionsByQuery(sessions, "Không chạy", null).map((s) => s.id),
-    ).toEqual(["s-title"]);
+  it("ignores session titles, so an agent-named chat is not a hit", () => {
+    // "s-title"'s title carries the query, but its last message does not: this
+    // box searches content. Search used to match titles too, which on installs
+    // that name chats after the agent turned an agent name into "every chat".
+    expect(filterSessionsByQuery(sessions, "khong chay", null)).toEqual([]);
+    expect(filterSessionsByQuery(sessions, "Không chạy", null)).toEqual([]);
   });
 
   it("matches the last message so an untyped chat still shows up", () => {
