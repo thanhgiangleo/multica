@@ -2,9 +2,9 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "@multica/core/api";
 import type { ChatSession, SearchChatMessageResult } from "@multica/core/types";
+import { foldForSearch } from "../../search/fold-search";
 import {
   filterSessionsByQuery,
-  foldForSearch,
   useChatSessionSearch,
 } from "./use-chat-session-search";
 

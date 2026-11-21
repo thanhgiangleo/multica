@@ -31,6 +31,7 @@ import { useScrollFade } from "@multica/ui/hooks/use-scroll-fade";
 import { isTaskMessageTaskId, taskMessagesOptions } from "@multica/core/chat/queries";
 import { RichContent } from "../../rich-content";
 import { RichContentScrollRootProvider } from "../../rich-content/scroll-root";
+import { useSearchHighlight } from "../../search/use-search-highlight";
 import { copyText } from "@multica/ui/lib/clipboard";
 import { AttachmentList } from "../../issues/components/comment-card";
 import { PreviewSequenceProvider, collectPreviewSequence } from "../../editor";
@@ -102,6 +103,12 @@ interface ChatMessageListProps {
    * that reply until chat:quick_actions resolves it.
    */
   quickActionsPendingMessageId?: string | null;
+  /**
+   * Chat-list search query. When non-empty, matching text inside the rendered
+   * messages is painted (CSS Custom Highlight) so a result reads in context.
+   * Same folded needle as the list filter — see search/fold-search.ts.
+   */
+  highlightQuery?: string;
 }
 
 // ─── Virtuoso chrome ─────────────────────────────────────────────────────
@@ -201,6 +208,7 @@ export function ChatMessageList({
   quickActionsDisabled = false,
   onRegenerateQuickActions,
   quickActionsPendingMessageId = null,
+  highlightQuery = "",
 }: ChatMessageListProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollContainerEl, setScrollContainerEl] = useState<HTMLDivElement | null>(null);
@@ -208,6 +216,9 @@ export function ChatMessageList({
     scrollRef.current = node;
     setScrollContainerEl(node);
   }, []);
+  // Paint search matches over whichever rows are mounted; mounts and streamed
+  // text are picked up by the hook's mutation observer.
+  useSearchHighlight({ container: scrollContainerEl, query: highlightQuery });
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   // The bottom-stick corrects through Virtuoso, never by writing `scrollTop`
   // on the container: `scrollHeight` is an estimate over the unrendered rows,

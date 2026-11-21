@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { useDefaultLayout } from "react-resizable-panels";
 import { ArrowLeft, Loader2, MessageSquare, Search, X } from "@multica/ui/icons";
 import { toast } from "sonner";
@@ -39,6 +40,24 @@ import { ArchivedAgentBanner } from "./components/archived-agent-banner";
 import { AgentAccessRevokedBanner } from "./components/agent-access-revoked-banner";
 import { RuntimeRequiredBanner } from "./components/runtime-required-banner";
 import { useRegisterCommandBarContext } from "../search/register-context";
+import { useSearchHighlight } from "../search/use-search-highlight";
+
+/**
+ * Scroll container for the thread list that also paints the search matches.
+ *
+ * A component rather than a ref in ChatPage because the list mounts in BOTH
+ * layout branches (compact and desktop), and each mount needs its own
+ * highlight owner — one ref would be shared by whichever mounted last.
+ */
+function HighlightingListBody({ query, children }: { query: string; children: ReactNode }) {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  useSearchHighlight({ container, query });
+  return (
+    <div ref={setContainer} className="flex-1 min-h-0 overflow-y-auto">
+      {children}
+    </div>
+  );
+}
 
 /**
  * Chat tab — the first-class two-pane surface (thread list on the left,
@@ -266,9 +285,13 @@ export function ChatPage() {
     [c.sessions, chatQuery, chatSearch.sessionIds],
   );
 
+  // Rounded search pill. The glyph and the clear button are overlaid on the
+  // input rather than given their own layout space, so the text area keeps the
+  // full panel width — at the 240px `list` panel minimum the reserved padding
+  // left only a few characters of field and read as a clipped box.
   const searchInput = (
     <div className="relative min-w-0 flex-1">
-      <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+      <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
       <Input
         value={chatQuery}
         onChange={(e) => setChatQuery(e.target.value)}
@@ -280,14 +303,14 @@ export function ChatPage() {
         }}
         placeholder={t(($) => $.page.search_placeholder)}
         aria-label={t(($) => $.page.search_placeholder)}
-        className="h-7 pl-7 pr-7 text-caption md:text-caption"
+        className="h-8 rounded-full pl-8 pr-8 text-caption md:text-caption"
       />
       {chatQuery !== "" && (
         <button
           type="button"
           onClick={() => setChatQuery("")}
           aria-label={t(($) => $.page.search_clear)}
-          className="absolute right-1 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="absolute right-1 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
           <X className="size-3.5" />
         </button>
@@ -308,9 +331,15 @@ export function ChatPage() {
           : null
     : null;
 
+  // The panel can be dragged down to 240px. The title is the only flexible
+  // item, so it truncates before the pill collapses — pinning it with
+  // `shrink-0` (as before) squeezed the field down to a few characters at the
+  // narrow end, which is what read as a clipped search box.
   const listHeader = (
     <PageHeader>
-      <h1 className="shrink-0 truncate text-body font-semibold">{t(($) => $.page.title)}</h1>
+      <h1 className="min-w-0 shrink truncate text-body font-semibold">
+        {t(($) => $.page.title)}
+      </h1>
       {searchInput}
       {newChatButton}
     </PageHeader>
@@ -321,6 +350,7 @@ export function ChatPage() {
       {searchNotice && (
         <div
           role="status"
+          data-search-ignore
           className="flex items-center gap-1.5 px-2 py-1.5 text-caption text-muted-foreground"
         >
           {chatSearch.isLoading && !chatSearch.failed && (
@@ -388,6 +418,7 @@ export function ChatPage() {
               : undefined
           }
           quickActionsPendingMessageId={quickActionsPending?.message_id ?? null}
+          highlightQuery={chatQuery}
         />
       ) : (
         <EmptyState
@@ -480,7 +511,7 @@ export function ChatPage() {
     return (
       <div className="flex flex-1 flex-col min-h-0">
         {listHeader}
-        <div className="flex-1 min-h-0 overflow-y-auto">{listBody}</div>
+        <HighlightingListBody query={chatQuery}>{listBody}</HighlightingListBody>
       </div>
     );
   }
@@ -506,7 +537,7 @@ export function ChatPage() {
       >
         <div className="flex flex-col border-r h-full">
           {listHeader}
-          <div className="flex-1 min-h-0 overflow-y-auto">{listBody}</div>
+          <HighlightingListBody query={chatQuery}>{listBody}</HighlightingListBody>
         </div>
       </ResizablePanel>
       <ResizableHandle />

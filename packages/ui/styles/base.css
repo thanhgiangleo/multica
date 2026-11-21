@@ -428,3 +428,12 @@ html[data-dnd-dragging="true"] * {
   background-color: var(--find-match-active);
   color: var(--find-match-foreground);
 }
+
+/* Chat search (typing in the chat list's search box). Same paint as in-page
+ * find, over thread-list rows and message bodies — ranges only, so it works
+ * over markdown, code blocks and virtualized rows without touching the DOM.
+ * One name for every surface; search-highlight.ts merges their ranges. */
+::highlight(multica-search-match) {
+  background-color: var(--find-match);
+  color: var(--find-match-foreground);
+}
