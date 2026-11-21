@@ -116,7 +116,12 @@ export function useChatSessionSearch(query: string): ChatSessionSearch {
  * Apply the filter to the sessions cache. A session matches when the server
  * found the query somewhere in its transcript, or — for instant feedback
  * before the request settles, and for sessions the search cannot see — when
- * its title or last message contains it.
+ * its last message contains it.
+ *
+ * Titles are deliberately not matched. A session title is derived from its
+ * first message and, on installs that name chats after the agent, is the agent
+ * name — searching "FRIDAY" filtered in every FRIDAY chat even though none of
+ * them discussed it. This box searches chat content, and only content.
  */
 export function filterSessionsByQuery(
   sessions: ChatSession[],
@@ -127,7 +132,6 @@ export function filterSessionsByQuery(
   if (!needle) return sessions;
   return sessions.filter((session) => {
     if (remoteSessionIds?.has(session.id)) return true;
-    if (foldForSearch(session.title?.trim() ?? "").includes(needle)) return true;
     const last = session.last_message?.content;
     return !!last && foldForSearch(last).includes(needle);
   });

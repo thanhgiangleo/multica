@@ -380,8 +380,10 @@ export function ChatThreadList({
         )}
 
         <div className="min-w-0 flex-1">
-          {/* Line 1: name + time (time stays put; hover actions overlay below) */}
-          <div className="flex items-center gap-1.5">
+          {/* Line 1: name + time (time stays put; hover actions overlay below).
+              Search matches only message content, so the title/agent chrome is
+              excluded from the highlight sweep. */}
+          <div data-search-ignore className="flex items-center gap-1.5">
             {session.pinned && (
               <Pin
                 aria-label={t(($) => $.list.pinned)}
@@ -427,7 +429,10 @@ export function ChatThreadList({
                   <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden text-caption">
                     {agentName && (
                       <>
-                        <span className="max-w-[40%] shrink-0 truncate font-medium text-muted-foreground">
+                        <span
+                          data-search-ignore
+                          className="max-w-[40%] shrink-0 truncate font-medium text-muted-foreground"
+                        >
                           {agentName}
                         </span>
                         <span aria-hidden="true" className="shrink-0 text-faint-foreground">

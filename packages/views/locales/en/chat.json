@@ -7,7 +7,7 @@
     "search_clear": "Clear search",
     "search_searching": "Searching messages…",
     "search_no_matches": "No chats match your search",
-    "search_failed": "Couldn't search message history — matching titles and recent messages only",
+    "search_failed": "Couldn't search message history — matching recent messages only",
     "search_truncated": "Showing the first 250 matching messages — refine the search to narrow it down"
   },
   "fab": {

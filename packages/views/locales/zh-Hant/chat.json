@@ -7,7 +7,7 @@
     "search_clear": "清除搜尋",
     "search_searching": "正在搜尋訊息…",
     "search_no_matches": "沒有聊天與你的搜尋相符",
-    "search_failed": "無法搜尋訊息歷史 —— 僅比對標題與最近的訊息",
+    "search_failed": "無法搜尋訊息歷史 —— 僅比對最近的訊息",
     "search_truncated": "僅顯示前 250 條相符訊息 —— 請縮小搜尋範圍"
   },
   "fab": {

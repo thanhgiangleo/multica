@@ -7,7 +7,7 @@
     "search_clear": "Effacer la recherche",
     "search_searching": "Recherche dans les messages…",
     "search_no_matches": "Aucune discussion ne correspond à votre recherche",
-    "search_failed": "Impossible de parcourir l'historique — seuls les titres et les messages récents sont comparés",
+    "search_failed": "Impossible de parcourir l'historique — seuls les messages récents sont comparés",
     "search_truncated": "Affichage des 250 premiers messages correspondants — précisez la recherche"
   },
   "fab": {
