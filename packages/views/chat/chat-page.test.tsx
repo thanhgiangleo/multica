@@ -3,8 +3,8 @@
 import { StrictMode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import type { Agent } from "@multica/core/types";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import type { Agent, ChatSession } from "@multica/core/types";
 import { I18nProvider } from "@multica/core/i18n/react";
 import enCommon from "../locales/en/common.json";
 import enChat from "../locales/en/chat.json";
@@ -29,16 +29,28 @@ vi.mock("./components/chat-input", () => ({
 }));
 vi.mock("./components/chat-thread-list", () => ({
   ChatThreadList: ({
+    sessions,
+    emptyMessage,
     onSelectSession,
   }: {
+    sessions: ChatSession[];
+    emptyMessage?: string;
     onSelectSession: (s: { id: string; agent_id: string }) => void;
   }) => (
-    <button
-      type="button"
-      onClick={() => onSelectSession({ id: "session-9", agent_id: "agent-9" })}
-    >
-      select-thread
-    </button>
+    <div>
+      <button
+        type="button"
+        onClick={() => onSelectSession({ id: "session-9", agent_id: "agent-9" })}
+      >
+        select-thread
+      </button>
+      <ul data-testid="thread-ids">
+        {sessions.map((s) => (
+          <li key={s.id}>{s.id}</li>
+        ))}
+      </ul>
+      {emptyMessage ? <p>{emptyMessage}</p> : null}
+    </div>
   ),
 }));
 vi.mock("./components/chat-session-header", () => ({
@@ -103,6 +115,12 @@ vi.mock("@multica/core/platform", async (importOriginal) => ({
 const storeRef = vi.hoisted(() => ({
   current: { activeSessionId: null as string | null },
 }));
+// The list the controller reports; the search tests narrow this.
+const sessionsRef = vi.hoisted(() => ({ current: [] as ChatSession[] }));
+const mockSearchChatMessages = vi.hoisted(() => vi.fn());
+vi.mock("@multica/core/api", () => ({
+  api: { searchChatMessages: mockSearchChatMessages },
+}));
 const storeListeners = vi.hoisted(() => new Set<() => void>());
 const availableAgentsRef = vi.hoisted(() => ({ current: [] as Agent[] }));
 const agentsSettledRef = vi.hoisted(() => ({ current: true }));
@@ -140,7 +158,7 @@ vi.mock("./components/use-chat-controller", async () => {
       agents: availableAgentsRef.current,
       availableAgents: availableAgentsRef.current,
       agentsSettled: agentsSettledRef.current,
-      sessions: [],
+      sessions: sessionsRef.current,
       activeSessionId: useSyncExternalStore(
         subscribeToStore,
         () => storeRef.current,
@@ -257,6 +275,8 @@ beforeEach(() => {
   vi.clearAllMocks();
   storeRef.current = { activeSessionId: null };
   storeListeners.clear();
+  sessionsRef.current = [];
+  mockSearchChatMessages.mockResolvedValue({ messages: [] });
   availableAgentsRef.current = [agent];
   agentsSettledRef.current = true;
   platformWorkspace.slug = "acme";
@@ -495,5 +515,94 @@ describe("ChatPage responsive layout", () => {
       screen.getByRole("button", { name: "select-thread" }),
     ).toBeInTheDocument();
     expect(screen.getByText("chat-input")).toBeInTheDocument();
+  });
+});
+
+function chatSession(overrides: Partial<ChatSession> & { id: string }): ChatSession {
+  return {
+    workspace_id: "ws-1",
+    agent_id: "agent-1",
+    creator_id: "user-1",
+    title: "",
+    status: "active",
+    has_unread: false,
+    created_at: "2026-01-01T00:00:00Z",
+    updated_at: "2026-01-01T00:00:00Z",
+    ...overrides,
+  };
+}
+
+function chatSearchHit(sessionId: string) {
+  return {
+    message_id: `message-${sessionId}`,
+    session_id: sessionId,
+    session_title: sessionId,
+    session_status: "active",
+    agent_id: "agent-1",
+    role: "user",
+    message_kind: "message",
+    snippet: "…",
+    match_source: "message" as const,
+    created_at: "2026-01-01T00:00:00Z",
+  };
+}
+
+describe("ChatPage chat search", () => {
+  it("puts the search field in the list header beside the new-chat button", () => {
+    renderPage("");
+
+    expect(
+      screen.getByRole("textbox", { name: "Search chats" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("new-chat-button")).toBeInTheDocument();
+  });
+
+  it("narrows the list to the chats whose transcript matched", async () => {
+    // Neither title nor last message contains the query: only the server-side
+    // transcript hit can keep s-match in the list.
+    sessionsRef.current = [
+      chatSession({ id: "s-match", title: "Deploy notes" }),
+      chatSession({ id: "s-other", title: "Weekly sync" }),
+    ];
+    mockSearchChatMessages.mockResolvedValue({ messages: [chatSearchHit("s-match")] });
+    renderPage("");
+    expect(screen.getByText("s-other")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Search chats" }), {
+      target: { value: "abc" },
+    });
+
+    await waitFor(() =>
+      expect(mockSearchChatMessages).toHaveBeenCalledWith(
+        expect.objectContaining({ q: "abc", offset: 0 }),
+      ),
+    );
+    await waitFor(() => expect(screen.queryByText("s-other")).not.toBeInTheDocument());
+    expect(screen.getByText("s-match")).toBeInTheDocument();
+  });
+
+  it("says the list is filtered, not empty, when nothing matches", async () => {
+    sessionsRef.current = [chatSession({ id: "s-other", title: "Weekly sync" })];
+    renderPage("");
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Search chats" }), {
+      target: { value: "zzz" },
+    });
+
+    expect(await screen.findByText("No chats match your search")).toBeInTheDocument();
+  });
+
+  it("clears the filter from the input's clear button", async () => {
+    sessionsRef.current = [chatSession({ id: "s-other", title: "Weekly sync" })];
+    renderPage("");
+    const input = screen.getByRole("textbox", { name: "Search chats" });
+
+    fireEvent.change(input, { target: { value: "zzz" } });
+    expect(await screen.findByText("No chats match your search")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Clear search" }));
+
+    expect(input).toHaveValue("");
+    expect(screen.getByText("s-other")).toBeInTheDocument();
   });
 });
