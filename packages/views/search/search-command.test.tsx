@@ -8,7 +8,7 @@ import { inboxUnreadSummaryOptions } from "@multica/core/inbox/queries";
 import { I18nProvider } from "@multica/core/i18n/react";
 import { issueDetailOptions, issueTimelineOptions } from "@multica/core/issues/queries";
 import { WORKSPACE_PAGES } from "@multica/core/paths";
-import type { Issue } from "@multica/core/types";
+import type { Issue, SearchChatMessageResult } from "@multica/core/types";
 import {
   agentListOptions,
   memberListOptions,
@@ -363,6 +363,7 @@ describe("SearchCommand", () => {
     apiFns.set("getBaseUrl", vi.fn(() => "http://127.0.0.1:8080"));
     apiFns.set("searchIssues", vi.fn(() => Promise.resolve({ issues: [], total: 0 })));
     apiFns.set("searchProjects", vi.fn(() => Promise.resolve({ projects: [], total: 0 })));
+    apiFns.set("searchChatMessages", vi.fn(() => Promise.resolve({ messages: [] })));
     mockPush.mockReset();
     mockPathname.current = "/ws-test/issues";
     mockGetShareableUrl.mockReset().mockImplementation((p: string) => `https://app.multica/${p}`);
@@ -1125,6 +1126,54 @@ describe("SearchCommand", () => {
 
       await waitFor(() => expect(resultValues()).toEqual(["issue-hit"]), { timeout: 2000 });
       expect(renderedHeadings()).not.toContain("Cancelled");
+    });
+  });
+
+  // Chat transcripts have no local index, so their hits arrive only from the
+  // server search. The session title is the actionable part of the row: the
+  // user remembers the words, not which conversation holds them.
+  describe("chat transcript results", () => {
+    const message = (over: Partial<SearchChatMessageResult> & { message_id: string; session_id: string }) => ({
+      message_id: over.message_id,
+      session_id: over.session_id,
+      session_title: "Deploy incident",
+      session_status: "active",
+      agent_id: "agent-1",
+      role: "user",
+      message_kind: "message",
+      snippet: "the rollout stalled at 50%",
+      match_source: "message" as const,
+      created_at: "2026-01-01T00:00:00Z",
+      ...over,
+    });
+
+    it("renders a transcript group and opens the session it came from", async () => {
+      const user = userEvent.setup();
+      api("searchChatMessages").mockResolvedValue({
+        messages: [message({ message_id: "msg-1", session_id: "session-9" })],
+      });
+      renderSearch();
+      await user.type(input(), "rollout");
+
+      const row = await waitFor(() => {
+        const el = document.querySelector<HTMLElement>('[cmdk-item=""][data-value="message:msg-1"]');
+        if (!el) throw new Error("transcript row not rendered");
+        return el;
+      }, { timeout: 2000 });
+      expect(renderedHeadings()).toContain("Messages");
+      expect(row).toHaveTextContent("Deploy incident");
+
+      await user.click(row);
+      expect(mockPush).toHaveBeenCalledWith("/ws-test/chat?session=session-9");
+    });
+
+    it("searches transcripts only in the unscoped palette", async () => {
+      const user = userEvent.setup();
+      renderSearch();
+      await user.type(input(), "#rollout");
+
+      await waitFor(() => expect(api("searchIssues")).toHaveBeenCalled(), { timeout: 2000 });
+      expect(api("searchChatMessages")).not.toHaveBeenCalled();
     });
   });
 

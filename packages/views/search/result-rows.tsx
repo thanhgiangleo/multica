@@ -13,6 +13,7 @@ import type {
 import type {
   Issue,
   ProjectStatus,
+  SearchChatMessageResult,
   SearchIssueResult,
   SearchProjectResult,
 } from "@multica/core/types";
@@ -152,6 +153,46 @@ export function IssueResultRow({
           </span>
         </div>
       )}
+    </CommandPrimitive.Item>
+  );
+}
+
+/**
+ * One transcript match from cross-chat search. The session title is the
+ * headline — the user remembers the words, not which chat holds them — and the
+ * snippet underneath shows them where in that conversation to look.
+ */
+export function ChatMessageResultRow({
+  message,
+  query,
+  disabled,
+  onSelect,
+}: {
+  message: SearchChatMessageResult;
+  query: string;
+  disabled?: boolean;
+  onSelect: () => void;
+}) {
+  const sessionTitle = message.session_title || message.session_id;
+  return (
+    <CommandPrimitive.Item
+      value={`message:${message.message_id}`}
+      disabled={disabled}
+      onSelect={onSelect}
+      className={cn(ROW_CLASS, "flex-col items-stretch gap-0.5")}
+    >
+      <div className="flex min-h-7 items-center gap-2.5">
+        <MessageSquare className="size-4 shrink-0 text-muted-foreground" />
+        <span className="min-w-0 flex-1 truncate">
+          <HighlightText text={sessionTitle} query={query} />
+        </span>
+        <RowHint>{message.role}</RowHint>
+      </div>
+      <div className={SNIPPET_CLASS}>
+        <span className="truncate text-caption text-muted-foreground">
+          <HighlightText text={message.snippet} query={query} />
+        </span>
+      </div>
     </CommandPrimitive.Item>
   );
 }

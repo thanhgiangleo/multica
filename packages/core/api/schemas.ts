@@ -82,6 +82,7 @@ import type {
   PluginSurfaceLaunch,
   ResourceLabelsResponse,
   RuntimeModelListRequest,
+  SearchChatMessagesResponse,
   SearchIssuesResponse,
   SearchProjectsResponse,
   ShareLink,
@@ -1563,6 +1564,30 @@ export const SearchProjectsResponseSchema = z.object({
 
 export const EMPTY_SEARCH_PROJECTS_RESPONSE: SearchProjectsResponse = {
   projects: [],
+};
+
+// Cross-chat transcript search: GET /api/chat/search. Session fields are
+// required by the row that renders them, so a hit missing its session context
+// is dropped rather than shown as an unopenable row.
+const SearchChatMessageResultSchema = z.object({
+  message_id: z.string(),
+  session_id: z.string(),
+  session_title: z.string(),
+  session_status: z.string(),
+  agent_id: z.string(),
+  role: z.string(),
+  message_kind: z.string(),
+  snippet: z.string(),
+  match_source: z.string(),
+  created_at: z.string(),
+}).loose();
+
+export const SearchChatMessagesResponseSchema = z.object({
+  messages: z.array(SearchChatMessageResultSchema).default([]),
+}).loose();
+
+export const EMPTY_SEARCH_CHAT_MESSAGES_RESPONSE: SearchChatMessagesResponse = {
+  messages: [],
 };
 
 // Local search index sync (MUL-7754). Callers reject a response that fails

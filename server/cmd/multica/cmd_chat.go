@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -47,14 +48,83 @@ channel.`,
 	RunE: runChatThread,
 }
 
+var chatSearchCmd = &cobra.Command{
+	Use:   "search <query>",
+	Short: "Search message content across all of your chat sessions",
+	Long: `Search the transcript of every chat session you created in this workspace and
+still have access to. Each hit reports the session_id and session_title it came
+from, so a conversation you no longer remember the location of is one lookup away.
+
+Unlike "multica chat history" and "multica chat thread", which read only the
+conversation you are currently running for, this searches across all sessions.
+
+Needs a workspace-member (user) API token; it is not available to an agent task
+token, which can only read its own conversation.`,
+	Args: cobra.MinimumNArgs(1),
+	RunE: runChatSearch,
+}
+
 func init() {
 	for _, c := range []*cobra.Command{chatHistoryCmd, chatThreadCmd} {
 		c.Flags().Int("limit", 0, "Maximum number of messages to return (the server clamps the range)")
 		c.Flags().String("before", "", "Opaque cursor (a next_cursor from a prior page) to read older messages")
 		c.Flags().String("output", "json", "Output format: table or json")
 	}
+	chatSearchCmd.Flags().Int("limit", 20, "Maximum number of matching messages (server caps at 50)")
+	chatSearchCmd.Flags().Int("offset", 0, "Number of matches to skip, for paging")
+	chatSearchCmd.Flags().String("output", "json", "Output format: table or json")
 	chatCmd.AddCommand(chatHistoryCmd)
 	chatCmd.AddCommand(chatThreadCmd)
+	chatCmd.AddCommand(chatSearchCmd)
+}
+
+func runChatSearch(cmd *cobra.Command, args []string) error {
+	query := strings.TrimSpace(strings.Join(args, " "))
+	if query == "" {
+		return fmt.Errorf("search query is required")
+	}
+	client, err := newAPIClient(cmd)
+	if err != nil {
+		return err
+	}
+	ctx, cancel := cli.APIContext(context.Background())
+	defer cancel()
+
+	q := url.Values{}
+	q.Set("q", query)
+	if limit, _ := cmd.Flags().GetInt("limit"); limit > 0 {
+		q.Set("limit", strconv.Itoa(limit))
+	}
+	if offset, _ := cmd.Flags().GetInt("offset"); offset > 0 {
+		q.Set("offset", strconv.Itoa(offset))
+	}
+
+	var resp map[string]any
+	if err := client.GetJSON(ctx, "/api/chat/search?"+q.Encode(), &resp); err != nil {
+		return fmt.Errorf("search chat: %w", err)
+	}
+
+	output, _ := cmd.Flags().GetString("output")
+	if output != "table" {
+		return cli.PrintJSON(os.Stdout, resp)
+	}
+	msgs, _ := resp["messages"].([]any)
+	rows := make([][]string, 0, len(msgs))
+	for _, mi := range msgs {
+		m, ok := mi.(map[string]any)
+		if !ok {
+			continue
+		}
+		rows = append(rows, []string{
+			strVal(m, "created_at"),
+			strVal(m, "session_id"),
+			strVal(m, "session_title"),
+			strVal(m, "role"),
+			strVal(m, "snippet"),
+		})
+	}
+	cli.PrintTable(os.Stdout, []string{"TS", "SESSION_ID", "SESSION", "ROLE", "SNIPPET"}, rows)
+	return nil
 }
 
 func runChatHistory(cmd *cobra.Command, _ []string) error {

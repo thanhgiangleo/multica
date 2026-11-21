@@ -466,7 +466,7 @@ export function IssueParentPage({ target, query }: { target: IssueTarget; query:
   const palette = usePalette();
   const writer = useIssueTargetWriter(target);
   const selectedIds = useMemo(() => new Set(writer.issues.map((issue) => issue.id)), [writer.issues]);
-  const { results, isLoading, stale } = useServerSearch(query, { projects: false });
+  const { results, isLoading, stale } = useServerSearch(query, { projects: false, chats: false });
   const candidates = results.issues.filter((issue) => !selectedIds.has(issue.id));
   const hasParent = writer.issues.some((issue) => !!issue.parent_issue_id);
 

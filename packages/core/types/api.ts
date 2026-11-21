@@ -559,6 +559,28 @@ export interface SearchProjectsResponse {
   projects: SearchProjectResult[];
 }
 
+/**
+ * One transcript message matching a cross-chat search. It carries the session
+ * it came from — that is the whole point of the search: the user remembers the
+ * words, not which of their chats holds them.
+ */
+export interface SearchChatMessageResult {
+  message_id: string;
+  session_id: string;
+  session_title: string;
+  session_status: string;
+  agent_id: string;
+  role: string;
+  message_kind: string;
+  snippet: string;
+  match_source: "message";
+  created_at: string;
+}
+
+export interface SearchChatMessagesResponse {
+  messages: SearchChatMessageResult[];
+}
+
 // Local search index sync (MUL-7754): GET /api/search-index/manifest,
 // GET /api/search-index/snapshot, POST /api/search-index/changes.
 

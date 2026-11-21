@@ -17,7 +17,7 @@ import { HighlightText } from "./highlight-text";
 import { useIssueTargetWriter } from "./issue-target";
 import { usePalette } from "./palette-context";
 import { CommandGroupView, CommandRow, PaletteGroup, ROW_CLASS, ROW_ICON_CLASS, RowHint } from "./rows";
-import { ActorRow, AgentPresenceText, IssueResultRow, ObjectRow, ProjectResultRow } from "./result-rows";
+import { ActorRow, AgentPresenceText, ChatMessageResultRow, IssueResultRow, ObjectRow, ProjectResultRow } from "./result-rows";
 import { DelegateGroup } from "./delegate/delegate-group";
 import type { DelegateActor, IssueTarget } from "./types";
 import type { BestMatch, RootModel } from "./use-root-model";
@@ -34,6 +34,7 @@ const TYPE_ORDER = [
   "members",
   "projects",
   "issues",
+  "messages",
   "autopilots",
   "chats",
   "skills",
@@ -251,6 +252,28 @@ export function RootView({
               query={server.results.query}
               disabled={server.stale}
               onSelect={() => palette.navigate(p.issueDetail(issue.id))}
+            />
+          ))}
+        </PaletteGroup>
+      ),
+    });
+  }
+  if (server.results.messages.length > 0) {
+    groups.push({
+      key: "messages",
+      type: "messages",
+      // A transcript hit is a content match, never a name match: it ranks
+      // below every title hit and only orders by recency among its own kind.
+      score: 10,
+      node: (
+        <PaletteGroup key="messages" heading={t(($) => $.groups.messages)}>
+          {server.results.messages.map((message) => (
+            <ChatMessageResultRow
+              key={message.message_id}
+              message={message}
+              query={server.results.query}
+              disabled={server.stale}
+              onSelect={() => palette.navigate(p.chatSession(message.session_id))}
             />
           ))}
         </PaletteGroup>

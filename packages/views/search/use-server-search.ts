@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { SearchIssueResult, SearchProjectResult } from "@multica/core/types";
+import { api } from "@multica/core/api";
+import type { SearchChatMessageResult, SearchIssueResult, SearchProjectResult } from "@multica/core/types";
 import { isLocalSearchReady, searchIssues, searchProjects } from "@multica/core/search-index";
 
 export interface SearchResults {
@@ -14,18 +15,25 @@ export interface SearchResults {
   query: string;
   issues: SearchIssueResult[];
   projects: SearchProjectResult[];
+  /**
+   * Transcript hits from every chat session the user created. Chat content has
+   * no local index, so this set is always the answer of a server request and
+   * is empty until the first one lands.
+   */
+  messages: SearchChatMessageResult[];
 }
 
-export const NO_RESULTS: SearchResults = { query: "", issues: [], projects: [] };
+export const NO_RESULTS: SearchResults = { query: "", issues: [], projects: [], messages: [] };
 
 /**
- * Issue (and optionally project) search for the palette. An empty query
- * clears the results without a request.
+ * Issue (and optionally project / chat transcript) search for the palette. An
+ * empty query clears the results without a request.
  */
-export function useServerSearch(query: string, options: { projects: boolean }) {
+export function useServerSearch(query: string, options: { projects: boolean; chats: boolean }) {
   const [results, setResults] = useState<SearchResults>(NO_RESULTS);
   const [isLoading, setIsLoading] = useState(false);
   const withProjects = options.projects;
+  const withChats = options.chats;
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const q = query.trim();
@@ -48,14 +56,28 @@ export function useServerSearch(query: string, options: { projects: boolean }) {
       const controller = new AbortController();
       abortRef.current = controller;
       try {
-        const [issueRes, projectRes] = await Promise.all([
+        const [issueRes, projectRes, chatRes] = await Promise.all([
           searchIssues({ q, limit: 20, include_closed: true, signal: controller.signal }),
           withProjects
             ? searchProjects({ q, limit: 10, include_closed: true, signal: controller.signal })
             : Promise.resolve({ projects: [] as SearchProjectResult[] }),
+          // Chat search is the one arm of this that can legitimately fail on
+          // its own — a member without any accessible agent gets an empty
+          // list, not an error — so a rejected request degrades to no
+          // transcript hits instead of taking the issue rows down with it.
+          withChats
+            ? api.searchChatMessages({ q, limit: 10, signal: controller.signal }).catch(() => ({
+                messages: [] as SearchChatMessageResult[],
+              }))
+            : Promise.resolve({ messages: [] as SearchChatMessageResult[] }),
         ]);
         if (!controller.signal.aborted) {
-          setResults({ query: q, issues: issueRes.issues, projects: projectRes.projects });
+          setResults({
+            query: q,
+            issues: issueRes.issues,
+            projects: projectRes.projects,
+            messages: chatRes.messages,
+          });
           setIsLoading(false);
         }
       } catch {
@@ -63,12 +85,12 @@ export function useServerSearch(query: string, options: { projects: boolean }) {
           // Drop the previous query's rows rather than leaving them on screen
           // permanently greyed out: the request that would have replaced them
           // is never coming. The list falls through to the empty state.
-          setResults({ query: q, issues: [], projects: [] });
+          setResults({ query: q, issues: [], projects: [], messages: [] });
           setIsLoading(false);
         }
       }
     }, delay);
-  }, [q, withProjects]);
+  }, [q, withProjects, withChats]);
 
   useEffect(
     () => () => {

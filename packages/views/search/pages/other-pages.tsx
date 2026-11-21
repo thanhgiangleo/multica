@@ -110,7 +110,7 @@ export function AgentAssignIssuePage({ agent, query }: { agent: Agent; query: st
   const updateIssue = useUpdateIssue();
   const { entryOf } = useIssueStatuses(wsId);
   const openModal = useModalStore((s) => s.open);
-  const { results, isLoading, stale } = useServerSearch(query, { projects: false });
+  const { results, isLoading, stale } = useServerSearch(query, { projects: false, chats: false });
   const newIssueLabel = t(($) => $.agent.new_issue, { name: agent.name });
   const q = query.trim().toLowerCase();
 

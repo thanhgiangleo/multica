@@ -16,6 +16,7 @@ import type {
   IssueDuplicates,
   GroupedIssuesResponse,
   ListIssuesResponse,
+  SearchChatMessagesResponse,
   SearchIssuesResponse,
   SearchProjectsResponse,
   SearchIndexManifest,
@@ -307,6 +308,7 @@ import {
   EMPTY_ISSUE_TABLE_GROUPS_RESPONSE,
   EMPTY_ISSUE_TABLE_ROWS_RESPONSE,
   EMPTY_LIST_ISSUES_RESPONSE,
+  EMPTY_SEARCH_CHAT_MESSAGES_RESPONSE,
   EMPTY_SEARCH_ISSUES_RESPONSE,
   EMPTY_SEARCH_PROJECTS_RESPONSE,
   EMPTY_SQUAD,
@@ -343,6 +345,7 @@ import {
   RuntimeUsageByAgentListSchema,
   RuntimeUsageByHourListSchema,
   RuntimeUsageListSchema,
+  SearchChatMessagesResponseSchema,
   SearchIssuesResponseSchema,
   SearchProjectsResponseSchema,
   SearchIndexManifestSchema,
@@ -1266,6 +1269,22 @@ export class ApiClient {
     );
     return parseWithFallback(raw, SearchProjectsResponseSchema, EMPTY_SEARCH_PROJECTS_RESPONSE, {
       endpoint: "GET /api/projects/search",
+    });
+  }
+
+  // Cross-chat transcript search. Unlike issues and projects there is no
+  // local index of chat content — transcripts live only on the server — so
+  // this is always a network round trip and the palette debounces it.
+  async searchChatMessages(params: { q: string; limit?: number; offset?: number; signal?: AbortSignal }): Promise<SearchChatMessagesResponse> {
+    const search = new URLSearchParams({ q: params.q });
+    if (params.limit !== undefined) search.set("limit", String(params.limit));
+    if (params.offset !== undefined) search.set("offset", String(params.offset));
+    const raw = await this.fetch<unknown>(
+      `/api/chat/search?${search}`,
+      params.signal ? { signal: params.signal } : undefined,
+    );
+    return parseWithFallback(raw, SearchChatMessagesResponseSchema, EMPTY_SEARCH_CHAT_MESSAGES_RESPONSE, {
+      endpoint: "GET /api/chat/search",
     });
   }
 

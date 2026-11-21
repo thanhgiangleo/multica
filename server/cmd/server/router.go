@@ -2477,6 +2477,11 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 					r.Delete("/draft-restores/{restoreId}", h.ConsumeChatDraftRestore)
 				})
 			})
+			// Cross-chat transcript search. Workspace members only, same gate as
+			// every other chat route here; the handler additionally intersects
+			// with the actor's currently accessible agent set, so a downgraded
+			// member cannot search transcripts of a private agent.
+			r.Get("/api/chat/search", h.SearchChatMessages)
 			r.Get("/api/chat/pending-tasks", h.ListPendingChatTasks)
 			r.Get("/api/chat/pending-tasks/has-any", h.HasPendingChatTasks)
 

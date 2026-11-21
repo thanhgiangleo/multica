@@ -147,7 +147,10 @@ export function useRootModel(
   const globalCommands = useGlobalCommands(contexts);
 
   const searching = active && scope !== "commands" && scope !== "people" ? text : "";
-  const server = useServerSearch(searching, { projects: scope === "all" });
+  // Chat transcripts are searched only in the unscoped palette: a scoped
+  // query ("issues: …", "people: …") is asking for a different kind of row,
+  // and the transcript request is the one arm that costs a full server scan.
+  const server = useServerSearch(searching, { projects: scope === "all", chats: scope === "all" });
   const objects = useObjectSearch(scope === "issues" || scope === "commands" ? "" : q, active);
   const recent = useRecentItems(active && !rawQuery.trim());
   const delegateCandidates = useDelegateCandidates(active);
@@ -267,6 +270,9 @@ export function useRootModel(
       objectCount > 0 ||
       results.issues.length > 0 ||
       results.projects.length > 0 ||
+      // Without this a query that only matches transcript text would render
+      // nothing, and a query that matched nothing at all would look identical.
+      results.messages.length > 0 ||
       pages.length > 0 ||
       commands.length > 0 ||
       contextGroups.length > 0;
