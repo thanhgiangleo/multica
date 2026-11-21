@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@multica/core/api";
 import type { ChatSession } from "@multica/core/types";
+import { foldForSearch } from "../../search/fold-search";
 
 // The endpoint caps `limit` at 50 and pages per matching MESSAGE, not per
 // session — one chatty session can spend a whole page on its own. A filter has
@@ -109,21 +110,6 @@ export function useChatSessionSearch(query: string): ChatSessionSearch {
     failed: settled && state.failed,
     truncated: settled && state.truncated,
   };
-}
-
-/**
- * Fold a string to its unaccented lowercase form so a filter can ignore
- * Vietnamese tone marks and case in BOTH directions: "khong" finds "không" and
- * "Không" finds "khong". NFD splits precomposed letters into base + combining
- * marks, which are then stripped; `đ` has no decomposition and is mapped by
- * hand.
- */
-export function foldForSearch(input: string): string {
-  return input
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/đ/g, "d");
 }
 
 /**
