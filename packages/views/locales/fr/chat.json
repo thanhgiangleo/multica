@@ -258,5 +258,13 @@
     "archive": "Archiver la discussion",
     "unarchive": "Désarchiver la discussion",
     "delete": "Supprimer la discussion"
+  },
+  "usage": {
+    "range_label": "Période d'utilisation",
+    "range_1d": "1j",
+    "range_3d": "3j",
+    "range_7d": "7j",
+    "tokens_hint": "{{tokens}} jetons sur cette période",
+    "refresh": "Actualiser l'utilisation"
   }
 }

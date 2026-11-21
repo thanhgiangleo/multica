@@ -258,5 +258,13 @@
     "archive": "Archive chat",
     "unarchive": "Unarchive chat",
     "delete": "Delete chat"
+  },
+  "usage": {
+    "range_label": "Usage period",
+    "range_1d": "1d",
+    "range_3d": "3d",
+    "range_7d": "7d",
+    "tokens_hint": "{{tokens}} tokens in this period",
+    "refresh": "Refresh usage"
   }
 }

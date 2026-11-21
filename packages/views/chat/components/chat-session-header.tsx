@@ -33,6 +33,7 @@ import { ActorAvatar } from "../../common/actor-avatar";
 import { AppLink } from "../../navigation";
 import { useT } from "../../i18n";
 import { TooltipHint } from "@multica/ui/components/common/tooltip-hint";
+import { ChatUsageWidget } from "./chat-usage-widget";
 
 /**
  * Per-session header for the conversation pane: agent avatar + editable chat
@@ -209,6 +210,8 @@ export function ChatSessionHeader({
           </div>
         )}
       </div>
+
+      <ChatUsageWidget />
 
       <DropdownMenu>
         <DropdownMenuTrigger
