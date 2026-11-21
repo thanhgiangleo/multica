@@ -162,6 +162,9 @@ impl PgCommentRuntime {
         Self { state }
     }
 
+    /// Mirrors Go's `newPgCommentRuntime` constructor; the runtime is built here
+    /// but its route wiring stays with the integrator's lane.
+    #[allow(dead_code)]
     pub fn shared(state: ApiState) -> Arc<Self> {
         Arc::new(Self::new(state))
     }
@@ -337,14 +340,10 @@ async fn bind_comment_steer(
     bind: BindCommentSteer<'_>,
 ) -> Option<Option<Uuid>> {
     let tx = db.transaction().await.ok()?;
-    if tx
-        .query_opt(LOCK_TASK_FOR_SUPPLEMENT_BIND_SQL, &[&bind.task_id])
+    tx.query_opt(LOCK_TASK_FOR_SUPPLEMENT_BIND_SQL, &[&bind.task_id])
         .await
         .ok()?
-        .is_none()
-    {
-        return None;
-    }
+        .as_ref()?;
     let row = tx
         .query_opt(
             BIND_COMMENT_TASK_SUPPLEMENT_SQL,
@@ -609,6 +608,7 @@ impl PgCommentRuntime {
     /// ended, has not started, or cannot take more input is never swapped for
     /// another turn of the same agent — the trigger keeps its ordinary handling,
     /// so losing the race never drops or misdirects the comment.
+    #[allow(clippy::too_many_arguments)]
     async fn steer_agent_triggers(
         &self,
         issue: &Row,

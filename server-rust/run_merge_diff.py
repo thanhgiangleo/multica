@@ -20,8 +20,16 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-ORACLE = "/data/rust-build/zbstech/zbsi63-go-oracle-20261104"
+# The oracle is the v2-pinned Go build: /app/server extracted from image
+# sha256:3f6835a1461c8... (revision e8ae72c9d, manifest oracle_image_id), which
+# is the ZBSI-60 brief pin. It is a different build profile from the earlier
+# zbsi63-go-oracle-20261104 (statically linked + stripped, 48 MB vs dynamically
+# linked + unstripped, 68 MB), so the hash is asserted rather than assumed: a
+# mislabelled oracle would make every differential result meaningless.
+ORACLE = "/data/rust-build/zbstech/zbsi60-go-oracle-e8ae72c9d-20261118"
+ORACLE_SHA256 = "bafb4054144544df9de09f64bcd4aff4c60a7beced367acbab86adae9e00fe36"
 MIGRATE = "/data/rust-build/zbstech/zbsi63-go-migrate-20261104"
+MIGRATE_SHA256 = "076f9f9072aa6aacd3a598c2d8434c98ac98b7b352562951c119de4660ad7d4e"
 RUST_BIN = "/data/rust-build/zbstech/.multica-rust-sprint-20261102/target-zbsi-100/debug/multica-server"
 SECRET = "synthetic_32_character_test_only_secret"
 OWNER = f"merge-diff-{int(time.time())}-{os.getpid()}"
@@ -52,7 +60,26 @@ def wait_healthy(port, proc, tries=120):
     raise RuntimeError(f"server on {port} never became healthy")
 
 
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def verify_binary(path, expected, role):
+    if not os.path.exists(path):
+        raise RuntimeError(f"{role} not found at {path}")
+    actual = file_sha256(path)
+    if actual != expected:
+        raise RuntimeError(f"{role} hash mismatch at {path}: expected {expected}, got {actual}")
+    print(f"{role} verified {actual} {path}", flush=True)
+
+
 def main():
+    verify_binary(ORACLE, ORACLE_SHA256, "go oracle")
+    verify_binary(MIGRATE, MIGRATE_SHA256, "go migrate")
     pg_port, go_port, rust_port = free_port(), free_port(), free_port()
     assert len({pg_port, go_port, rust_port}) == 3
     assert 5432 not in (pg_port, go_port, rust_port)
@@ -292,6 +319,9 @@ INSERT INTO task_token(token_hash,task_id,agent_id,workspace_id,user_id,expires_
         print(f"route probe rows: {len(rows)}", flush=True)
 
         summary = {"owner": OWNER, "ports": {"pg": pg_port, "go": go_port, "rust": rust_port},
+                   "oracle": {"path": ORACLE, "sha256": ORACLE_SHA256},
+                   "migrate": {"path": MIGRATE, "sha256": MIGRATE_SHA256},
+                   "rust_bin": {"path": RUST_BIN, "sha256": file_sha256(RUST_BIN)},
                    "reports": reports}
         (ROOT / "merge-diff-summary.json").write_text(json.dumps(summary, indent=2))
         return 0 if all(r["exit"] == 0 for r in reports.values()) else 1

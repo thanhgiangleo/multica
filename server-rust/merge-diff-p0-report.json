@@ -10,42 +10,42 @@
         "case": "anonymous-chat-list",
         "passed": true,
         "status": 401,
-        "elapsed_ms": 6.379992235451937,
+        "elapsed_ms": 5.395565181970596,
         "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
       },
       {
         "case": "anonymous-task-messages",
         "passed": true,
         "status": 401,
-        "elapsed_ms": 4.554158076643944,
+        "elapsed_ms": 3.6849267780780792,
         "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
       },
       {
         "case": "read-agent",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 7.698256056755781,
+        "elapsed_ms": 7.001383230090141,
         "contract_sha256": "5dd01b577b8c7b94476b9157ad0b5f5735e7df9bb479902c67edb197b393779c"
       },
       {
         "case": "anonymous-agents",
         "passed": true,
         "status": 401,
-        "elapsed_ms": 3.4220218658447266,
+        "elapsed_ms": 3.884958103299141,
         "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
       },
       {
         "case": "quick-actions-unconfigured",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.262725822627544,
+        "elapsed_ms": 5.574029870331287,
         "contract_sha256": "ea32d6c77597caa0898a3ec7e61b3790d1f1500e7f4f540a693739ebcbfe1250"
       },
       {
         "case": "plugin-hooks-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.518120851367712,
+        "elapsed_ms": 3.898942843079567,
         "contract_sha256": "ae141a11f0b7037e65bbf65717d780c0cf6ddbd5347adeb1f85dc09ecee2113b"
       }
     ]
@@ -60,42 +60,42 @@
         "case": "anonymous-chat-list",
         "passed": true,
         "status": 401,
-        "elapsed_ms": 3.707590978592634,
+        "elapsed_ms": 3.8470099680125713,
         "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
       },
       {
         "case": "anonymous-task-messages",
         "passed": true,
         "status": 401,
-        "elapsed_ms": 3.7552393041551113,
+        "elapsed_ms": 3.8995230570435524,
         "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
       },
       {
         "case": "read-agent",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 6.599707063287497,
+        "elapsed_ms": 6.2962188385427,
         "contract_sha256": "5dd01b577b8c7b94476b9157ad0b5f5735e7df9bb479902c67edb197b393779c"
       },
       {
         "case": "anonymous-agents",
         "passed": true,
         "status": 401,
-        "elapsed_ms": 3.6626127548515797,
+        "elapsed_ms": 3.7973751313984394,
         "contract_sha256": "64d9983227ac211607fcd1f0a94c660f43b06174f73e045bd0e8806114fe26bd"
       },
       {
         "case": "quick-actions-unconfigured",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 5.558994133025408,
+        "elapsed_ms": 5.642953794449568,
         "contract_sha256": "ea32d6c77597caa0898a3ec7e61b3790d1f1500e7f4f540a693739ebcbfe1250"
       },
       {
         "case": "plugin-hooks-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.562961868941784,
+        "elapsed_ms": 4.416154697537422,
         "contract_sha256": "ae141a11f0b7037e65bbf65717d780c0cf6ddbd5347adeb1f85dc09ecee2113b"
       }
     ]

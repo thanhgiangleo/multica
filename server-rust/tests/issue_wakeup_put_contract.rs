@@ -244,12 +244,11 @@ async fn put_replaces_atomically_fences_old_work_and_baselines_condition() {
         json!({"type":"pull_request","event":"checks_finished"})
     );
     assert!(updated.1["next_fire_at"].is_string());
-    assert_eq!(
+    assert!(
         updated.1["last_error"]
             .as_str()
             .unwrap()
-            .starts_with("Condition pending: "),
-        true
+            .starts_with("Condition pending: ")
     );
     let status_condition = json!({"agent_id":agent,"instruction":"wait for review","kind":"event","condition":{"type":"issue_field","field":"status","value":"in_review"}});
     let updated = put(

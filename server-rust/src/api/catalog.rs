@@ -15,10 +15,10 @@ use std::collections::HashMap;
 use tokio_postgres::{GenericClient, Row};
 use uuid::Uuid;
 
-#[path = "p0_workflow_handoff.rs"]
-mod p0_workflow_handoff;
 #[path = "p0_issue_trigger_preview.rs"]
 mod p0_issue_trigger_preview;
+#[path = "p0_workflow_handoff.rs"]
+mod p0_workflow_handoff;
 
 #[derive(Clone)]
 pub(super) struct WorkspaceId(pub(super) Uuid);

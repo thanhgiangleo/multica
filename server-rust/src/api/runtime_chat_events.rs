@@ -234,6 +234,29 @@ impl Events {
             user,
         }
     }
+
+    // The in-process counterpart of the Go bus: an unfiltered subscription for
+    // server-side listeners that apply their own workspace and identity rules.
+    // There is no recipient or `visible_to` filter here on purpose — a listener
+    // is not an audience, and filtering by an arbitrary workspace would silently
+    // drop events from other tenants. A `Lagged` error is returned to the
+    // caller, which must reconnect and refetch authoritative DB state rather
+    // than replay a partial stream.
+    pub(super) fn subscribe_all(&self) -> AllEvents {
+        AllEvents {
+            receiver: self.0.subscribe(),
+        }
+    }
+}
+
+pub(super) struct AllEvents {
+    receiver: broadcast::Receiver<Delivery>,
+}
+
+impl AllEvents {
+    pub async fn recv(&mut self) -> Result<Event, broadcast::error::RecvError> {
+        self.receiver.recv().await.map(|delivery| delivery.event)
+    }
 }
 
 impl SquadEventSink for Events {

@@ -140,7 +140,7 @@ pub(super) struct WriteError(pub StatusCode, pub String);
 
 impl From<ApiError> for WriteError {
     fn from(value: ApiError) -> Self {
-        Self(value.0, value.1.into())
+        Self(value.0, value.1)
     }
 }
 

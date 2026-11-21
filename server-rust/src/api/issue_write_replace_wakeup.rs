@@ -356,22 +356,23 @@ pub(super) async fn replace(
             error(StatusCode::BAD_REQUEST, "wakeup capacity exceeded")
         } else { fail() }
     })?.get(0);
-    if let Some(condition) = condition_value.as_ref() {
-        if condition["type"] == "pull_request" && condition["event"] == "checks_finished" {
-            condition::baseline(
-                &tx,
-                id,
-                issue,
-                ws,
-                condition,
-                now,
-                state
-                    .pull_request_refresh
-                    .as_ref()
-                    .is_some_and(|refresh| refresh.enabled()),
-            )
-            .await?;
-        }
+    if let Some(condition) = condition_value.as_ref()
+        && condition["type"] == "pull_request"
+        && condition["event"] == "checks_finished"
+    {
+        condition::baseline(
+            &tx,
+            id,
+            issue,
+            ws,
+            condition,
+            now,
+            state
+                .pull_request_refresh
+                .as_ref()
+                .is_some_and(|refresh| refresh.enabled()),
+        )
+        .await?;
     }
     if let Some(task) = task.as_ref() {
         record_terminal_task_snapshot(

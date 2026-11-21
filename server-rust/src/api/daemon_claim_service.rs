@@ -311,6 +311,9 @@ pub(super) async fn fail_task(
 /// Authorization runs first, inside the transaction, re-reading the runtime
 /// and agent under `FOR UPDATE` so a concurrent owner change or agent move
 /// cannot slip between the builder's checks and the token write.
+/// Go's `FinalizeTaskClaim` takes the same eight values so the credentials and
+/// the authorization snapshot commit or roll back as one unit.
+#[allow(clippy::too_many_arguments)]
 pub(super) async fn finalize_task_claim(
     state: &ApiState,
     task: Uuid,

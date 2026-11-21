@@ -1054,10 +1054,12 @@ async fn rerun_source(
     let target = tx.query_opt("SELECT owner_id,permission_mode,runtime_id,archived_at FROM agent WHERE id=$1 AND workspace_id=$2 FOR SHARE", &[&agent,&ws]).await.map_err(|_| fail("issue rerun failed"))?
         .ok_or_else(|| bad("load target agent: no rows in result set"))?;
     if !super::runtime_chat::can_invoke(
+        // Deref to `tokio_postgres::Transaction`, which implements
+        // `GenericClient`; the `deadpool_postgres::Transaction` wrapper does not.
         &*tx,
         ws,
         user,
-        &actor,
+        actor,
         agent,
         target.get("owner_id"),
         &target.get::<_, String>("permission_mode"),

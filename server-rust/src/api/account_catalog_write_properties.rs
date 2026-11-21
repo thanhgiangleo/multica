@@ -31,7 +31,7 @@ pub(super) fn routes() -> Router<ApiState> {
 struct Failure(StatusCode, String);
 impl From<ApiError> for Failure {
     fn from(err: ApiError) -> Self {
-        Self(err.0, err.1.into())
+        Self(err.0, err.1)
     }
 }
 impl IntoResponse for Failure {

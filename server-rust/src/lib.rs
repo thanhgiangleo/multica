@@ -2,6 +2,7 @@
 
 pub mod api;
 pub mod health;
+pub mod issue_wakeup_dispatch;
 pub mod migrate;
 pub mod scheduler;
 mod scheduler_issue_wakeup;

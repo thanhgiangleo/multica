@@ -149,7 +149,7 @@ async fn authorized(
     // gets a slot when max_tasks cuts a busy batch short.
     Ok(ids
         .iter()
-        .filter_map(|id| allowed.get(id).map(|row| build::runtime_from_row(row)))
+        .filter_map(|id| allowed.get(id).map(build::runtime_from_row))
         .collect())
 }
 

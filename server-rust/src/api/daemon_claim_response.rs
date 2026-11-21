@@ -188,11 +188,11 @@ pub(super) async fn build_claimed_task_response(
     let legacy_redirects = !capability(headers, "platform-skill-v1");
     let config: Option<Value> = row.get("mcp_config");
     let mut mcp_config = config.clone();
-    if let Ok(bindings) = load::enabled_agent_mcp_servers(&db, agent_id).await {
-        if !bindings.is_empty() {
-            let encoded = config.as_ref().and_then(|v| serde_json::to_vec(v).ok());
-            mcp_config = compose::resolve_agent_mcp_config(&bindings, encoded.as_deref());
-        }
+    if let Ok(bindings) = load::enabled_agent_mcp_servers(&db, agent_id).await
+        && !bindings.is_empty()
+    {
+        let encoded = config.as_ref().and_then(|v| serde_json::to_vec(v).ok());
+        mcp_config = compose::resolve_agent_mcp_config(&bindings, encoded.as_deref());
     }
     let overlay: Option<Value> = task.get("runtime_mcp_overlay");
     if composio_enabled && let Some(overlay) = overlay.as_ref() {
@@ -241,15 +241,14 @@ pub(super) async fn build_claimed_task_response(
             pure::openclaw_model_override(runtime_config.as_ref()),
         );
     }
-    if system_key == "mika" {
-        if let Some(instructions) =
+    if system_key == "mika"
+        && let Some(instructions) =
             super::agents_squads_sprint::bindings::settings::compose_mika_instructions(
                 agent["name"].as_str().unwrap_or(""),
                 agent["instructions"].as_str().unwrap_or(""),
             )
-        {
-            agent["instructions"] = json!(instructions);
-        }
+    {
+        agent["instructions"] = json!(instructions);
     }
     if capability(headers, "skill-bundles-v1") {
         let (_, refs) =
@@ -281,11 +280,11 @@ pub(super) async fn build_claimed_task_response(
         .await);
     }
     out["agent"] = agent;
-    if let Some(owner) = runtime.owner_id {
-        if let Ok(Some((name, description))) = load::user_profile(&db, owner).await {
-            optional(&mut out, "requesting_user_name", name);
-            optional(&mut out, "requesting_user_profile_description", description);
-        }
+    if let Some(owner) = runtime.owner_id
+        && let Ok(Some((name, description))) = load::user_profile(&db, owner).await
+    {
+        optional(&mut out, "requesting_user_name", name);
+        optional(&mut out, "requesting_user_profile_description", description);
     }
 
     let mut issue_number = 0;
@@ -344,33 +343,32 @@ pub(super) async fn build_claimed_task_response(
         .await;
         if task.get::<_, bool>("is_leader_task") {
             let mut injected = false;
-            if let Some(squad_id) = task.get::<_, Option<Uuid>>("squad_id") {
-                if let Ok(Some(squad)) = load::squad(&db, squad_id, issue.workspace_id).await {
-                    if squad.leader_id == Some(agent_id) {
-                        let owns = issue.assignee_type.as_deref() == Some("squad")
-                            && issue.assignee_id == Some(squad.id);
-                        let role = match (&workflow, legacy) {
-                            (Some(_), true) => LeaderWorkflow::LegacyDaemon,
-                            (Some(_), false) => LeaderWorkflow::CurrentDaemon,
-                            _ => LeaderWorkflow::None,
-                        };
-                        let briefing = squad_briefing::build_leader_briefing(
-                            &**db,
-                            &squad_briefing::Squad {
-                                id: squad.id,
-                                name: squad.name,
-                                leader_id: agent_id,
-                                instructions: squad.instructions,
-                            },
-                            owns,
-                            role,
-                            capability(headers, "cli-comment-steer-v1"),
-                        )
-                        .await;
-                        append_briefing(&mut out["agent"], &briefing);
-                        injected = true;
-                    }
-                }
+            if let Some(squad_id) = task.get::<_, Option<Uuid>>("squad_id")
+                && let Ok(Some(squad)) = load::squad(&db, squad_id, issue.workspace_id).await
+                && squad.leader_id == Some(agent_id)
+            {
+                let owns = issue.assignee_type.as_deref() == Some("squad")
+                    && issue.assignee_id == Some(squad.id);
+                let role = match (&workflow, legacy) {
+                    (Some(_), true) => LeaderWorkflow::LegacyDaemon,
+                    (Some(_), false) => LeaderWorkflow::CurrentDaemon,
+                    _ => LeaderWorkflow::None,
+                };
+                let briefing = squad_briefing::build_leader_briefing(
+                    &**db,
+                    &squad_briefing::Squad {
+                        id: squad.id,
+                        name: squad.name,
+                        leader_id: agent_id,
+                        instructions: squad.instructions,
+                    },
+                    owns,
+                    role,
+                    capability(headers, "cli-comment-steer-v1"),
+                )
+                .await;
+                append_briefing(&mut out["agent"], &briefing);
+                injected = true;
             }
             if !injected {
                 out.as_object_mut().unwrap().remove("is_leader_task");
@@ -430,17 +428,16 @@ pub(super) async fn build_claimed_task_response(
         }
         let mut loaded_trigger = None;
         let mut scope = None;
-        if let Some(trigger) = trigger {
-            if let Ok(Some(row)) = load::comment(&db, trigger, runtime.workspace_id).await {
-                if !row.deleted {
-                    optional(&mut out, "trigger_comment_content", &row.comment.content);
-                    out["trigger_thread_id"] = json!(row.comment.thread_id);
-                    optional(&mut out, "trigger_author_type", &row.comment.author_type);
-                    optional(&mut out, "trigger_author_name", &row.comment.author_name);
-                    scope = Some(trigger);
-                    loaded_trigger = Some(row);
-                }
-            }
+        if let Some(trigger) = trigger
+            && let Ok(Some(row)) = load::comment(&db, trigger, runtime.workspace_id).await
+            && !row.deleted
+        {
+            optional(&mut out, "trigger_comment_content", &row.comment.content);
+            out["trigger_thread_id"] = json!(row.comment.thread_id);
+            optional(&mut out, "trigger_author_type", &row.comment.author_type);
+            optional(&mut out, "trigger_author_name", &row.comment.author_name);
+            scope = Some(trigger);
+            loaded_trigger = Some(row);
         }
         if !coalesced {
             if !folded.is_empty()
@@ -491,16 +488,15 @@ pub(super) async fn build_claimed_task_response(
                         source.error.as_deref().unwrap_or(""),
                     ) && source.runtime_id == Some(runtime.id)
                         && !retired
+                        && let Some(session) = source.session_id.as_deref()
                     {
-                        if let Some(session) = source.session_id.as_deref() {
-                            optional(&mut out, "prior_session_id", session);
-                            resumed_at = source.started_at;
-                            anchor = pure::new_resumed_run_anchor(
-                                &source.status,
-                                source.started_at,
-                                pure::decode_issue_state_snapshot(source.issue_snapshot.as_deref()),
-                            );
-                        }
+                        optional(&mut out, "prior_session_id", session);
+                        resumed_at = source.started_at;
+                        anchor = pure::new_resumed_run_anchor(
+                            &source.status,
+                            source.started_at,
+                            pure::decode_issue_state_snapshot(source.issue_snapshot.as_deref()),
+                        );
                     }
                     if source.session_rollout_missing {
                         out["prior_session_resume_unavailable"] = json!(true);
@@ -576,8 +572,8 @@ pub(super) async fn build_claimed_task_response(
                     out["issue_changed_fields"] = json!(changed);
                 }
             }
-            if let Some(trigger) = scope {
-                if let Ok(count) = load::count_new_comments_since(
+            if let Some(trigger) = scope
+                && let Ok(count) = load::count_new_comments_since(
                     &db,
                     id,
                     runtime.workspace_id,
@@ -586,12 +582,11 @@ pub(super) async fn build_claimed_task_response(
                     agent_id,
                 )
                 .await
-                {
-                    out["new_comments_delta_known"] = json!(true);
-                    if count > 0 {
-                        out["new_comment_count"] = json!(count);
-                        out["new_comments_since"] = json!(pure::rfc3339_secs(anchor.started_at));
-                    }
+            {
+                out["new_comments_delta_known"] = json!(true);
+                if count > 0 {
+                    out["new_comment_count"] = json!(count);
+                    out["new_comments_since"] = json!(pure::rfc3339_secs(anchor.started_at));
                 }
             }
         }
@@ -662,10 +657,10 @@ pub(super) async fn build_claimed_task_response(
         let fresh: bool = task.get("force_fresh_session");
         let revision: Option<i64> = task.get("channel_context_revision");
         if !fresh && revision.is_none() {
-            if let (Some(session), Some(bound)) = (chat.session_id.as_deref(), chat.runtime_id) {
-                if bound == runtime.id {
-                    optional(&mut out, "prior_session_id", session);
-                }
+            if let (Some(session), Some(bound)) = (chat.session_id.as_deref(), chat.runtime_id)
+                && bound == runtime.id
+            {
+                optional(&mut out, "prior_session_id", session);
             }
             if let Some(dir) = chat.work_dir.as_deref() {
                 optional(&mut out, "prior_work_dir", dir);
@@ -685,24 +680,21 @@ pub(super) async fn build_claimed_task_response(
                 "failed to load chat input",
             )
         })?;
-        if !fresh {
-            if revision.is_some()
+        if !fresh
+            && (revision.is_some()
                 || out["prior_session_id"].as_str().unwrap_or("").is_empty()
-                || out["prior_work_dir"].as_str().unwrap_or("").is_empty()
+                || out["prior_work_dir"].as_str().unwrap_or("").is_empty())
+            && let Ok(Some(prior)) = load::last_chat_task_session(&db, chat.id, revision).await
+        {
+            if out["prior_session_id"].as_str().unwrap_or("").is_empty()
+                && prior.runtime_id == Some(runtime.id)
             {
-                if let Ok(Some(prior)) = load::last_chat_task_session(&db, chat.id, revision).await
-                {
-                    if out["prior_session_id"].as_str().unwrap_or("").is_empty()
-                        && prior.runtime_id == Some(runtime.id)
-                    {
-                        optional(&mut out, "prior_session_id", prior.session_id);
-                    }
-                    if out["prior_work_dir"].as_str().unwrap_or("").is_empty() {
-                        if let Some(dir) = prior.work_dir {
-                            optional(&mut out, "prior_work_dir", dir);
-                        }
-                    }
-                }
+                optional(&mut out, "prior_session_id", prior.session_id);
+            }
+            if out["prior_work_dir"].as_str().unwrap_or("").is_empty()
+                && let Some(dir) = prior.work_dir
+            {
+                optional(&mut out, "prior_work_dir", dir);
             }
             if load::latest_chat_rollout_missing(&db, chat.id, revision)
                 .await
@@ -813,59 +805,58 @@ pub(super) async fn build_claimed_task_response(
     if task.get::<_, Option<Uuid>>("issue_id").is_none()
         && task.get::<_, Option<Uuid>>("chat_session_id").is_none()
         && task.get::<_, Option<Uuid>>("autopilot_run_id").is_none()
-    {
-        if let Some(context) = task
+        && let Some(context) = task
             .get::<_, Option<Value>>("context")
             .filter(|v| v["type"] == "quick_create")
+    {
+        for (wire, key) in [
+            ("quick_create_prompt", "prompt"),
+            ("quick_create_priority", "priority"),
+            ("quick_create_due_date", "due_date"),
+        ] {
+            optional(&mut out, wire, context[key].as_str().unwrap_or(""));
+        }
+        optional(
+            &mut out,
+            "thread_name",
+            context["prompt"].as_str().unwrap_or(""),
+        );
+        if let Some(ids) = context["attachment_ids"]
+            .as_array()
+            .filter(|ids| !ids.is_empty())
         {
-            for (wire, key) in [
-                ("quick_create_prompt", "prompt"),
-                ("quick_create_priority", "priority"),
-                ("quick_create_due_date", "due_date"),
-            ] {
-                optional(&mut out, wire, context[key].as_str().unwrap_or(""));
-            }
-            optional(
-                &mut out,
-                "thread_name",
-                context["prompt"].as_str().unwrap_or(""),
-            );
-            if let Some(ids) = context["attachment_ids"]
-                .as_array()
-                .filter(|ids| !ids.is_empty())
-            {
-                out["quick_create_attachment_ids"] = json!(ids);
-            }
-            let ws_raw = context["workspace_id"].as_str().unwrap_or("");
-            let ws = Uuid::parse_str(ws_raw).ok();
-            optional(&mut out, "workspace_id", ws_raw);
-            if ws != Some(runtime.workspace_id) {
-                let _ = service::cancel_task(state, task_id, None).await;
-                return Err(ClaimBuildFailure::unsettled(
-                    "error_workspace",
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "task workspace isolation check failed",
-                ));
-            }
-            let ws = ws.unwrap();
-            if let Some(source) = context["source_context_id"]
-                .as_str()
-                .filter(|s| !s.is_empty())
-            {
-                let source = Uuid::parse_str(source);
-                let Ok(source) = source else {
-                    return Err(build::fail_claimed_task_before_launch(
-                        state,
-                        task,
-                        "Captured source context is invalid. Start again from the branch point.",
-                        "agent_unknown",
-                        "error_source_context_invalid",
-                        StatusCode::CONFLICT,
-                        "captured source context is invalid",
-                    )
-                    .await);
-                };
-                match load::issue_source_context(&db, ws, source).await {
+            out["quick_create_attachment_ids"] = json!(ids);
+        }
+        let ws_raw = context["workspace_id"].as_str().unwrap_or("");
+        let ws = Uuid::parse_str(ws_raw).ok();
+        optional(&mut out, "workspace_id", ws_raw);
+        if ws != Some(runtime.workspace_id) {
+            let _ = service::cancel_task(state, task_id, None).await;
+            return Err(ClaimBuildFailure::unsettled(
+                "error_workspace",
+                StatusCode::INTERNAL_SERVER_ERROR,
+                "task workspace isolation check failed",
+            ));
+        }
+        let ws = ws.unwrap();
+        if let Some(source) = context["source_context_id"]
+            .as_str()
+            .filter(|s| !s.is_empty())
+        {
+            let source = Uuid::parse_str(source);
+            let Ok(source) = source else {
+                return Err(build::fail_claimed_task_before_launch(
+                    state,
+                    task,
+                    "Captured source context is invalid. Start again from the branch point.",
+                    "agent_unknown",
+                    "error_source_context_invalid",
+                    StatusCode::CONFLICT,
+                    "captured source context is invalid",
+                )
+                .await);
+            };
+            match load::issue_source_context(&db, ws, source).await {
                     Err(_) => {
                         let _ = service::requeue_task_after_claim_failure(state, task).await;
                         return Err(ClaimBuildFailure::unsettled("error_source_context_load", StatusCode::INTERNAL_SERVER_ERROR, "failed to load captured source context"));
@@ -877,72 +868,69 @@ pub(super) async fn build_claimed_task_response(
                         "Captured source context is no longer available. Start again from the branch point.", "agent_unknown",
                         "error_source_context_unavailable", StatusCode::CONFLICT, "captured source context is unavailable").await),
                 }
-            }
-            let project_id = context["project_id"]
-                .as_str()
-                .and_then(|id| Uuid::parse_str(id).ok());
-            project(
-                &mut out,
-                load::resolve_claim_project_context(&db, project_id, ws)
-                    .await
-                    .map_err(|_| project_failure())?,
-            );
-            if let Some(parent) = context["parent_issue_id"]
-                .as_str()
-                .filter(|s| !s.is_empty())
-            {
-                let mut exists = true;
-                if let Ok(parent_id) = Uuid::parse_str(parent) {
-                    match load::issue(&db, parent_id).await {
-                        Ok(Some(parent_issue)) if parent_issue.workspace_id == ws => {
-                            if let Ok(Some(workspace)) = load::workspace(&db, ws).await {
-                                optional(
-                                    &mut out,
-                                    "parent_issue_identifier",
-                                    format!("{}-{}", workspace.issue_prefix, parent_issue.number),
-                                );
-                            }
+        }
+        let project_id = context["project_id"]
+            .as_str()
+            .and_then(|id| Uuid::parse_str(id).ok());
+        project(
+            &mut out,
+            load::resolve_claim_project_context(&db, project_id, ws)
+                .await
+                .map_err(|_| project_failure())?,
+        );
+        if let Some(parent) = context["parent_issue_id"]
+            .as_str()
+            .filter(|s| !s.is_empty())
+        {
+            let mut exists = true;
+            if let Ok(parent_id) = Uuid::parse_str(parent) {
+                match load::issue(&db, parent_id).await {
+                    Ok(Some(parent_issue)) if parent_issue.workspace_id == ws => {
+                        if let Ok(Some(workspace)) = load::workspace(&db, ws).await {
+                            optional(
+                                &mut out,
+                                "parent_issue_identifier",
+                                format!("{}-{}", workspace.issue_prefix, parent_issue.number),
+                            );
                         }
-                        Ok(None)
-                            if !context["source_context_id"]
-                                .as_str()
-                                .unwrap_or("")
-                                .is_empty() =>
-                        {
-                            exists = false
-                        }
-                        _ => {}
                     }
-                }
-                if exists {
-                    optional(&mut out, "parent_issue_id", parent);
+                    Ok(None)
+                        if !context["source_context_id"]
+                            .as_str()
+                            .unwrap_or("")
+                            .is_empty() =>
+                    {
+                        exists = false
+                    }
+                    _ => {}
                 }
             }
-            if let Some(id) = context["squad_id"]
-                .as_str()
-                .and_then(|id| Uuid::parse_str(id).ok())
-            {
-                if let Ok(Some(squad)) = load::squad(&db, id, ws).await {
-                    if squad.leader_id == Some(agent_id) {
-                        let briefing = squad_briefing::build_leader_briefing(
-                            &**db,
-                            &squad_briefing::Squad {
-                                id: squad.id,
-                                name: squad.name.clone(),
-                                leader_id: agent_id,
-                                instructions: squad.instructions,
-                            },
-                            false,
-                            LeaderWorkflow::None,
-                            capability(headers, "cli-comment-steer-v1"),
-                        )
-                        .await;
-                        append_briefing(&mut out["agent"], &briefing);
-                        out["squad_id"] = json!(squad.id);
-                        optional(&mut out, "squad_name", squad.name);
-                    }
-                }
+            if exists {
+                optional(&mut out, "parent_issue_id", parent);
             }
+        }
+        if let Some(id) = context["squad_id"]
+            .as_str()
+            .and_then(|id| Uuid::parse_str(id).ok())
+            && let Ok(Some(squad)) = load::squad(&db, id, ws).await
+            && squad.leader_id == Some(agent_id)
+        {
+            let briefing = squad_briefing::build_leader_briefing(
+                &**db,
+                &squad_briefing::Squad {
+                    id: squad.id,
+                    name: squad.name.clone(),
+                    leader_id: agent_id,
+                    instructions: squad.instructions,
+                },
+                false,
+                LeaderWorkflow::None,
+                capability(headers, "cli-comment-steer-v1"),
+            )
+            .await;
+            append_briefing(&mut out["agent"], &briefing);
+            out["squad_id"] = json!(squad.id);
+            optional(&mut out, "squad_name", squad.name);
         }
     }
     if out["workspace_id"] != json!(runtime.workspace_id) {
@@ -1012,14 +1000,14 @@ pub(super) async fn build_claimed_task_response(
             reason,
         ));
     }
-    if capability(headers, "joined-wakeups-v1") {
-        if let Some(joined) = daemon_claim_join::join_waiting_wakeups(state, task).await {
-            optional(
-                &mut out,
-                "wakeup_joined",
-                daemon_claim_join::joined_wakeup_notes(Some(&joined)),
-            );
-        }
+    if capability(headers, "joined-wakeups-v1")
+        && let Some(joined) = daemon_claim_join::join_waiting_wakeups(state, task).await
+    {
+        optional(
+            &mut out,
+            "wakeup_joined",
+            daemon_claim_join::joined_wakeup_notes(Some(&joined)),
+        );
     }
     super::p0_tasks::hydrate_attribution(&db, std::slice::from_mut(&mut out)).await;
     if let Some(originator) = out["attribution"]["originator"].as_object() {
@@ -1047,14 +1035,17 @@ pub(super) async fn build_claimed_task_response(
 }
 
 fn fresh_retry_workdir(out: &mut Value, task: &Row, headers: &HeaderMap) {
-    if capability(headers, "checkout-keeps-work-v1") {
-        if let Some(dir) = task.get::<_, Option<String>>("work_dir") {
-            optional(out, "prior_work_dir", dir);
-        }
+    if capability(headers, "checkout-keeps-work-v1")
+        && let Some(dir) = task.get::<_, Option<String>>("work_dir")
+    {
+        optional(out, "prior_work_dir", dir);
     }
     out["prior_session_resume_unavailable"] = json!(true);
 }
 
+/// Go's `finalizeClaimDelivery` receives the same eight values; the token,
+/// receipt list and snapshot all travel together through the claim.
+#[allow(clippy::too_many_arguments)]
 pub(super) async fn finalize_claim_delivery(
     state: &ApiState,
     task: &Row,

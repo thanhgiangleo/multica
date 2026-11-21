@@ -114,39 +114,43 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     scheduler.register(scheduler::prune_search_index_changes())?;
     scheduler.register(scheduler::issue_wakeup_job())?;
     let (stop_scheduler, scheduler_shutdown) = tokio::sync::watch::channel(false);
-    let sweep_task = tokio::spawn(multica_server::api::p0_daemon_outcomes::run_runtime_sweeper(
-        pool.clone(),
-        multica_server::api::p0_daemon_outcomes::runtime_reconnect_grace(),
-        scheduler_shutdown.clone(),
-    ));
-    let scheduler_task = tokio::spawn(scheduler.run(scheduler_shutdown));
+    let sweep_task = tokio::spawn(
+        multica_server::api::p0_daemon_outcomes::run_runtime_sweeper(
+            pool.clone(),
+            multica_server::api::p0_daemon_outcomes::runtime_reconnect_grace(),
+            scheduler_shutdown.clone(),
+        ),
+    );
+    let scheduler_task = tokio::spawn(scheduler.run(scheduler_shutdown.clone()));
     println!(
         "rust backend read slice listening on {} (not full backend)",
         listener.local_addr()?
     );
+    let state = ApiState::new(pool, secret.into_bytes())
+        .with_realtime_token(std::env::var("REALTIME_METRICS_TOKEN").ok())
+        .with_local_inbox_events()
+        .with_local_pin_events()
+        .with_local_p0_agent_events()
+        .with_local_p0_task_events()
+        .with_local_daemon_wake()
+        .with_invitation_admission_from_env()
+        .with_session_config(session)
+        .with_workspace_integrations(
+            multica_server::api::workspace_integrations::IntegrationConfig::from_env(),
+        )
+        .with_cloud_billing(
+            multica_server::api::cloud_billing::CloudRuntimeConfig::from_env(),
+            multica_server::api::cloud_billing::CloudBillingFlagProvider::from_env(),
+        )
+        .with_cloud_url(&std::env::var("MULTICA_CLOUD_URL").unwrap_or_default())?;
+    // Go registers its subscriber listeners before the server starts serving, so
+    // no committed comment can be published before something is listening.
+    let subscriber_listener =
+        multica_server::api::comment_subscriber_listener::spawn(&state, scheduler_shutdown.clone());
     let served = axum::serve(
         listener,
-        router_with_api(
-            health,
-            ApiState::new(pool, secret.into_bytes())
-                .with_realtime_token(std::env::var("REALTIME_METRICS_TOKEN").ok())
-                .with_local_inbox_events()
-                .with_local_pin_events()
-                .with_local_p0_agent_events()
-                .with_local_p0_task_events()
-                .with_local_daemon_wake()
-                .with_invitation_admission_from_env()
-                .with_session_config(session)
-                .with_workspace_integrations(
-                    multica_server::api::workspace_integrations::IntegrationConfig::from_env(),
-                )
-                .with_cloud_billing(
-                    multica_server::api::cloud_billing::CloudRuntimeConfig::from_env(),
-                    multica_server::api::cloud_billing::CloudBillingFlagProvider::from_env(),
-                )
-                .with_cloud_url(&std::env::var("MULTICA_CLOUD_URL").unwrap_or_default())?,
-        )
-        .into_make_service_with_connect_info::<std::net::SocketAddr>(),
+        router_with_api(health, state)
+            .into_make_service_with_connect_info::<std::net::SocketAddr>(),
     )
     .with_graceful_shutdown(shutdown_signal())
     .await;
@@ -156,6 +160,9 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     }
     if let Err(error) = sweep_task.await {
         eprintln!("runtime sweeper join: {error}");
+    }
+    if let Err(error) = subscriber_listener.await {
+        eprintln!("comment subscriber listener join: {error}");
     }
     served?;
     Ok(())

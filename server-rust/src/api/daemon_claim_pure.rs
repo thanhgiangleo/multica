@@ -136,6 +136,7 @@ pub(super) fn trigger_comment_edited_since(
 
 /// Issue-annotation scope for counting comments added since a resumed run.
 #[derive(Clone, Debug)]
+#[allow(dead_code)] // Ported with the resumed-run counter; its caller is not wired yet.
 pub(super) struct CommentCountScope {
     pub anchor_id: uuid::Uuid,
     pub issue_id: uuid::Uuid,
@@ -334,6 +335,7 @@ pub(super) fn disabled_runtime_skills_for(
 }
 
 /// Go's `uuidStringsOrEmpty`: a marshalled empty slice is `[]`, never `null`.
+#[allow(dead_code)] // Kept for the claim response field that will marshal through it.
 pub(super) fn uuid_strings_or_empty(ids: &[uuid::Uuid]) -> Value {
     Value::Array(ids.iter().map(|id| json!(id)).collect())
 }
@@ -451,12 +453,12 @@ pub(super) fn format_legacy_comment_bundle(comments: &[ClaimComment]) -> String 
 /// budget. The returned ids preserve the INPUT order, and an over-budget comment
 /// stops admission rather than being skipped, so the daemon never sees a
 /// chronological gap.
-pub(super) fn select_comment_delivery<'a>(
-    comments: &'a [ClaimComment],
+pub(super) fn select_comment_delivery(
+    comments: &[ClaimComment],
     trigger_id: Option<uuid::Uuid>,
     legacy: bool,
     limit: usize,
-) -> Vec<&'a ClaimComment> {
+) -> Vec<&ClaimComment> {
     if comments.is_empty() {
         return Vec::new();
     }
@@ -494,6 +496,7 @@ pub(super) fn select_comment_delivery<'a>(
 /// RFC3339 with nanosecond precision, matching Go's `time.RFC3339Nano` for a
 /// generation stamp. Second-resolution display timestamps cannot distinguish
 /// claims reclaimed inside the same second.
+#[allow(dead_code)] // Generation stamps move to nanosecond precision with the caller.
 pub(super) fn rfc3339_nano(value: DateTime<Utc>) -> String {
     value.to_rfc3339_opts(SecondsFormat::Nanos, true)
 }
@@ -639,10 +642,20 @@ mod tests {
             "resource_type": "local_directory",
             "resource_ref": {"local_path": "/home/u/repo", "execution_mode": "worktree", "daemon_id": "d1"}
         });
-        assert!(worktree_claim_block_reason(&[resource.clone()], None, false).is_none());
-        assert!(worktree_claim_block_reason(&[resource.clone()], Some(""), false).is_none());
-        assert!(worktree_claim_block_reason(&[resource.clone()], Some("d1"), true).is_none());
-        assert!(worktree_claim_block_reason(&[resource.clone()], Some("other"), false).is_none());
+        assert!(
+            worktree_claim_block_reason(std::slice::from_ref(&resource), None, false).is_none()
+        );
+        assert!(
+            worktree_claim_block_reason(std::slice::from_ref(&resource), Some(""), false).is_none()
+        );
+        assert!(
+            worktree_claim_block_reason(std::slice::from_ref(&resource), Some("d1"), true)
+                .is_none()
+        );
+        assert!(
+            worktree_claim_block_reason(std::slice::from_ref(&resource), Some("other"), false)
+                .is_none()
+        );
         let reason = worktree_claim_block_reason(&[resource], Some("d1"), false).unwrap();
         assert!(reason.contains("/home/u/repo"));
         assert!(reason.contains("worktree"));
@@ -777,7 +790,7 @@ mod tests {
         // A missing trigger falls back to the newest loaded comment.
         let none = select_comment_delivery(&list, None, false, 0);
         assert!(none.iter().any(|c| c.id == ids[3]));
-        assert!(select_comment_delivery(&list, None, false, 0).len() > 0);
+        assert!(!select_comment_delivery(&list, None, false, 0).is_empty());
         // Empty input is empty output, not a panic.
         assert!(select_comment_delivery(&[], None, false, 10).is_empty());
     }

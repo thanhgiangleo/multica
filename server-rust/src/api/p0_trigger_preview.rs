@@ -21,7 +21,6 @@ use axum::{
     routing::post,
 };
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::sync::Arc;
 use uuid::Uuid;
 
@@ -338,6 +337,7 @@ async fn preview(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json::json;
     #[test]
     fn payload_sanitization_and_go_shape() {
         assert_eq!(

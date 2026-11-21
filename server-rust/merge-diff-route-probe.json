@@ -3790,7 +3790,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -3818,7 +3818,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -3846,7 +3846,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -4013,8 +4013,8 @@
    "application/json"
   ],
   "rust": [
-   404,
-   "text/plain"
+   403,
+   "application/json"
   ]
  },
  {
@@ -4462,7 +4462,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -6281,8 +6281,8 @@
    ""
   ],
   "rust": [
-   404,
-   "application/json"
+   204,
+   ""
   ]
  },
  {
@@ -6309,8 +6309,8 @@
    "application/json"
   ],
   "rust": [
-   405,
-   ""
+   400,
+   "application/json"
   ]
  },
  {
@@ -6730,7 +6730,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -7290,7 +7290,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -7402,7 +7402,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -7934,7 +7934,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -10370,7 +10370,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -10454,7 +10454,7 @@
   ],
   "rust": [
    404,
-   "text/plain"
+   "application/json"
   ]
  },
  {
@@ -10481,8 +10481,8 @@
    "application/json"
   ],
   "rust": [
-   404,
-   "text/plain"
+   409,
+   "application/json"
   ]
  },
  {

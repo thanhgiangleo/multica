@@ -2,7 +2,7 @@
 #[path = "issue_write_wakeup_condition.rs"]
 mod condition;
 #[path = "issue_write_cron.rs"]
-pub(super) mod cron;
+pub(crate) mod cron;
 #[path = "issue_write_replace_wakeup.rs"]
 mod replace;
 use super::{

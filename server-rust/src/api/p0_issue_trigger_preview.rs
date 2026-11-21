@@ -208,6 +208,9 @@ async fn actor_context(
     ("agent".into(), task.agent, originator, Some(task.task))
 }
 
+/// Go's `canAccessAgent` takes the same eight values; the actor pair and the
+/// workspace are part of its signature, not incidental arguments.
+#[allow(clippy::too_many_arguments)]
 async fn can_access_agent(
     db: &impl GenericClient,
     agent: Uuid,

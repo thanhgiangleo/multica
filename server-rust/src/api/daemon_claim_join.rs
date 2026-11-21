@@ -209,7 +209,7 @@ async fn try_join(state: &ApiState, task: &Row, original: Vec<u8>) -> Join<Vec<u
     let stored: Stored = serde_json::from_slice(&original).unwrap_or_default();
     let mut db = state.pool.get().await.map_err(|_| JoinError::Database)?;
     // Read without locks; every rule is locked and rechecked below.
-    let candidates: Vec<Uuid> = (&**db)
+    let candidates: Vec<Uuid> = db
         .query(
             "SELECT w.id FROM issue_wakeup w WHERE w.issue_id=$1 AND (w.agent_id=$2 OR w.system_rule IS NOT NULL) AND w.disabled_at IS NULL AND EXISTS(SELECT 1 FROM issue_wakeup_receipt r WHERE r.wakeup_id=w.id AND r.revision=w.revision AND r.processed_at IS NULL AND (w.condition IS NULL OR r.event_type IN ('condition.met','wakeup.timeout','wakeup.manual'))) ORDER BY w.created_at,w.id",
             &[&issue_id, &agent_id],
@@ -700,17 +700,15 @@ async fn acknowledged_by_self(
         None => return Ok(false),
     };
     let mut own_rule = wakeup.system_rule.is_some();
-    if !own_rule {
-        if let Some(source) = wakeup.source_task_id {
-            own_rule = db
-                .query_opt(
-                    "SELECT agent_id FROM agent_task_queue WHERE id=$1",
-                    &[&source],
-                )
-                .await
-                .map_err(|_| JoinError::Database)?
-                .is_some_and(|row| row.get::<_, Uuid>(0) == task_agent);
-        }
+    if !own_rule && let Some(source) = wakeup.source_task_id {
+        own_rule = db
+            .query_opt(
+                "SELECT agent_id FROM agent_task_queue WHERE id=$1",
+                &[&source],
+            )
+            .await
+            .map_err(|_| JoinError::Database)?
+            .is_some_and(|row| row.get::<_, Uuid>(0) == task_agent);
     }
     let mut seen: HashSet<Uuid> = HashSet::new();
     let mut causes: Vec<Uuid> = Vec::new();

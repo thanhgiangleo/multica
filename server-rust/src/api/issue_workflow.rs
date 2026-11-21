@@ -17,7 +17,9 @@ pub(super) const HANDLER_PROJECT_LEAD: &str = "project_lead";
 pub(super) const HANDLER_CREATOR: &str = "creator";
 
 pub(super) const DEFAULT_NAME: &str = "Default";
-/// Where a new issue lands unless its creator picks a status.
+/// Where a new issue lands unless its creator picks a status. Go names the
+/// same default; the create path passes the literal today.
+#[allow(dead_code)]
 pub(super) const START_STATUS: &str = "todo";
 
 const FIXED_HEAD: [&str; 2] = ["backlog", "todo"];
@@ -35,7 +37,8 @@ pub(super) fn is_fixed(key: &str) -> bool {
 }
 
 /// Entering the status can hand an issue off. Parking, finishing and cancelling
-/// never reassign.
+/// never reassign. Kept alongside `Step::hands_off` for the Go parity table.
+#[allow(dead_code)]
 pub(super) fn accepts_handoff(key: &str) -> bool {
     !matches!(key, "backlog" | "done" | "cancelled")
 }
@@ -169,10 +172,7 @@ impl Definition {
         let mut passed: Vec<String> = Vec::new();
         let mut seen = vec![key.to_string()];
         let mut at = key.to_string();
-        loop {
-            let Some(next) = self.next_status(&at) else {
-                break;
-            };
+        while let Some(next) = self.next_status(&at) {
             if seen.contains(&next) {
                 break;
             }
@@ -758,9 +758,12 @@ fn brief_text(value: &str) -> String {
     for ch in value.replace("\r\n", "\n").chars() {
         if ch == '\n' || ch == '\t' {
             out.push(ch);
-        } else if ch < ' ' || ch == '\u{7f}' || ('\u{80}'..'\u{a0}').contains(&ch) {
-            continue;
-        } else if ch == '\u{2028}' || ch == '\u{2029}' {
+        } else if ch < ' '
+            || ch == '\u{7f}'
+            || ('\u{80}'..'\u{a0}').contains(&ch)
+            || ch == '\u{2028}'
+            || ch == '\u{2029}'
+        {
             continue;
         } else {
             out.push(ch);

@@ -141,6 +141,9 @@ impl ClaimBuildFailure {
 #[derive(Debug)]
 pub(super) struct ClaimDeliveryAuthz {
     pub reason: &'static str,
+    /// Go's struct carries the detail alongside the reason; today's response
+    /// maps only the reason, but the field stays to keep the row shape aligned.
+    #[allow(dead_code)]
     pub detail: &'static str,
     /// The agent owner the gate read under lock, so the caller can pick between
     /// "agent has no owner" and "agent and runtime have different owners".
@@ -154,6 +157,9 @@ pub(super) struct ClaimDeliveryAuthz {
 #[derive(Debug)]
 pub(super) enum FinalizeClaimError {
     Authz(ClaimDeliveryAuthz),
+    /// The payload is carried so the variant matches Go's error type, but the
+    /// caller currently maps it only to a generic 500.
+    #[allow(dead_code)]
     Api(ApiError),
 }
 
@@ -284,10 +290,14 @@ pub(super) struct TaskToken<'a> {
     pub trigger_comment_id: Option<Uuid>,
     /// Kept for the caller so the same raw value reaches the response; never
     /// stored.
+    #[allow(dead_code)]
     pub raw: &'a str,
 }
 
 impl TaskToken<'_> {
+    /// Go exposes the raw value through the struct; the field is public here,
+    /// so the accessor exists only to mirror that surface.
+    #[allow(dead_code)]
     pub fn raw(&self) -> &str {
         self.raw
     }

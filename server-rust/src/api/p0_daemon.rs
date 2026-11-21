@@ -145,27 +145,31 @@ async fn recover_orphans(
             }
         }
         let workspace = runtime.workspace_id;
-        if !retry_pending {
-            if let Some(issue_id) = issue {
-                let trigger: Option<Uuid> = task.get("trigger_comment_id");
-                if let Err(err) = db.execute(
+        if !retry_pending && let Some(issue_id) = issue {
+            let trigger: Option<Uuid> = task.get("trigger_comment_id");
+            if let Err(err) = db.execute(
                     "INSERT INTO comment(id,issue_id,workspace_id,author_type,author_id,content,type,parent_id,source_task_id) VALUES ($1,$2,$3,'agent',$4,$5,'system',$6,$7)",
                     &[&Uuid::now_v7(),&issue_id,&workspace,&agent,&"daemon restarted while task was in flight",&trigger,&id],
                 ).await { eprintln!("failed to comment on recovered task {id}: {err}"); }
-            }
         }
-        if let Some(issue_id) = issue {
-            if !retried_issues.contains(&issue_id) && processed_issues.insert(issue_id) {
-                let reset = db.execute(
+        if let Some(issue_id) = issue
+            && !retried_issues.contains(&issue_id)
+            && processed_issues.insert(issue_id)
+        {
+            let reset = db.execute(
                     "UPDATE issue SET status='todo',updated_at=now() WHERE id=$1 AND workspace_id=$2 AND status='in_progress' AND NOT EXISTS (SELECT 1 FROM agent_task_queue WHERE issue_id=$1 AND status IN ('queued','dispatched','running','waiting_local_directory'))",
                     &[&issue_id,&workspace],
                 ).await;
-                match reset {
-                    Ok(1) => state.events.publish(system_event("issue:updated",workspace,None,None,
-                        json!({"issue_id":issue_id,"status":"todo","previous_status":"in_progress"}))),
-                    Err(err) => eprintln!("failed to reset recovered issue {issue_id}: {err}"),
-                    _ => {},
-                }
+            match reset {
+                Ok(1) => state.events.publish(system_event(
+                    "issue:updated",
+                    workspace,
+                    None,
+                    None,
+                    json!({"issue_id":issue_id,"status":"todo","previous_status":"in_progress"}),
+                )),
+                Err(err) => eprintln!("failed to reset recovered issue {issue_id}: {err}"),
+                _ => {}
             }
         }
         state.events.publish(system_event("task:failed",workspace,task.get("chat_session_id"),None,

@@ -128,6 +128,10 @@ impl HubState {
     }
 }
 
+/// Go's `Hub` exposes this whole broadcast surface; several of the frames are
+/// not emitted from live lib code yet, and their call sites sit behind routers
+/// this lane does not switch on. Keep the methods so the Go shape stays intact.
+#[allow(dead_code)]
 impl Hub {
     fn register(
         &self,
@@ -397,10 +401,18 @@ fn runtime_ids(uri: &Uri) -> Vec<String> {
     ids
 }
 
-fn runtime_binding_allowed(identity: &DaemonIdentity, daemon: Option<&str>, owner: Option<Uuid>) -> bool {
+fn runtime_binding_allowed(
+    identity: &DaemonIdentity,
+    daemon: Option<&str>,
+    owner: Option<Uuid>,
+) -> bool {
     match identity {
         DaemonIdentity::User(user) => owner == Some(*user),
-        DaemonIdentity::Bound { daemon: expected, owner: token_owner, .. } => {
+        DaemonIdentity::Bound {
+            daemon: expected,
+            owner: token_owner,
+            ..
+        } => {
             daemon == Some(expected.as_str())
                 && !expected.trim().is_empty()
                 && (expected.starts_with("qoder-managed-")
@@ -825,9 +837,21 @@ mod tests {
             owner: Some(owner),
             hash: String::new(),
         };
-        assert!(runtime_binding_allowed(&bound, Some("synthetic-daemon"), Some(owner)));
-        assert!(!runtime_binding_allowed(&bound, Some("synthetic-daemon"), Some(other)));
-        assert!(!runtime_binding_allowed(&bound, Some("other-daemon"), Some(owner)));
+        assert!(runtime_binding_allowed(
+            &bound,
+            Some("synthetic-daemon"),
+            Some(owner)
+        ));
+        assert!(!runtime_binding_allowed(
+            &bound,
+            Some("synthetic-daemon"),
+            Some(other)
+        ));
+        assert!(!runtime_binding_allowed(
+            &bound,
+            Some("other-daemon"),
+            Some(owner)
+        ));
         assert!(!runtime_binding_allowed(&bound, None, Some(owner)));
     }
 

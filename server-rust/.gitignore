@@ -7,3 +7,5 @@
 .test-migrations-rust/
 *.pyc
 .DS_Store
+.zbsi60-latency/
+.zbsi60-throughput/

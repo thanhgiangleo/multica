@@ -230,5 +230,5 @@ async fn squad_evaluation_checks_task_provenance_and_live_leadership() {
         )
     );
     // Tenant-scoped lookup hides the foreign task before ownership or issue diagnostics.
-    assert!(db.query_one("SELECT EXISTS(SELECT 1 FROM agent_task_queue q JOIN agent a ON a.id=q.agent_id WHERE q.id=$1 AND a.workspace_id=$2)", &[&foreign_task,&ws]).await.unwrap().get::<_,bool>(0) == false);
+    assert!(!db.query_one("SELECT EXISTS(SELECT 1 FROM agent_task_queue q JOIN agent a ON a.id=q.agent_id WHERE q.id=$1 AND a.workspace_id=$2)", &[&foreign_task,&ws]).await.unwrap().get::<_,bool>(0));
 }

@@ -8,8 +8,16 @@ use uuid::Uuid;
 async fn database() -> Pool {
     let url = std::env::var("RUST_API_TEST_DATABASE_URL").expect("disposable PG URL required");
     let config = Config::from_str(&url).unwrap();
-    assert!(config.get_dbname().unwrap_or_default().starts_with("multica_"));
-    let pool = Pool::builder(Manager::new(config, NoTls)).max_size(8).build().unwrap();
+    assert!(
+        config
+            .get_dbname()
+            .unwrap_or_default()
+            .starts_with("multica_")
+    );
+    let pool = Pool::builder(Manager::new(config, NoTls))
+        .max_size(8)
+        .build()
+        .unwrap();
     pool.get().await.unwrap().batch_execute("\
         CREATE TABLE agent_runtime (id uuid PRIMARY KEY, status text NOT NULL, last_seen_at timestamptz, updated_at timestamptz NOT NULL DEFAULT now());\
         CREATE TABLE agent_task_queue (id uuid PRIMARY KEY, runtime_id uuid NOT NULL, status text NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), completed_at timestamptz, error text, failure_reason text, wait_reason text, delivered_comment_ids uuid[] NOT NULL DEFAULT '{}');\
@@ -33,7 +41,13 @@ async fn task(pool: &Pool, runtime: Uuid, status: &str, receipt: Option<Uuid>) -
     id
 }
 async fn status(pool: &Pool, id: Uuid) -> String {
-    pool.get().await.unwrap().query_one("SELECT status FROM agent_task_queue WHERE id=$1", &[&id]).await.unwrap().get(0)
+    pool.get()
+        .await
+        .unwrap()
+        .query_one("SELECT status FROM agent_task_queue WHERE id=$1", &[&id])
+        .await
+        .unwrap()
+        .get(0)
 }
 
 #[tokio::test]
@@ -44,17 +58,39 @@ async fn stale_recheck_grace_and_atomic_terminal_settlement() {
     let refreshed = runtime(&pool, "online", 151, true).await;
     let fresh = runtime(&pool, "online", 149, true).await;
     let db = pool.get().await.unwrap();
-    db.execute("UPDATE agent_runtime SET last_seen_at=now() WHERE id=$1", &[&refreshed]).await.unwrap();
+    db.execute(
+        "UPDATE agent_runtime SET last_seen_at=now() WHERE id=$1",
+        &[&refreshed],
+    )
+    .await
+    .unwrap();
     drop(db);
     // Candidate ids came from an earlier SELECT; heartbeat wins before UPDATE.
-    assert_eq!(mark_stale_runtime_candidates(&pool, &[refreshed]).await.unwrap(), 0);
+    assert_eq!(
+        mark_stale_runtime_candidates(&pool, &[refreshed])
+            .await
+            .unwrap(),
+        0
+    );
     let first = sweep_runtime_once(&pool, 10800).await.unwrap();
     assert_eq!(first.offline_runtimes, 1);
     assert_eq!(first.failed_tasks, 0);
     let db = pool.get().await.unwrap();
-    assert_eq!(db.query_one("SELECT status FROM agent_runtime WHERE id=$1", &[&stale]).await.unwrap().get::<_, String>(0), "offline");
+    assert_eq!(
+        db.query_one("SELECT status FROM agent_runtime WHERE id=$1", &[&stale])
+            .await
+            .unwrap()
+            .get::<_, String>(0),
+        "offline"
+    );
     for id in [refreshed, fresh] {
-        assert_eq!(db.query_one("SELECT status FROM agent_runtime WHERE id=$1", &[&id]).await.unwrap().get::<_, String>(0), "online");
+        assert_eq!(
+            db.query_one("SELECT status FROM agent_runtime WHERE id=$1", &[&id])
+                .await
+                .unwrap()
+                .get::<_, String>(0),
+            "online"
+        );
     }
     drop(db);
 
@@ -74,45 +110,100 @@ async fn stale_recheck_grace_and_atomic_terminal_settlement() {
     let planned_only = Uuid::new_v4();
     let with_receipt = task(&pool, old, "running", Some(delivered)).await;
     let db = pool.get().await.unwrap();
-    for (id, current_status) in [(failed,"pending"),(dispatched,"delivering"),(with_receipt,"pending")] {
-        db.execute("INSERT INTO task_supplement(task_id,status) VALUES($1,$2)", &[&id,&current_status]).await.unwrap();
+    for (id, current_status) in [
+        (failed, "pending"),
+        (dispatched, "delivering"),
+        (with_receipt, "pending"),
+    ] {
+        db.execute(
+            "INSERT INTO task_supplement(task_id,status) VALUES($1,$2)",
+            &[&id, &current_status],
+        )
+        .await
+        .unwrap();
     }
-    for (id, source) in [(delivered,failed),(planned_only,failed)] {
+    for (id, source) in [(delivered, failed), (planned_only, failed)] {
         db.execute("INSERT INTO comment(id,author_type,type,source_task_id) VALUES($1,'system','progress_update',$2)", &[&id,&source]).await.unwrap();
     }
     drop(db);
     let second = sweep_runtime_once(&pool, 10800).await.unwrap();
     assert_eq!(second.failed_tasks, 4);
-    for id in [failed,dispatched,waiting,with_receipt] {
-        assert_eq!(status(&pool,id).await,"failed");
+    for id in [failed, dispatched, waiting, with_receipt] {
+        assert_eq!(status(&pool, id).await, "failed");
         let db = pool.get().await.unwrap();
         let row=db.query_one("SELECT error,failure_reason,completed_at IS NOT NULL,wait_reason FROM agent_task_queue WHERE id=$1", &[&id]).await.unwrap();
-        assert_eq!(row.get::<_,String>(0),"runtime went offline");
-        assert_eq!(row.get::<_,String>(1),"runtime_offline");
-        assert!(row.get::<_,bool>(2));
-        assert_eq!(row.get::<_,Option<String>>(3),None);
+        assert_eq!(row.get::<_, String>(0), "runtime went offline");
+        assert_eq!(row.get::<_, String>(1), "runtime_offline");
+        assert!(row.get::<_, bool>(2));
+        assert_eq!(row.get::<_, Option<String>>(3), None);
     }
-    for (id, expected) in [(within_grace,"running"),(reconnected,"running"),(queued,"queued"),(completed,"completed")] { assert_eq!(status(&pool,id).await,expected); }
-    let db=pool.get().await.unwrap();
-    for id in [failed,dispatched,with_receipt] {
-        let row=db.query_one("SELECT status,failure_reason FROM task_supplement WHERE task_id=$1", &[&id]).await.unwrap();
-        assert_eq!(row.get::<_,String>(0),"failed");
-        assert_eq!(row.get::<_,String>(1),"turn_ended");
+    for (id, expected) in [
+        (within_grace, "running"),
+        (reconnected, "running"),
+        (queued, "queued"),
+        (completed, "completed"),
+    ] {
+        assert_eq!(status(&pool, id).await, expected);
     }
-    assert!(db.query_one("SELECT recovery_settled_at IS NOT NULL FROM comment WHERE id=$1", &[&delivered]).await.unwrap().get::<_,bool>(0));
-    assert!(!db.query_one("SELECT recovery_settled_at IS NOT NULL FROM comment WHERE id=$1", &[&planned_only]).await.unwrap().get::<_,bool>(0));
+    let db = pool.get().await.unwrap();
+    for id in [failed, dispatched, with_receipt] {
+        let row = db
+            .query_one(
+                "SELECT status,failure_reason FROM task_supplement WHERE task_id=$1",
+                &[&id],
+            )
+            .await
+            .unwrap();
+        assert_eq!(row.get::<_, String>(0), "failed");
+        assert_eq!(row.get::<_, String>(1), "turn_ended");
+    }
+    assert!(
+        db.query_one(
+            "SELECT recovery_settled_at IS NOT NULL FROM comment WHERE id=$1",
+            &[&delivered]
+        )
+        .await
+        .unwrap()
+        .get::<_, bool>(0)
+    );
+    assert!(
+        !db.query_one(
+            "SELECT recovery_settled_at IS NOT NULL FROM comment WHERE id=$1",
+            &[&planned_only]
+        )
+        .await
+        .unwrap()
+        .get::<_, bool>(0)
+    );
     drop(db);
-    assert_eq!(sweep_runtime_once(&pool,10800).await.unwrap().failed_tasks,0);
+    assert_eq!(
+        sweep_runtime_once(&pool, 10800).await.unwrap().failed_tasks,
+        0
+    );
 
     // Settlement failure must abort the failed status, not leave a terminal
     // receipt that the recovery outbox can no longer replay.
-    let rollback_task=task(&pool,old,"running",None).await;
-    let db=pool.get().await.unwrap();
-    db.execute("INSERT INTO task_supplement(task_id,status) VALUES($1,'pending')", &[&rollback_task]).await.unwrap();
+    let rollback_task = task(&pool, old, "running", None).await;
+    let db = pool.get().await.unwrap();
+    db.execute(
+        "INSERT INTO task_supplement(task_id,status) VALUES($1,'pending')",
+        &[&rollback_task],
+    )
+    .await
+    .unwrap();
     db.batch_execute("DROP TABLE comment").await.unwrap();
     drop(db);
-    assert!(sweep_runtime_once(&pool,10800).await.is_err());
-    assert_eq!(status(&pool,rollback_task).await,"running");
-    let db=pool.get().await.unwrap();
-    assert_eq!(db.query_one("SELECT status FROM task_supplement WHERE task_id=$1", &[&rollback_task]).await.unwrap().get::<_,String>(0),"pending");
+    assert!(sweep_runtime_once(&pool, 10800).await.is_err());
+    assert_eq!(status(&pool, rollback_task).await, "running");
+    let db = pool.get().await.unwrap();
+    assert_eq!(
+        db.query_one(
+            "SELECT status FROM task_supplement WHERE task_id=$1",
+            &[&rollback_task]
+        )
+        .await
+        .unwrap()
+        .get::<_, String>(0),
+        "pending"
+    );
 }

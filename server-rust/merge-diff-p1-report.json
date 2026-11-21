@@ -10,329 +10,329 @@
         "case": "workspace-patch-empty-name",
         "passed": true,
         "status": 400,
-        "elapsed_ms": 5.926788318902254,
+        "elapsed_ms": 6.939294282346964,
         "contract_sha256": "61a43c725473d62c5e1080bf6bf3b340a2a908dcb6f3ee13817ad07c7594ca1e"
       },
       {
         "case": "workspace-patch-invalid-prefix",
         "passed": true,
         "status": 400,
-        "elapsed_ms": 5.272247828543186,
+        "elapsed_ms": 6.55657984316349,
         "contract_sha256": "ec6c39664e6667861b42dd8f71a5abc07024b12f65f88e388770f623fbba25d1"
       },
       {
         "case": "workspace-patch-rename",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 7.122998591512442,
+        "elapsed_ms": 7.525480352342129,
         "contract_sha256": "916a9734c05c259aa60a1fff9bc1934831b062ce1c61172ca372acadb0935547"
       },
       {
         "case": "github-connect-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 3.842837642878294,
+        "elapsed_ms": 3.5508107393980026,
         "contract_sha256": "e37b3c5301f508ec077de860085330830946571d901d8408a7dbc2c44d2bf827"
       },
       {
         "case": "github-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 4.241666290909052,
+        "elapsed_ms": 3.9802570827305317,
         "contract_sha256": "67f73de1dd11be6898cc5a10fc98aa0a740b0a7a67057a9f6859fe348d2d3afd"
       },
       {
         "case": "github-repositories-missing",
         "passed": true,
         "status": 404,
-        "elapsed_ms": 4.486852791160345,
+        "elapsed_ms": 3.6010160110890865,
         "contract_sha256": "b1f50e7401d01b6d0ea5082542830bc2da83e01b7c5afd97f58e38e79cee4991"
       },
       {
         "case": "github-revoke-missing",
         "passed": true,
         "status": 204,
-        "elapsed_ms": 4.0211440064013,
+        "elapsed_ms": 3.82820563390851,
         "contract_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
       },
       {
         "case": "vcs-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 4.017591010779142,
+        "elapsed_ms": 3.803206142038107,
         "contract_sha256": "4f3641a8ec0aedbb0e4687233d7c690162fdc8eb59f6a4d5b9da7f8d1be37e0b"
       },
       {
         "case": "vcs-create-disabled",
         "passed": true,
         "status": 404,
-        "elapsed_ms": 3.9746351540088654,
+        "elapsed_ms": 3.8145137950778008,
         "contract_sha256": "41f10a3da7386d7de3d1cf08f5b35ab54eff8d5033d2c51e1a4f7e92d655e2b3"
       },
       {
         "case": "vcs-delete-disabled",
         "passed": true,
         "status": 204,
-        "elapsed_ms": 4.544715862721205,
+        "elapsed_ms": 4.771805834025145,
         "contract_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
       },
       {
         "case": "vcs-rotate-disabled",
         "passed": true,
         "status": 404,
-        "elapsed_ms": 4.174189176410437,
+        "elapsed_ms": 4.220452159643173,
         "contract_sha256": "41f10a3da7386d7de3d1cf08f5b35ab54eff8d5033d2c51e1a4f7e92d655e2b3"
       },
       {
         "case": "dingtalk-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 3.8611991330981255,
+        "elapsed_ms": 4.00145910680294,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "dingtalk-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.892498090863228,
+        "elapsed_ms": 3.595526795834303,
         "contract_sha256": "a1e17447172472b25fb613157daebe33ab33d780e00f624adb53a2930da4ae7a"
       },
       {
         "case": "dingtalk-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.7271399050951004,
+        "elapsed_ms": 3.7429160438477993,
         "contract_sha256": "84afc3bc51aaf40ceb2e87ecb3c2d66dd20746a7cb935c6fb028d1437ff544e7"
       },
       {
         "case": "dingtalk-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6262990906834602,
+        "elapsed_ms": 3.6795511841773987,
         "contract_sha256": "84afc3bc51aaf40ceb2e87ecb3c2d66dd20746a7cb935c6fb028d1437ff544e7"
       },
       {
         "case": "lark-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 3.720951732248068,
+        "elapsed_ms": 3.744611982256174,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "lark-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.2224726639688015,
+        "elapsed_ms": 3.8342741318047047,
         "contract_sha256": "9e0cd09d460a700c0c65048e30bd38f09bb47e86f992873bcac9af887ebcc689"
       },
       {
         "case": "lark-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.306895192712545,
+        "elapsed_ms": 3.6444230936467648,
         "contract_sha256": "384b6c44c3e6c6a399791a7851d703a6a37adb0e9149e5a2469c53c86e0f0ede"
       },
       {
         "case": "lark-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.130587913095951,
+        "elapsed_ms": 4.025107249617577,
         "contract_sha256": "384b6c44c3e6c6a399791a7851d703a6a37adb0e9149e5a2469c53c86e0f0ede"
       },
       {
         "case": "slack-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 3.8667190819978714,
+        "elapsed_ms": 3.846431151032448,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "slack-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.74229671433568,
+        "elapsed_ms": 3.9215008728206158,
         "contract_sha256": "96c57bb1a23a6571d43dbf276ce5005e476bba04fdbe23f590340be5c2add565"
       },
       {
         "case": "slack-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6687212996184826,
+        "elapsed_ms": 4.279855638742447,
         "contract_sha256": "7f81ffce72e3335605f9d15f827ed7930003e199fc5ec5d594bae0829c0f7abc"
       },
       {
         "case": "slack-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.9650886319577694,
+        "elapsed_ms": 4.145643208175898,
         "contract_sha256": "7f81ffce72e3335605f9d15f827ed7930003e199fc5ec5d594bae0829c0f7abc"
       },
       {
         "case": "telegram-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 3.8927067071199417,
+        "elapsed_ms": 4.166529048234224,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "telegram-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.681316040456295,
+        "elapsed_ms": 3.7675248458981514,
         "contract_sha256": "ab25ffca4ce3c7a3b224040abf018e29bc75f3f1c729109f0dd91bf31a1c50c0"
       },
       {
         "case": "telegram-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.9781788364052773,
+        "elapsed_ms": 3.779021091759205,
         "contract_sha256": "2ae68b826944e617b4b870c88768a0e564a0f3121646998ef2fc609cad2b19a0"
       },
       {
         "case": "telegram-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6945240572094917,
+        "elapsed_ms": 3.63433500751853,
         "contract_sha256": "2ae68b826944e617b4b870c88768a0e564a0f3121646998ef2fc609cad2b19a0"
       },
       {
         "case": "wecom-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 10.553340893238783,
+        "elapsed_ms": 10.293835774064064,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "wecom-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.097810946404934,
+        "elapsed_ms": 4.374965094029903,
         "contract_sha256": "ccc2dec7d88e4bdab2f3bc3eb3ec41c0f90ff2548939a940ce92e4a032924d67"
       },
       {
         "case": "wecom-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.9472421631217003,
+        "elapsed_ms": 3.6759143695235252,
         "contract_sha256": "ccc2dec7d88e4bdab2f3bc3eb3ec41c0f90ff2548939a940ce92e4a032924d67"
       },
       {
         "case": "wecom-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6279656924307346,
+        "elapsed_ms": 3.6748331040143967,
         "contract_sha256": "8e40a535732821509e2072b186530e74539c2bcbb4f8b72fe1246b9824717a94"
       },
       {
         "case": "lark-status-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.761399071663618,
+        "elapsed_ms": 3.441083710640669,
         "contract_sha256": "9e0cd09d460a700c0c65048e30bd38f09bb47e86f992873bcac9af887ebcc689"
       },
       {
         "case": "billing-balance",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.3931201323866844,
+        "elapsed_ms": 3.402054775506258,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-batches",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.3007957972586155,
+        "elapsed_ms": 3.6272387951612473,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-price-tiers",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6543039605021477,
+        "elapsed_ms": 4.25413204357028,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-topups",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6006621085107327,
+        "elapsed_ms": 3.5997158847749233,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-transactions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.591995220631361,
+        "elapsed_ms": 3.951510414481163,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-checkout-sessions-cs-synthetic",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.7154708988964558,
+        "elapsed_ms": 3.8745300844311714,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-checkout-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.6769439466297626,
+        "elapsed_ms": 3.814206924289465,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-portal-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.808140754699707,
+        "elapsed_ms": 3.9809001609683037,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "subscription-prices",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.87760903686285,
+        "elapsed_ms": 4.255654290318489,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-summary",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.636063076555729,
+        "elapsed_ms": 3.838879056274891,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-checkout-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.8128523156046867,
+        "elapsed_ms": 4.158893134444952,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-portal-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.838084638118744,
+        "elapsed_ms": 3.7189670838415623,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-seats-purchase-preview",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.725921269506216,
+        "elapsed_ms": 3.7455279380083084,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-seats-purchases",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.06415993347764,
+        "elapsed_ms": 3.4958370961248875,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-seats-reconcile",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.7315399385988712,
+        "elapsed_ms": 3.7964265793561935,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       }
     ]
@@ -347,329 +347,329 @@
         "case": "workspace-patch-empty-name",
         "passed": true,
         "status": 400,
-        "elapsed_ms": 5.585802253335714,
+        "elapsed_ms": 5.468511022627354,
         "contract_sha256": "61a43c725473d62c5e1080bf6bf3b340a2a908dcb6f3ee13817ad07c7594ca1e"
       },
       {
         "case": "workspace-patch-invalid-prefix",
         "passed": true,
         "status": 400,
-        "elapsed_ms": 5.043038632720709,
+        "elapsed_ms": 4.6615940518677235,
         "contract_sha256": "ec6c39664e6667861b42dd8f71a5abc07024b12f65f88e388770f623fbba25d1"
       },
       {
         "case": "workspace-patch-rename",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 13.905818108469248,
+        "elapsed_ms": 15.73276100680232,
         "contract_sha256": "916a9734c05c259aa60a1fff9bc1934831b062ce1c61172ca372acadb0935547"
       },
       {
         "case": "github-connect-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 4.401079844683409,
+        "elapsed_ms": 4.814919084310532,
         "contract_sha256": "e37b3c5301f508ec077de860085330830946571d901d8408a7dbc2c44d2bf827"
       },
       {
         "case": "github-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 4.7565908171236515,
+        "elapsed_ms": 4.745604004710913,
         "contract_sha256": "67f73de1dd11be6898cc5a10fc98aa0a740b0a7a67057a9f6859fe348d2d3afd"
       },
       {
         "case": "github-repositories-missing",
         "passed": true,
         "status": 404,
-        "elapsed_ms": 5.224322900176048,
+        "elapsed_ms": 4.229916259646416,
         "contract_sha256": "b1f50e7401d01b6d0ea5082542830bc2da83e01b7c5afd97f58e38e79cee4991"
       },
       {
         "case": "github-revoke-missing",
         "passed": true,
         "status": 204,
-        "elapsed_ms": 21.04960521683097,
+        "elapsed_ms": 16.72885427251458,
         "contract_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
       },
       {
         "case": "vcs-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 5.1126256585121155,
+        "elapsed_ms": 6.110228132456541,
         "contract_sha256": "4f3641a8ec0aedbb0e4687233d7c690162fdc8eb59f6a4d5b9da7f8d1be37e0b"
       },
       {
         "case": "vcs-create-disabled",
         "passed": true,
         "status": 404,
-        "elapsed_ms": 4.37896279618144,
+        "elapsed_ms": 5.0467257387936115,
         "contract_sha256": "41f10a3da7386d7de3d1cf08f5b35ab54eff8d5033d2c51e1a4f7e92d655e2b3"
       },
       {
         "case": "vcs-delete-disabled",
         "passed": true,
         "status": 204,
-        "elapsed_ms": 4.977236036211252,
+        "elapsed_ms": 5.561923608183861,
         "contract_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
       },
       {
         "case": "vcs-rotate-disabled",
         "passed": true,
         "status": 404,
-        "elapsed_ms": 4.581413231790066,
+        "elapsed_ms": 4.893541801720858,
         "contract_sha256": "41f10a3da7386d7de3d1cf08f5b35ab54eff8d5033d2c51e1a4f7e92d655e2b3"
       },
       {
         "case": "dingtalk-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 6.8551660515367985,
+        "elapsed_ms": 6.977515760809183,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "dingtalk-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.505066201090813,
+        "elapsed_ms": 5.006488878279924,
         "contract_sha256": "a1e17447172472b25fb613157daebe33ab33d780e00f624adb53a2930da4ae7a"
       },
       {
         "case": "dingtalk-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.471160005778074,
+        "elapsed_ms": 4.162470810115337,
         "contract_sha256": "84afc3bc51aaf40ceb2e87ecb3c2d66dd20746a7cb935c6fb028d1437ff544e7"
       },
       {
         "case": "dingtalk-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.8239541463553905,
+        "elapsed_ms": 4.21305513009429,
         "contract_sha256": "84afc3bc51aaf40ceb2e87ecb3c2d66dd20746a7cb935c6fb028d1437ff544e7"
       },
       {
         "case": "lark-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 7.285582832992077,
+        "elapsed_ms": 6.124777253717184,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "lark-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.263084847480059,
+        "elapsed_ms": 4.20042872428894,
         "contract_sha256": "9e0cd09d460a700c0c65048e30bd38f09bb47e86f992873bcac9af887ebcc689"
       },
       {
         "case": "lark-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.046663176268339,
+        "elapsed_ms": 4.201187752187252,
         "contract_sha256": "384b6c44c3e6c6a399791a7851d703a6a37adb0e9149e5a2469c53c86e0f0ede"
       },
       {
         "case": "lark-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.935744985938072,
+        "elapsed_ms": 4.587054718285799,
         "contract_sha256": "384b6c44c3e6c6a399791a7851d703a6a37adb0e9149e5a2469c53c86e0f0ede"
       },
       {
         "case": "slack-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 7.261447608470917,
+        "elapsed_ms": 7.238106336444616,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "slack-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.116111900657415,
+        "elapsed_ms": 4.666476044803858,
         "contract_sha256": "96c57bb1a23a6571d43dbf276ce5005e476bba04fdbe23f590340be5c2add565"
       },
       {
         "case": "slack-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.8050228506326675,
+        "elapsed_ms": 3.820778802037239,
         "contract_sha256": "7f81ffce72e3335605f9d15f827ed7930003e199fc5ec5d594bae0829c0f7abc"
       },
       {
         "case": "slack-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.870569169521332,
+        "elapsed_ms": 3.9975186809897423,
         "contract_sha256": "7f81ffce72e3335605f9d15f827ed7930003e199fc5ec5d594bae0829c0f7abc"
       },
       {
         "case": "telegram-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 6.8251946941018105,
+        "elapsed_ms": 7.170798256993294,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "telegram-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.799467045813799,
+        "elapsed_ms": 3.945382311940193,
         "contract_sha256": "ab25ffca4ce3c7a3b224040abf018e29bc75f3f1c729109f0dd91bf31a1c50c0"
       },
       {
         "case": "telegram-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.943276289850473,
+        "elapsed_ms": 4.649790935218334,
         "contract_sha256": "2ae68b826944e617b4b870c88768a0e564a0f3121646998ef2fc609cad2b19a0"
       },
       {
         "case": "telegram-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.495084285736084,
+        "elapsed_ms": 4.4456226751208305,
         "contract_sha256": "2ae68b826944e617b4b870c88768a0e564a0f3121646998ef2fc609cad2b19a0"
       },
       {
         "case": "wecom-list-disabled",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 6.418864708393812,
+        "elapsed_ms": 6.612508092075586,
         "contract_sha256": "c7722b61d0ab208e52a6a56ae034dd1b9bb9be809f066be9fc8a8f598bf5f01d"
       },
       {
         "case": "wecom-install-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.258334171026945,
+        "elapsed_ms": 4.870553035289049,
         "contract_sha256": "ccc2dec7d88e4bdab2f3bc3eb3ec41c0f90ff2548939a940ce92e4a032924d67"
       },
       {
         "case": "wecom-revoke-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.822200629860163,
+        "elapsed_ms": 4.2832959443330765,
         "contract_sha256": "ccc2dec7d88e4bdab2f3bc3eb3ec41c0f90ff2548939a940ce92e4a032924d67"
       },
       {
         "case": "wecom-redeem-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.02046600356698,
+        "elapsed_ms": 3.837095107883215,
         "contract_sha256": "8e40a535732821509e2072b186530e74539c2bcbb4f8b72fe1246b9824717a94"
       },
       {
         "case": "lark-status-disabled",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.205805249512196,
+        "elapsed_ms": 4.114645998924971,
         "contract_sha256": "9e0cd09d460a700c0c65048e30bd38f09bb47e86f992873bcac9af887ebcc689"
       },
       {
         "case": "billing-balance",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.481461830437183,
+        "elapsed_ms": 4.174421075731516,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-batches",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.665277898311615,
+        "elapsed_ms": 4.589588847011328,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-price-tiers",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.951725084334612,
+        "elapsed_ms": 4.326128400862217,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-topups",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 20.204752683639526,
+        "elapsed_ms": 18.441020976752043,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-transactions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.760141018778086,
+        "elapsed_ms": 4.217243753373623,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-checkout-sessions-cs-synthetic",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.253704100847244,
+        "elapsed_ms": 3.7778131663799286,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-checkout-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.013067577034235,
+        "elapsed_ms": 4.014524165540934,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "billing-portal-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.966911695897579,
+        "elapsed_ms": 4.250204190611839,
         "contract_sha256": "50598fe288952f1895b86a1e7fbdff8b90083853b44e361c7780cec93ecd0e73"
       },
       {
         "case": "subscription-prices",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.142314195632935,
+        "elapsed_ms": 4.385294858366251,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-summary",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.566268064081669,
+        "elapsed_ms": 4.514466971158981,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-checkout-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.079536069184542,
+        "elapsed_ms": 4.482592921704054,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-portal-sessions",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.8773659616708755,
+        "elapsed_ms": 4.245385993272066,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-seats-purchase-preview",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.14924556389451,
+        "elapsed_ms": 4.522942937910557,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-seats-purchases",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 4.241023678332567,
+        "elapsed_ms": 4.195440094918013,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       },
       {
         "case": "subscription-seats-reconcile",
         "passed": true,
         "status": 403,
-        "elapsed_ms": 3.874491900205612,
+        "elapsed_ms": 4.6526361256837845,
         "contract_sha256": "3abbaeaf260162650334e3b53e2542058a2bb00849278ced3afd2d638c2640ff"
       }
     ]

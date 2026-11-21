@@ -669,7 +669,9 @@ pub async fn mark_stale_runtime_candidates(
     pool: &deadpool_postgres::Pool,
     candidates: &[Uuid],
 ) -> Result<usize, String> {
-    if candidates.is_empty() { return Ok(0); }
+    if candidates.is_empty() {
+        return Ok(0);
+    }
     let db = pool.get().await.map_err(|e| e.to_string())?;
     Ok(db.query("UPDATE agent_runtime SET status='offline',updated_at=now() WHERE status='online' AND id=ANY($1::uuid[]) AND last_seen_at < now()-make_interval(secs => 150::double precision) RETURNING id", &[&candidates])
         .await.map_err(|e| e.to_string())?.len())
@@ -703,7 +705,10 @@ pub async fn sweep_runtime_once(
             .map_err(|e| format!("offline task terminal settlement: {e:?}"))?;
     }
     tx.commit().await.map_err(|e| e.to_string())?;
-    Ok(RuntimeSweepResult { offline_runtimes, failed_tasks: victims.len() })
+    Ok(RuntimeSweepResult {
+        offline_runtimes,
+        failed_tasks: victims.len(),
+    })
 }
 
 pub async fn run_runtime_sweeper(
@@ -725,7 +730,9 @@ pub async fn run_runtime_sweeper(
                 }
             }
         }
-        if *shutdown.borrow() { break; }
+        if *shutdown.borrow() {
+            break;
+        }
     }
 }
 

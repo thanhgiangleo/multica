@@ -42,7 +42,8 @@ impl IssueCreateRuntime for Policy {
         if workspace != self.workspace {
             return Err(());
         }
-        self.result.lock().unwrap().clone()
+        // `IssueCountPolicy` is `Copy`, so copy out of the guard directly.
+        *self.result.lock().unwrap()
     }
 
     fn created(&self, _: &IssueCreatedEvent) {}
@@ -128,7 +129,11 @@ async fn limit_usage_degrades_to_204_and_caps_reported_usage() {
         .unwrap()
         .get(0);
     let mut workspaces = Vec::new();
-    for (name, issues) in [("Limit Full", 5_i64), ("Limit Small", 2), ("Limit Foreign", 7)] {
+    for (name, issues) in [
+        ("Limit Full", 5_i64),
+        ("Limit Small", 2),
+        ("Limit Foreign", 7),
+    ] {
         let ws: Uuid = db
             .query_one(
                 "INSERT INTO workspace(name,slug) VALUES ($1,$2) RETURNING id",
@@ -181,7 +186,15 @@ async fn limit_usage_degrades_to_204_and_caps_reported_usage() {
     }
 
     // Under the limit: the exact count for the selected workspace only.
-    let under = policy_app(pool.clone(), full, IssueCountPolicy { limit: Some(10), revision: 7 }).await;
+    let under = policy_app(
+        pool.clone(),
+        full,
+        IssueCountPolicy {
+            limit: Some(10),
+            revision: 7,
+        },
+    )
+    .await;
     let (status, body) = read(&under, full, user).await;
     assert_eq!(status, StatusCode::OK, "{body}");
     assert_eq!(
@@ -192,8 +205,15 @@ async fn limit_usage_degrades_to_204_and_caps_reported_usage() {
     // At and over the limit: usage is capped, and a foreign workspace's issues
     // never contribute even though they share the same owner.
     for (ws, issues) in [(full, 5), (small, 2), (foreign, 7)] {
-        let capped =
-            policy_app(pool.clone(), ws, IssueCountPolicy { limit: Some(3), revision: 7 }).await;
+        let capped = policy_app(
+            pool.clone(),
+            ws,
+            IssueCountPolicy {
+                limit: Some(3),
+                revision: 7,
+            },
+        )
+        .await;
         let (status, body) = read(&capped, ws, user).await;
         assert_eq!(status, StatusCode::OK, "{body}");
         assert_eq!(

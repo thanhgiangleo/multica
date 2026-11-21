@@ -1,7 +1,7 @@
 //! Disposable PostgreSQL contract test for the scheduler claim/lease core.
 //! Run through `sprint-gate.py --kind db -- bash tests/scheduler_db_verify.sh`.
-use deadpool_postgres::{Manager as PgManager, Pool};
 use chrono::TimeDelta;
+use deadpool_postgres::{Manager as PgManager, Pool};
 use multica_server::scheduler::*;
 use serde_json::{Value, json};
 use std::{str::FromStr, sync::Arc, time::Duration};

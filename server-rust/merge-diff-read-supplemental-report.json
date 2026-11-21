@@ -10,14 +10,14 @@
         "case": "empty-message-page",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 7.6062059961259365,
+        "elapsed_ms": 8.094171062111855,
         "contract_sha256": "1e1364272a1317fb23ce8dee7dbfb98c1233a4572867766df97636477bf88ef3"
       },
       {
         "case": "pending-tasks-has-any",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 5.312259774655104,
+        "elapsed_ms": 4.5092180371284485,
         "contract_sha256": "1e64c8f1b6a273dd68df3c38dac6299f65aaa7b9aebbf9278ee6deaee0a05121"
       }
     ]
@@ -32,14 +32,14 @@
         "case": "empty-message-page",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 8.329000789672136,
+        "elapsed_ms": 7.8605907037854195,
         "contract_sha256": "1e1364272a1317fb23ce8dee7dbfb98c1233a4572867766df97636477bf88ef3"
       },
       {
         "case": "pending-tasks-has-any",
         "passed": true,
         "status": 200,
-        "elapsed_ms": 8.801797404885292,
+        "elapsed_ms": 8.673955220729113,
         "contract_sha256": "1e64c8f1b6a273dd68df3c38dac6299f65aaa7b9aebbf9278ee6deaee0a05121"
       }
     ]

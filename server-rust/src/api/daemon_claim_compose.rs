@@ -187,6 +187,9 @@ pub(super) fn merge_mcp_overlay(
 /// Go `trailingUserMessages`: only the newest uninterrupted run of user turns is
 /// replayed, and it stops at the first message whose channel media is still
 /// uploading — sending that one would hand the agent a dangling attachment.
+/// The claim path does not replay history yet, so the helper stays for the
+/// caller that adopts it.
+#[allow(dead_code)]
 pub(super) fn trailing_user_messages(rows: &[Value], now: DateTime<Utc>) -> Vec<Value> {
     let mut start = 0;
     for index in (0..rows.len()).rev() {

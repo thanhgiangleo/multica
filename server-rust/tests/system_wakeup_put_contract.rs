@@ -221,7 +221,7 @@ async fn issue_customization_and_workspace_default_follow_go_contract() {
         .await
         .unwrap();
     assert_eq!(row.get::<_, String>(0), "stage:1");
-    assert_eq!(row.get::<_, bool>(1), true);
+    assert!(row.get::<_, bool>(1));
     assert_eq!(
         row.get::<_, Value>(2),
         json!({"type":"children_done","each_stage":true})
@@ -273,15 +273,14 @@ async fn issue_customization_and_workspace_default_follow_go_contract() {
         request(&app, &workspace_path, &jwt(owner), json!({"enabled":true})).await;
     assert_eq!(status, StatusCode::OK, "{response:?}");
     assert_eq!(response[0]["customized"], 1); // p1 remains customized
-    assert_eq!(
+    assert!(
         db.query_one(
             "SELECT enabled,condition_state FROM issue_wakeup WHERE id=$1",
             &[&uncustomized]
         )
         .await
         .unwrap()
-        .get::<_, bool>(0),
-        true
+        .get::<_, bool>(0)
     );
     assert_eq!(
         db.query_one(
@@ -293,34 +292,31 @@ async fn issue_customization_and_workspace_default_follow_go_contract() {
         .get::<_, String>(0),
         "all"
     );
-    assert_eq!(
+    assert!(
         db.query_one("SELECT enabled FROM issue_wakeup WHERE id=$1", &[&rule])
             .await
             .unwrap()
-            .get::<_, bool>(0),
-        true
+            .get::<_, bool>(0)
     );
     db.execute("INSERT INTO issue_wakeup_receipt(id,wakeup_id,revision,event_key,event_type,payload) VALUES(gen_random_uuid(),$1,1,'default','children.changed','{}'::jsonb)", &[&uncustomized]).await.unwrap();
     let (status, response) =
         request(&app, &workspace_path, &jwt(owner), json!({"enabled":false})).await;
     assert_eq!(status, StatusCode::OK, "{response:?}");
     assert_eq!(response[0]["enabled"], false);
-    assert_eq!(
-        db.query_one(
+    assert!(
+        !db.query_one(
             "SELECT enabled FROM issue_wakeup WHERE id=$1",
             &[&uncustomized]
         )
         .await
         .unwrap()
-        .get::<_, bool>(0),
-        false
+        .get::<_, bool>(0)
     );
     assert_eq!(db.query_one("SELECT count(*) FROM issue_wakeup_receipt WHERE wakeup_id=$1 AND processed_at IS NOT NULL", &[&uncustomized]).await.unwrap().get::<_,i64>(0),1);
-    assert_eq!(
+    assert!(
         db.query_one("SELECT enabled FROM issue_wakeup WHERE id=$1", &[&rule])
             .await
             .unwrap()
-            .get::<_, bool>(0),
-        true
+            .get::<_, bool>(0)
     );
 }

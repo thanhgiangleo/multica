@@ -292,26 +292,24 @@ async fn preview(
         if moving && requested.is_none() && !definition.is_default {
             status = mapped_status(&db, ws, definition, &previous).await?;
         }
-        if (requested.is_some() || (moving && !definition.is_default))
-            && !definition.is_default
-            && !definition.has(&status)
-        {
+        if (moving || requested.is_some()) && !definition.has(&status) && !definition.is_default {
             return Ok(rejected_status(definition, &status));
         }
         let entering = (moving && project_param.is_some())
             || (!moving && requested.is_some() && status != previous);
-        if entering && issue.get::<_, Option<String>>("triage_state").is_none() {
-            if let Some(step) = definition.step(&status).filter(|step| step.hands_off()) {
-                let creator_type: String = issue.get("creator_type");
-                let creator_id: Uuid = issue.get("creator_id");
-                if let Some((kind, assignee)) = issue_workflow::resolve_handler(
-                    step,
-                    project_ref,
-                    Some(&creator_type),
-                    Some(creator_id),
-                ) {
-                    handoff = Some((definition, project_ref, kind, assignee));
-                }
+        if entering
+            && issue.get::<_, Option<String>>("triage_state").is_none()
+            && let Some(step) = definition.step(&status).filter(|step| step.hands_off())
+        {
+            let creator_type: String = issue.get("creator_type");
+            let creator_id: Uuid = issue.get("creator_id");
+            if let Some((kind, assignee)) = issue_workflow::resolve_handler(
+                step,
+                project_ref,
+                Some(&creator_type),
+                Some(creator_id),
+            ) {
+                handoff = Some((definition, project_ref, kind, assignee));
             }
         }
     }

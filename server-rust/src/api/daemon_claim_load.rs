@@ -17,6 +17,8 @@ use uuid::Uuid;
 /// `GetIssue` is read through this so the caller can distinguish "no row"
 /// (which cancels the task) from a transient failure (which only fails it).
 pub(super) struct IssueClaimRow {
+    /// Go's `GetIssue` row carries the id; the claim reads it back by key today.
+    #[allow(dead_code)]
     pub id: Uuid,
     pub workspace_id: Uuid,
     pub title: String,
@@ -70,6 +72,8 @@ pub(super) struct ChatClaimRow {
     pub work_dir: Option<String>,
     pub runtime_id: Option<Uuid>,
     pub is_agent_intro: bool,
+    /// Go's chat-session row carries the creator; no claim branch reads it yet.
+    #[allow(dead_code)]
     pub creator_id: Option<Uuid>,
     pub project_id: Option<Uuid>,
 }
@@ -99,6 +103,8 @@ pub(super) async fn chat_session(
 }
 
 pub(super) struct AutopilotRunClaimRow {
+    /// Mirrors Go's run row; the caller resolves the run by its own id.
+    #[allow(dead_code)]
     pub id: Uuid,
     pub autopilot_id: Uuid,
     pub trigger_payload: Option<Value>,
@@ -123,6 +129,8 @@ pub(super) async fn autopilot_run(
 }
 
 pub(super) struct AutopilotClaimRow {
+    /// Mirrors Go's autopilot row; the caller already holds the id it queried by.
+    #[allow(dead_code)]
     pub id: Uuid,
     pub workspace_id: Uuid,
     pub title: String,
@@ -319,6 +327,8 @@ pub(super) struct AgentSkillRow {
     pub name: String,
     pub description: String,
     pub content: String,
+    /// Part of Go's skill row; the claim's summary does not surface it.
+    #[allow(dead_code)]
     pub config: Option<Value>,
 }
 
@@ -380,6 +390,8 @@ pub(super) async fn skill_files(
 /// `GetCommentInWorkspace`, plus the edit facts the claim needs for its notices.
 pub(super) struct CommentClaimRow {
     pub comment: ClaimComment,
+    /// Go's comment row carries the thread parent; no claim branch reads it yet.
+    #[allow(dead_code)]
     pub parent_id: Option<Uuid>,
     pub deleted: bool,
     pub edit: CommentEditFacts,
@@ -758,6 +770,8 @@ pub(super) async fn channel_task_delivery(
 pub(super) struct InputMessage {
     pub id: Uuid,
     pub content: String,
+    /// Go's message row carries the task id; the batch is already task-scoped.
+    #[allow(dead_code)]
     pub task_id: Option<Uuid>,
     pub role: String,
     pub channel_media_pending_until: Option<DateTime<Utc>>,

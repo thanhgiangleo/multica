@@ -646,7 +646,11 @@ async fn singular_and_batch_claim_deliver_issue_and_chat_with_go_skill_wire_shap
         assert!(delivered.get("plugin_hook_tools").is_none());
         assert!(delivered.get("remote_mcp_connections").is_none());
         assert!(delivered.get("remote_mcp_daemon_token").is_none());
-        assert!(delivered["auth_token"].as_str().is_some_and(|token| !token.is_empty()));
+        assert!(
+            delivered["auth_token"]
+                .as_str()
+                .is_some_and(|token| !token.is_empty())
+        );
         assert_eq!(delivered["agent"]["skills"][0]["id"], skill.to_string());
         assert!(delivered["agent"]["skills"][0].get("source").is_none());
         // Go's AgentSkillData has no omitempty on id, so a builtin ships an
