@@ -2,7 +2,13 @@
   "page": {
     "title": "聊天",
     "select_prompt": "選擇一個對話，或點 + 新建",
-    "agent_link_no_access": "你沒有權限與該智慧體聊天。"
+    "agent_link_no_access": "你沒有權限與該智慧體聊天。",
+    "search_placeholder": "搜尋聊天",
+    "search_clear": "清除搜尋",
+    "search_searching": "正在搜尋訊息…",
+    "search_no_matches": "沒有聊天與你的搜尋相符",
+    "search_failed": "無法搜尋訊息歷史 —— 僅比對標題與最近的訊息",
+    "search_truncated": "僅顯示前 250 條相符訊息 —— 請縮小搜尋範圍"
   },
   "fab": {
     "running": "Multica 正在工作...",

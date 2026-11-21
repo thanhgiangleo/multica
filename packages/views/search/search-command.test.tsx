@@ -1134,8 +1134,6 @@ describe("SearchCommand", () => {
   // user remembers the words, not which conversation holds them.
   describe("chat transcript results", () => {
     const message = (over: Partial<SearchChatMessageResult> & { message_id: string; session_id: string }) => ({
-      message_id: over.message_id,
-      session_id: over.session_id,
       session_title: "Deploy incident",
       session_status: "active",
       agent_id: "agent-1",

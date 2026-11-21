@@ -2,7 +2,13 @@
   "page": {
     "title": "채팅",
     "select_prompt": "대화를 선택하거나 +로 새로 시작하세요",
-    "agent_link_no_access": "이 에이전트와 채팅할 권한이 없습니다."
+    "agent_link_no_access": "이 에이전트와 채팅할 권한이 없습니다.",
+    "search_placeholder": "채팅 검색",
+    "search_clear": "검색 지우기",
+    "search_searching": "메시지 검색 중…",
+    "search_no_matches": "검색과 일치하는 채팅이 없습니다",
+    "search_failed": "메시지 기록을 검색하지 못했습니다 — 제목과 최근 메시지만 비교합니다",
+    "search_truncated": "일치하는 메시지 처음 250개를 표시합니다 — 검색어를 좁혀 보세요"
   },
   "fab": {
     "running": "Multica가 작업 중입니다...",

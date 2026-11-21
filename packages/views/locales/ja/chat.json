@@ -2,7 +2,13 @@
   "page": {
     "title": "チャット",
     "select_prompt": "会話を選ぶか、＋ で新規作成してください",
-    "agent_link_no_access": "このエージェントとチャットする権限がありません。"
+    "agent_link_no_access": "このエージェントとチャットする権限がありません。",
+    "search_placeholder": "チャットを検索",
+    "search_clear": "検索をクリア",
+    "search_searching": "メッセージを検索中…",
+    "search_no_matches": "検索に一致するチャットはありません",
+    "search_failed": "メッセージ履歴を検索できませんでした — タイトルと最近のメッセージのみ照合しています",
+    "search_truncated": "一致するメッセージの先頭 250 件を表示しています — 検索語を絞り込んでください"
   },
   "fab": {
     "running": "Multica が作業中です...",

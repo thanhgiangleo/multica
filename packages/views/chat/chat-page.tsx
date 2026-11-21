@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDefaultLayout } from "react-resizable-panels";
-import { ArrowLeft, MessageSquare } from "@multica/ui/icons";
+import { ArrowLeft, Loader2, MessageSquare, Search, X } from "@multica/ui/icons";
 import { toast } from "sonner";
 import { Button } from "@multica/ui/components/ui/button";
+import { Input } from "@multica/ui/components/ui/input";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -31,6 +32,7 @@ import { ChatSessionHeader } from "./components/chat-session-header";
 import { EmptyState } from "./components/chat-empty-state";
 import { NewChatButton } from "./components/new-chat-button";
 import { useChatController } from "./components/use-chat-controller";
+import { filterSessionsByQuery, useChatSessionSearch } from "./components/use-chat-session-search";
 import { OfflineBanner } from "./components/offline-banner";
 import { NoAgentBanner } from "./components/no-agent-banner";
 import { ArchivedAgentBanner } from "./components/archived-agent-banner";
@@ -252,21 +254,90 @@ export function ChatPage() {
     />
   );
 
+  // The list filter. `c.sessions` only carries each chat's last message, so
+  // "this conversation contains <query>" has to come from the transcript
+  // search; the hook returns the matching session ids and the filter also
+  // matches the title / last message locally for an instant first paint.
+  const [chatQuery, setChatQuery] = useState("");
+  const chatSearch = useChatSessionSearch(chatQuery);
+  const isFiltering = chatQuery.trim() !== "";
+  const visibleSessions = useMemo(
+    () => filterSessionsByQuery(c.sessions, chatQuery, chatSearch.sessionIds),
+    [c.sessions, chatQuery, chatSearch.sessionIds],
+  );
+
+  const searchInput = (
+    <div className="relative min-w-0 flex-1">
+      <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+      <Input
+        value={chatQuery}
+        onChange={(e) => setChatQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            e.preventDefault();
+            setChatQuery("");
+          }
+        }}
+        placeholder={t(($) => $.page.search_placeholder)}
+        aria-label={t(($) => $.page.search_placeholder)}
+        className="h-7 pl-7 pr-7 text-caption md:text-caption"
+      />
+      {chatQuery !== "" && (
+        <button
+          type="button"
+          onClick={() => setChatQuery("")}
+          aria-label={t(($) => $.page.search_clear)}
+          className="absolute right-1 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        >
+          <X className="size-3.5" />
+        </button>
+      )}
+    </div>
+  );
+
+  // One status line above the list, most severe first. A failed or capped
+  // transcript search must say so: the local fallback still filters, but the
+  // user has to know it is not the whole story.
+  const searchNotice = isFiltering
+    ? chatSearch.failed
+      ? t(($) => $.page.search_failed)
+      : chatSearch.truncated
+        ? t(($) => $.page.search_truncated)
+        : chatSearch.isLoading
+          ? t(($) => $.page.search_searching)
+          : null
+    : null;
+
   const listHeader = (
     <PageHeader>
-      <h1 className="flex-1 text-body font-semibold">{t(($) => $.page.title)}</h1>
+      <h1 className="shrink-0 truncate text-body font-semibold">{t(($) => $.page.title)}</h1>
+      {searchInput}
       {newChatButton}
     </PageHeader>
   );
 
   const listBody = (
     <div className="px-2 py-1">
+      {searchNotice && (
+        <div
+          role="status"
+          className="flex items-center gap-1.5 px-2 py-1.5 text-caption text-muted-foreground"
+        >
+          {chatSearch.isLoading && !chatSearch.failed && (
+            <Loader2 className="size-3 shrink-0 animate-spin" />
+          )}
+          <span className="min-w-0">{searchNotice}</span>
+        </div>
+      )}
       <ChatThreadList
-        sessions={c.sessions}
+        sessions={visibleSessions}
         agents={c.agents}
         activeSessionId={c.activeSessionId}
         onSelectSession={handleSelect}
         onArchive={handleArchive}
+        emptyMessage={
+          isFiltering ? t(($) => $.page.search_no_matches) : undefined
+        }
       />
     </div>
   );
