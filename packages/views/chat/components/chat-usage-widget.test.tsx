@@ -78,6 +78,18 @@ beforeEach(() => {
 });
 
 describe("ChatUsageWidget", () => {
+  it("shows and fetches only 1d in compact mode", () => {
+    renderWithI18n(<ChatUsageWidget compact />);
+
+    expect(screen.getByText("1d")).toBeInTheDocument();
+    expect(renderedFigures()).toEqual(["1K"]);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    const dailyKeys = queryArgs.current.map(({ queryKey }) =>
+      queryKey[queryKey.indexOf("daily") + 1],
+    );
+    expect(dailyKeys).toEqual([1]);
+  });
+
   it("offers 1d / 3d / 7d and starts on 1d", () => {
     renderWithI18n(<ChatUsageWidget />);
 

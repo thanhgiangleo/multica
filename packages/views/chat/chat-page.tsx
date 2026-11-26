@@ -30,6 +30,7 @@ import { ChatInput } from "./components/chat-input";
 import { ChatQueue } from "./components/chat-queue";
 import { ChatThreadList } from "./components/chat-thread-list";
 import { ChatSessionHeader } from "./components/chat-session-header";
+import { ChatUsageWidget } from "./components/chat-usage-widget";
 import { ChatTriageBar, ChatTriageProvider } from "./components/message-triage";
 import { EmptyState } from "./components/chat-empty-state";
 import { NewChatButton } from "./components/new-chat-button";
@@ -342,6 +343,7 @@ export function ChatPage() {
         {t(($) => $.page.title)}
       </h1>
       {searchInput}
+      {isCompact && <ChatUsageWidget compact />}
       {newChatButton}
     </PageHeader>
   );
