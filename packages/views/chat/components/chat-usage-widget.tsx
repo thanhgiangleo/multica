@@ -19,8 +19,8 @@ import { useT } from "../../i18n";
 // Only the three short windows the chat header has room for. The full
 // dashboard keeps 1d–180d; this is a glanceable strip, not a replacement.
 const RANGES = [1, 3, 7] as const;
+const COMPACT_RANGES = [1] as const;
 type UsageRange = (typeof RANGES)[number];
-
 
 /**
  * Workspace usage at a glance, inside the conversation header.
@@ -36,21 +36,21 @@ type UsageRange = (typeof RANGES)[number];
  * costs at most three requests a session and usually zero extra ones (the
  * dashboard's own 1d/7d views reuse the same keys when the window matches).
  */
-export function ChatUsageWidget() {
+export function ChatUsageWidget({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useT("chat");
   const wsId = useWorkspaceId();
   const viewTZ = useViewingTimezone();
   const queryClient = useQueryClient();
   const locales = i18n.resolvedLanguage ?? i18n.language;
-  const [days, setDays] = useState<UsageRange>(1);
-
+  const [selectedDays, setDays] = useState<UsageRange>(1);
+  const days = compact ? 1 : selectedDays;
+  const ranges: readonly UsageRange[] = compact ? COMPACT_RANGES : RANGES;
   const queries = useQueries({
-    queries: RANGES.map((range) =>
+    queries: ranges.map((range) =>
       dashboardUsageDailyOptions(wsId, range, null, viewTZ),
     ),
   });
-  const active = queries[RANGES.indexOf(days)];
-  const data = active?.data;
+  const data = queries[ranges.indexOf(days)]?.data;
 
   // The API returns headroom days beyond the requested window (the dashboard
   // does the same trim); anchor the cutoff on the viewer's tz so 1d really is
@@ -73,6 +73,28 @@ export function ChatUsageWidget() {
       );
   }, [data, days, viewTZ]);
   const isFetching = queries.some((q) => q.isFetching);
+  const tokensHint =
+    tokenCount === null
+      ? null
+      : t(($) => $.usage.tokens_hint, {
+          tokens: tokenCount.toLocaleString(locales),
+        });
+  const figure = tokenCount === null ? (
+    <span aria-hidden className="text-muted-foreground">{"—"}</span>
+  ) : (
+    <CompactNumberFlow value={tokenCount} locales={locales} />
+  );
+
+  if (compact) {
+    return (
+      <TooltipHint label={tokensHint}>
+        <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-surface-border bg-muted/50 px-2 py-0.5 text-caption tabular-nums">
+          <span className="text-muted-foreground">{t(($) => $.usage.range_1d)}</span>
+          <span className="font-medium">{figure}</span>
+        </span>
+      </TooltipHint>
+    );
+  }
 
   const refresh = () => {
     for (const range of RANGES) {
@@ -120,23 +142,9 @@ export function ChatUsageWidget() {
           exact number the compact form rounds. `null` means the rollup has not
           arrived yet — a dash reads as "not loaded", where a zero would read
           as "no usage". */}
-      <TooltipHint
-        label={
-          tokenCount === null
-            ? null
-            : t(($) => $.usage.tokens_hint, {
-                tokens: tokenCount.toLocaleString(locales),
-              })
-        }
-      >
+      <TooltipHint label={tokensHint}>
         <span className="inline-flex min-w-[3rem] items-center justify-end text-caption font-medium tabular-nums">
-          {tokenCount === null ? (
-            <span aria-hidden className="text-muted-foreground">
-              {"—"}
-            </span>
-          ) : (
-            <CompactNumberFlow value={tokenCount} locales={locales} />
-          )}
+          {figure}
         </span>
       </TooltipHint>
 

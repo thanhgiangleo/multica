@@ -56,6 +56,11 @@ vi.mock("./components/chat-thread-list", () => ({
 vi.mock("./components/chat-session-header", () => ({
   ChatSessionHeader: () => <div>chat-session-header</div>,
 }));
+vi.mock("./components/chat-usage-widget", () => ({
+  ChatUsageWidget: ({ compact }: { compact?: boolean }) => (
+    <div>{compact ? "compact-usage" : "full-usage"}</div>
+  ),
+}));
 vi.mock("./components/chat-empty-state", () => ({
   EmptyState: () => <div>chat-empty-state</div>,
 }));
@@ -474,6 +479,23 @@ describe("ChatPage ?agent= deep link", () => {
 
 describe("ChatPage responsive layout", () => {
   const SELECT_PROMPT = "Pick a conversation, or start a new one with +";
+
+  it("places compact usage between search and new chat on phones", () => {
+    layout.width = 360;
+    renderPage("");
+
+    const search = screen.getByRole("textbox", { name: "Search chats" });
+    const usage = screen.getByText("compact-usage");
+    expect(search.parentElement?.nextElementSibling).toBe(usage);
+    expect(usage.nextElementSibling).toBe(screen.getByText("new-chat-button"));
+  });
+
+  it("does not add usage to the desktop list header", () => {
+    layout.width = DESKTOP;
+    renderPage("");
+
+    expect(screen.queryByText(/^(compact|full)-usage$/)).not.toBeInTheDocument();
+  });
 
   it("folds to a single column on a foldable's inner screen held upright", () => {
     // Below the compact breakpoint, with nothing open, the page spends the
