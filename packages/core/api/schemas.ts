@@ -19,6 +19,7 @@ import type {
   BillingTransactionsPage,
   CancelTaskResponse,
   ChatMessage,
+  ChatMessageTriageList,
   ChatDraftRestoresResponse,
   ChatPendingTask,
   ChatSession,
@@ -977,6 +978,28 @@ export const ChatMessageSchema = z.object({
   // must not hide the assistant reply that contains it.
   quick_actions: z.array(ChatQuickActionSchema).catch([]).optional().default([]),
 }).loose();
+
+// Per-message triage. Every field is lenient because this is additive state: a
+// malformed decision must degrade to "nothing decided" rather than hide the
+// reply or break the transcript fetch that carries it.
+export const ChatMessageTriageStateSchema = z.object({
+  chat_message_id: z.string(),
+  flagged: z.boolean().catch(false).default(false),
+  handled: z.boolean().catch(false).default(false),
+  flagged_at: z.string().optional(),
+  handled_at: z.string().optional(),
+  revision: z.number().catch(0).default(0),
+}).loose();
+
+export const ChatMessageTriageListSchema = z.object({
+  states: z.array(ChatMessageTriageStateSchema).catch([]).default([]),
+  open_count: z.number().catch(0).default(0),
+}).loose();
+
+export const EMPTY_CHAT_MESSAGE_TRIAGE_LIST: ChatMessageTriageList = {
+  states: [],
+  open_count: 0,
+};
 
 export const ChatMessageListSchema = z.array(ChatMessageSchema).default([]);
 export const EMPTY_CHAT_MESSAGE_LIST: ChatMessage[] = [];
@@ -2195,6 +2218,7 @@ export const ChatSessionSchema: z.ZodType<ChatSession> = z.object({
   status: z.enum(["active", "archived"]).catch("active"),
   has_unread: z.boolean().default(false),
   unread_count: z.number().optional(),
+  open_count: z.number().catch(0).default(0),
   last_message: ChatLastMessageSchema.nullable().optional().catch(undefined),
   pinned: z.boolean().optional(),
   channel_source: ChatChannelSourceSchema.optional().catch(undefined),
@@ -2211,6 +2235,7 @@ export const EMPTY_CHAT_SESSION: ChatSession = {
   title: "",
   status: "active",
   has_unread: false,
+  open_count: 0,
   created_at: "",
   updated_at: "",
 };

@@ -34,6 +34,7 @@ import { AppLink } from "../../navigation";
 import { useT } from "../../i18n";
 import { TooltipHint } from "@multica/ui/components/common/tooltip-hint";
 import { ChatUsageWidget } from "./chat-usage-widget";
+import { ChatTriageHeaderChip } from "./message-triage";
 
 /**
  * Per-session header for the conversation pane: agent avatar + editable chat
@@ -210,6 +211,8 @@ export function ChatSessionHeader({
           </div>
         )}
       </div>
+
+      <ChatTriageHeaderChip sessionId={session.id} />
 
       <ChatUsageWidget />
 

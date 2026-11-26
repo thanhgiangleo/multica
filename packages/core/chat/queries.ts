@@ -49,6 +49,9 @@ export const chatKeys = {
   quickActionsFailureAll: () => ["chat", "quick-actions-failure"] as const,
   quickActionsFailure: (sessionId: string) =>
     [...chatKeys.quickActionsFailureAll(), sessionId] as const,
+  /** Per-message triage (flag/handle) decisions for one session. */
+  triageAll: () => ["chat", "message-triage"] as const,
+  triage: (sessionId: string) => [...chatKeys.triageAll(), sessionId] as const,
   draftRestoresAll: () => ["chat", "draft-restores"] as const,
   /** Durable deferred-cancellation draft restores for a session (#5219). */
   draftRestores: (sessionId: string) => [...chatKeys.draftRestoresAll(), sessionId] as const,
@@ -381,5 +384,25 @@ export function chatQuickActionsFailureOptions(sessionId: string) {
     queryFn: async (): Promise<ChatQuickActionsFailureState | null> => null,
     enabled: false,
     staleTime: Infinity,
+  });
+}
+
+/**
+ * The caller's triage decisions for one session — which replies they flagged,
+ * which they already dealt with.
+ *
+ * `staleTime: 0` overrides the app-wide Infinity default on purpose: triage is
+ * the user's own work queue, written from several places (this session's
+ * message list, the triage bar, a second device) and read through a
+ * server-derived outstanding count. Pinning the first result forever would let
+ * a decision made in another tab leave this tab's badge lying indefinitely,
+ * and the payload is tiny (only decided rows).
+ */
+export function chatMessageTriageOptions(sessionId: string) {
+  return queryOptions({
+    queryKey: chatKeys.triage(sessionId),
+    queryFn: () => api.listChatMessageTriage(sessionId),
+    enabled: !!sessionId,
+    staleTime: 0,
   });
 }

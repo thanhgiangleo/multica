@@ -72,6 +72,7 @@ import {
   promotePendingChatTask,
   removePendingChatTask,
 } from "../chat/pending";
+import { syncSessionOpenCount, writeTriageStateFromPayload } from "../chat/triage-cache";
 import { resolvePostAuthDestination, useHasOnboarded } from "../paths";
 import type {
   IssueTableFacetsRequest,
@@ -121,6 +122,7 @@ import type {
   ChatMessagesPage,
   ChatSession,
   ChatSessionCreatedPayload,
+  ChatMessageTriagePayload,
   InvitationCreatedPayload,
 } from "../types";
 
@@ -1056,6 +1058,7 @@ export function useRealtimeSync(
       // Chat events are handled explicitly below; do not double-invalidate.
       "chat:message", "chat:done", "chat:quick_actions", "chat:cancel_finalized", "chat:session_read",
       "chat:session_created", "chat:session_deleted", "chat:session_updated",
+      "chat:message_triage",
       // task:message stays out of the prefix path because it fires per
       // streamed message during a long run — invalidating the snapshot on
       // every message would flood the network. Specific chat handlers below
@@ -1776,6 +1779,44 @@ export function useRealtimeSync(
       invalidateSessionLists();
     });
 
+    // chat:message_triage is one reader's own decision about one reply, delivered
+    // only to them (publishChat scopes chat events to the session's creator).
+    // Another device of the same member flags or handles a reply here, and this
+    // device's markers and outstanding count follow.
+    //
+    // Patched inline rather than invalidated: this fires on every flag/handle
+    // tap, and a refetch per tap would re-read a list that this frame already
+    // describes. `bulk_cleared` names no message, so that case refetches.
+    const unsubChatMessageTriage = ws.on("chat:message_triage", (p) => {
+      const payload = p as ChatMessageTriagePayload;
+      chatWsLogger.info("chat:message_triage (global)", payload);
+      const sessionId = payload.chat_session_id;
+      if (!sessionId) return;
+      const wsId = getCurrentWsId();
+      if (payload.bulk_cleared) {
+        qc.invalidateQueries({ queryKey: chatKeys.triage(sessionId) });
+        // The sessions list carries the thread-list badge, and nothing in the
+        // frame says what the new total is — re-read rather than guess.
+        if (wsId) qc.invalidateQueries({ queryKey: chatKeys.sessions(wsId) });
+        return;
+      }
+      if (!payload.chat_message_id) return;
+      // Shared with the local mutations (chat/triage-cache.ts) so a decision
+      // made here and one made in this tab leave the caches in the same shape:
+      // the per-reply rows the transcript reads, plus the session's count in
+      // the thread list. Recomputed from the rows, not incremented, so a
+      // duplicated or out-of-order frame cannot drift the badge.
+      const next = writeTriageStateFromPayload(qc, sessionId, {
+        chat_message_id: payload.chat_message_id,
+        flagged: payload.flagged,
+        handled: payload.handled,
+        flagged_at: payload.flagged_at,
+        handled_at: payload.handled_at,
+        revision: payload.revision ?? 0,
+      });
+      syncSessionOpenCount(qc, wsId, sessionId, next.open_count);
+    });
+
     const unsubChatSessionCreated = ws.on("chat:session_created", (p) => {
       const payload = p as ChatSessionCreatedPayload;
       chatWsLogger.info("chat:session_created (global)", payload);
@@ -1863,6 +1904,7 @@ export function useRealtimeSync(
       unsubTaskCompleted();
       unsubTaskFailed();
       unsubChatSessionRead();
+      unsubChatMessageTriage();
       unsubChatSessionCreated();
       unsubChatSessionDeleted();
       unsubChatSessionUpdated();

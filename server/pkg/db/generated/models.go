@@ -537,6 +537,17 @@ type ChatMessage struct {
 	ChannelTypingSettled          bool               `json:"channel_typing_settled"`
 }
 
+type ChatMessageUserState struct {
+	ChatMessageID pgtype.UUID        `json:"chat_message_id"`
+	UserID        pgtype.UUID        `json:"user_id"`
+	WorkspaceID   pgtype.UUID        `json:"workspace_id"`
+	ChatSessionID pgtype.UUID        `json:"chat_session_id"`
+	FlaggedAt     pgtype.Timestamptz `json:"flagged_at"`
+	HandledAt     pgtype.Timestamptz `json:"handled_at"`
+	Revision      int64              `json:"revision"`
+	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
+}
+
 type ChatPinnedAgent struct {
 	ID          pgtype.UUID        `json:"id"`
 	WorkspaceID pgtype.UUID        `json:"workspace_id"`

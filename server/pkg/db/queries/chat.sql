@@ -1735,3 +1735,112 @@ WHERE workspace_id = $1
   AND status = 'active'
 ORDER BY created_at ASC
 LIMIT 1;
+
+-- ─── Per-message triage state (flag = needs action, handled = dealt with) ───
+--
+-- Rows are created lazily on the first decision and never touched by any other
+-- path, so a reader who never marks anything pays nothing. Every writer clears
+-- the opposite timestamp in the SAME statement: the table's CHECK constraint
+-- rejects a row that is both outstanding and discharged, and letting the table
+-- enforce that means the flag/handle handlers can never drift apart.
+
+-- name: FlagChatMessage :one
+-- Marks one reply as needing the reader's attention. Idempotent: re-flagging an
+-- already-flagged reply keeps the original flag time and just bumps revision,
+-- so a double-tap does not restart the "how long has this been waiting" clock.
+INSERT INTO chat_message_user_state AS state (
+    chat_message_id, user_id, workspace_id, chat_session_id, flagged_at, handled_at
+)
+VALUES ($1, $2, $3, $4, now(), NULL)
+ON CONFLICT (chat_message_id, user_id) DO UPDATE
+SET flagged_at = COALESCE(state.flagged_at, now()),
+    handled_at = NULL,
+    revision = state.revision + 1,
+    updated_at = now()
+RETURNING *;
+
+-- name: UnflagChatMessage :exec
+-- Clears the flag. The row survives with both timestamps NULL — a reader who
+-- flagged and then changed their mind still leaves the evidence that they
+-- looked at this reply, which is what lets the triage bar tell "decided
+-- nothing yet" apart from "was here and dismissed it".
+UPDATE chat_message_user_state
+SET flagged_at = NULL,
+    revision = revision + 1,
+    updated_at = now()
+WHERE chat_message_id = $1 AND user_id = $2;
+
+-- name: HandleChatMessage :one
+-- Marks one reply as dealt with. Implies clearing any outstanding flag.
+INSERT INTO chat_message_user_state AS state (
+    chat_message_id, user_id, workspace_id, chat_session_id, flagged_at, handled_at
+)
+VALUES ($1, $2, $3, $4, NULL, now())
+ON CONFLICT (chat_message_id, user_id) DO UPDATE
+SET flagged_at = NULL,
+    handled_at = COALESCE(state.handled_at, now()),
+    revision = state.revision + 1,
+    updated_at = now()
+RETURNING *;
+
+-- name: UnhandleChatMessage :exec
+-- Reverses a "dealt with" decision without re-flagging: the reply returns to
+-- the undecided pool, not to the outstanding one.
+UPDATE chat_message_user_state
+SET handled_at = NULL,
+    revision = revision + 1,
+    updated_at = now()
+WHERE chat_message_id = $1 AND user_id = $2;
+
+-- name: ListChatMessageStatesBySession :many
+-- Hydrates a fetched transcript with the caller's own decisions. Scoped to the
+-- session (not to a message-id list) because the page cursor may hand the
+-- client rows it did not ask about, and a stray extra state row is cheaper
+-- than a second round trip per page.
+SELECT * FROM chat_message_user_state
+WHERE user_id = $1 AND chat_session_id = $2;
+
+-- name: CountOpenChatMessageStatesBySession :one
+-- Outstanding count for one session — the chat header chip and the thread-list
+-- badge. Mirrors the partial index so this stays an index-only scan on open
+-- items regardless of how much decided history the reader accumulates.
+SELECT count(*)::int AS open_count
+FROM chat_message_user_state
+WHERE user_id = $1 AND chat_session_id = $2
+  AND flagged_at IS NOT NULL AND handled_at IS NULL;
+
+-- name: CountOpenChatMessageStatesByCreator :many
+-- Outstanding counts for every session the caller owns in a workspace, in one
+-- round trip. The thread list renders one badge per row and would otherwise
+-- need a query per session.
+SELECT chat_session_id, count(*)::int AS open_count
+FROM chat_message_user_state
+WHERE user_id = $1
+  AND workspace_id = $2
+  AND flagged_at IS NOT NULL
+  AND handled_at IS NULL
+GROUP BY chat_session_id;
+
+-- name: DeleteChatMessageUserStatesBySession :exec
+-- chat_message_user_state is keyed by chat_session_id with no FK (MUL-3515),
+-- so deleting a session must prune its triage decisions in the same
+-- transaction, next to the other chat_session-keyed tables DeleteChatSession
+-- already sweeps. Comments/decisions about a conversation that no longer
+-- exists are unreachable, and leaving them would keep rows that no read path
+-- can ever clear.
+DELETE FROM chat_message_user_state
+WHERE chat_session_id = $1;
+
+-- name: HandleOpenChatMessagesInSession :exec
+-- "Mark everything here as dealt with" — the triage bar's bulk action. Scoped to
+-- assistant replies: the reader's own messages are never outstanding, and a
+-- bulk write that swept them would fabricate state for rows that never had any.
+UPDATE chat_message_user_state AS s
+SET handled_at = now(),
+    flagged_at = NULL,
+    revision = s.revision + 1,
+    updated_at = now()
+WHERE s.user_id = $1
+  AND s.chat_session_id = $2
+  AND s.flagged_at IS NOT NULL
+  AND s.handled_at IS NULL;

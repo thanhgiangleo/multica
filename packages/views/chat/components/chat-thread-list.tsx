@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock,
+  Flag,
   Loader2,
   Pin,
   PinOff,
@@ -222,6 +223,10 @@ export function ChatThreadList({
       ? presence.byAgent.get(agent.id)?.availability === "offline"
       : false;
     const unread = isCurrent ? 0 : (session.unread_count ?? 0);
+    // NOT zeroed for the current session: unlike unread (which the open chat
+    // clears by advancing the read cursor), an outstanding marker is a decision
+    // the reader made and it stays until they discharge it.
+    const openCount = session.open_count ?? 0;
     const isConfirmingDelete = confirmingDeleteId === session.id;
     const isConfirmingStop = confirmingStopId === session.id && !!pendingTask;
     const isConfirmingAction = isConfirmingDelete || isConfirmingStop;
@@ -450,6 +455,22 @@ export function ChatThreadList({
                       className="inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-[oklch(0.62_0.14_18)] px-1 text-micro font-semibold text-white"
                     >
                       {unread > 99 ? "99+" : unread}
+                    </span>
+                  )}
+                  {/* Outstanding replies the reader marked and has not
+                      handled. Separate badge from unread on purpose: unread
+                      clears the moment the chat is opened, this one survives
+                      that and is what the reader still owes. Both can show at
+                      once (a new reply landed on top of an outstanding one),
+                      which is why this is an amber flag chip and not another
+                      count in the red bubble. */}
+                  {openCount > 0 && (
+                    <span
+                      aria-label={t(($) => $.window.triage_thread_badge, { count: openCount })}
+                      className="inline-flex h-[18px] shrink-0 items-center gap-0.5 rounded-full border border-warning/50 bg-warning/20 px-1 text-micro font-semibold tabular-nums text-foreground"
+                    >
+                      <Flag className="size-2.5 text-priority-high" aria-hidden="true" />
+                      {openCount > 99 ? "99+" : openCount}
                     </span>
                   )}
                 </>

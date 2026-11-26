@@ -99,6 +99,8 @@ import type {
   ChatSession,
   ChatPinnedAgent,
   ChatMessage,
+  ChatMessageTriageList,
+  ChatMessageTriageState,
   ChatMessagesPage,
   ChatDraftRestoresResponse,
   ChatPendingTask,
@@ -267,6 +269,8 @@ import {
   CancelTaskResponseSchema,
   ChatDraftRestoresResponseSchema,
   ChatMessageListSchema,
+  ChatMessageTriageListSchema,
+  ChatMessageTriageStateSchema,
   ChatMessagesPageSchema,
   ChatPendingTaskSchema,
   ChatSessionListSchema,
@@ -296,6 +300,7 @@ import {
   EMPTY_APP_CONFIG,
   EMPTY_ATTACHMENT,
   EMPTY_CHAT_MESSAGE_LIST,
+  EMPTY_CHAT_MESSAGE_TRIAGE_LIST,
   EMPTY_CHAT_PENDING_TASK,
   EMPTY_CHAT_SESSION,
   EMPTY_CHAT_SESSION_LIST,
@@ -3877,6 +3882,69 @@ export class ApiClient {
       }
       throw err;
     }
+  }
+
+  /**
+   * The caller's triage decisions for one session (flag/handle per reply).
+   *
+   * Additive endpoint: a server that predates it answers 404, and the caller
+   * treats that as "nothing decided" so an older backend never breaks chat.
+   */
+  async listChatMessageTriage(sessionId: string): Promise<ChatMessageTriageList> {
+    try {
+      const raw: unknown = await this.fetch(
+        `/api/chat/sessions/${sessionId}/message-triage`,
+      );
+      return parseWithFallback(raw, ChatMessageTriageListSchema, EMPTY_CHAT_MESSAGE_TRIAGE_LIST, {
+        endpoint: "GET /api/chat/sessions/:id/message-triage",
+      });
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 404) return EMPTY_CHAT_MESSAGE_TRIAGE_LIST;
+      throw err;
+    }
+  }
+
+  /** Flag one reply as needing the caller's attention. Idempotent. */
+  async flagChatMessage(sessionId: string, messageId: string): Promise<ChatMessageTriageState | null> {
+    return this.setChatMessageTriage(sessionId, messageId, "flag", "POST");
+  }
+
+  async unflagChatMessage(sessionId: string, messageId: string): Promise<ChatMessageTriageState | null> {
+    return this.setChatMessageTriage(sessionId, messageId, "flag", "DELETE");
+  }
+
+  /** Mark one reply as dealt with (clears any flag). Idempotent. */
+  async handleChatMessage(sessionId: string, messageId: string): Promise<ChatMessageTriageState | null> {
+    return this.setChatMessageTriage(sessionId, messageId, "handle", "POST");
+  }
+
+  async unhandleChatMessage(sessionId: string, messageId: string): Promise<ChatMessageTriageState | null> {
+    return this.setChatMessageTriage(sessionId, messageId, "handle", "DELETE");
+  }
+
+  /** Mark every outstanding reply in the session as dealt with. */
+  async handleAllOpenChatMessages(sessionId: string): Promise<void> {
+    await this.fetch(`/api/chat/sessions/${sessionId}/message-triage/handle-all`, {
+      method: "POST",
+    });
+  }
+
+  private async setChatMessageTriage(
+    sessionId: string,
+    messageId: string,
+    action: "flag" | "handle",
+    method: "POST" | "DELETE",
+  ): Promise<ChatMessageTriageState | null> {
+    const raw: unknown = await this.fetch(
+      `/api/chat/sessions/${sessionId}/messages/${messageId}/triage/${action}`,
+      { method },
+    );
+    return parseWithFallback<ChatMessageTriageState | null>(
+      raw,
+      ChatMessageTriageStateSchema,
+      null,
+      { endpoint: `${method} /api/chat/sessions/:id/messages/:mid/triage/${action}` },
+    );
   }
 
   async sendChatMessage(

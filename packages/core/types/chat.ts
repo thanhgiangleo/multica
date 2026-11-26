@@ -83,6 +83,39 @@ export interface ChatChannelSource {
   route_revision: number;
 }
 
+/**
+ * The reader's own triage decision about ONE assistant reply.
+ *
+ * Two independent decisions are stored, not one:
+ * - `flagged`  — this reply needs my attention ("I read it, I still owe an answer")
+ * - `handled`  — I am done with this reply
+ *
+ * Neither being true is a real state ("seen, nothing decided yet") and is what
+ * keeps a conversation full of read replies from rendering as a wall of
+ * alarms. A single "handled" bit cannot express that, which is why the pair
+ * exists.
+ *
+ * `revision` is the USER-STATE revision and is deliberately not
+ * `ChatMessage`-content: a client receiving a new value patches the marker
+ * only and must never re-render the reply body.
+ */
+export interface ChatMessageTriageState {
+  chat_message_id: string;
+  flagged: boolean;
+  handled: boolean;
+  flagged_at?: string;
+  handled_at?: string;
+  revision: number;
+}
+
+/** Every decision the reader has recorded in one session. */
+export interface ChatMessageTriageList {
+  /** Rows that exist. Absent ids mean "nothing decided", which costs no row. */
+  states: ChatMessageTriageState[];
+  /** Outstanding (flagged, not handled) replies in the session. */
+  open_count: number;
+}
+
 export interface ChatSession {
   id: string;
   workspace_id: string;
@@ -99,6 +132,10 @@ export interface ChatSession {
   /** Number of unread assistant messages (after the read cursor). List-only;
    *  optional so older clients / non-list payloads stay valid. */
   unread_count?: number;
+  /** How many replies in this session the reader flagged and has not handled
+   *  yet — their own work queue, which survives opening the chat (unread
+   *  clears on read). List-only; optional for older servers. */
+  open_count?: number;
   /** Latest message in the session, or null when empty. List-only. */
   last_message?: ChatLastMessage | null;
   /** True when the user has pinned this chat to the top of the list.

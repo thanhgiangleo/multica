@@ -2,12 +2,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../api";
 import { useWorkspaceId } from "../hooks";
 import { chatKeys, sortChatSessions, QUICK_ACTIONS_PENDING_TIMEOUT_MS } from "./queries";
+import {
+  applyTriagePatch,
+  syncSessionOpenCount,
+  writeTriageStateFromPayload,
+  type TriagePatch,
+} from "./triage-cache";
+import { getCurrentWsId } from "../platform/workspace-storage";
 import { createLogger } from "../logger";
 import type {
   ChatSession,
   ChatPinnedAgent,
   ChatDraftRestoresResponse,
   ChatQuickActionsPendingState,
+  ChatMessageTriageList,
+  ChatMessageTriageState,
 } from "../types";
 
 const logger = createLogger("chat.mut");
@@ -414,6 +423,118 @@ export function useRegenerateChatQuickActions() {
           ctx.previous ?? null,
         );
       }
+    },
+  });
+}
+
+/**
+ * Per-message triage writes: flagging a reply ("needs attention") and handling
+ * it ("done with it") are separate mutations because they are separate
+ * decisions — the UI must be able to do either without implying the other.
+ *
+ * Every mutation patches the session's triage cache optimistically and rolls
+ * back on failure. The patch is written to the SAME cache entry the message
+ * list reads, so a reply's marker flips the instant the reader clicks, without
+ * a refetch and without touching the transcript itself (the reply's content is
+ * not part of this state).
+ */
+function useChatMessageTriageMutation(
+  write: (sessionId: string, messageId: string) => Promise<ChatMessageTriageState | null>,
+  patch: Omit<TriagePatch, "sessionId" | "messageId">,
+) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ sessionId, messageId }: { sessionId: string; messageId: string }) =>
+      write(sessionId, messageId),
+    onMutate: async ({ sessionId, messageId }) => {
+      await qc.cancelQueries({ queryKey: chatKeys.triage(sessionId) });
+      const previous = qc.getQueryData<ChatMessageTriageList>(chatKeys.triage(sessionId));
+      qc.setQueryData<ChatMessageTriageList>(chatKeys.triage(sessionId), (old) => {
+        const next = applyTriagePatch(old, { sessionId, messageId, ...patch });
+        // Optimistic badge move in the same tick as the row marker, so the
+        // thread list and the transcript never disagree mid-flight.
+        syncSessionOpenCount(qc, getCurrentWsId(), sessionId, next.open_count);
+        return next;
+      });
+      return { previous, sessionId };
+    },
+    onError: (err, _vars, ctx) => {
+      logger.error("chatMessageTriage.error.rollback", { err });
+      if (ctx?.previous !== undefined) {
+        qc.setQueryData<ChatMessageTriageList>(chatKeys.triage(ctx.sessionId), ctx.previous);
+        // The badge was patched optimistically too; put it back with the list.
+        syncSessionOpenCount(qc, getCurrentWsId(), ctx.sessionId, ctx.previous.open_count);
+      }
+    },
+    onSuccess: (state, { sessionId }) => {
+      if (!state) return;
+      // The server's authoritative row replaces the optimistic placeholder so
+      // the timestamps and revision shown are the persisted ones, and its count
+      // is projected into the thread list through the shared helper the
+      // realtime path also uses.
+      const next = writeTriageStateFromPayload(qc, sessionId, state);
+      syncSessionOpenCount(qc, getCurrentWsId(), sessionId, next.open_count);
+    },
+    onSettled: (_data, _err, { sessionId }) => {
+      qc.invalidateQueries({ queryKey: chatKeys.triage(sessionId) });
+    },
+  });
+}
+
+/** Flag one reply as needing the reader's attention. */
+export function useFlagChatMessage() {
+  return useChatMessageTriageMutation(api.flagChatMessage, { flagged: true });
+}
+
+/** Remove the flag without claiming the reply is done. */
+export function useUnflagChatMessage() {
+  return useChatMessageTriageMutation(api.unflagChatMessage, { flagged: false });
+}
+
+/** Mark one reply as dealt with (clears any flag). */
+export function useHandleChatMessage() {
+  return useChatMessageTriageMutation(api.handleChatMessage, { flagged: false, handled: true });
+}
+
+/** Reverse a "dealt with" decision. Returns the reply to the undecided pool. */
+export function useUnhandleChatMessage() {
+  return useChatMessageTriageMutation(api.unhandleChatMessage, { handled: false });
+}
+
+/** Mark every outstanding reply in the session as dealt with. */
+export function useHandleAllOpenChatMessages() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (sessionId: string) => api.handleAllOpenChatMessages(sessionId),
+    onMutate: async (sessionId) => {
+      await qc.cancelQueries({ queryKey: chatKeys.triage(sessionId) });
+      const previous = qc.getQueryData<ChatMessageTriageList>(chatKeys.triage(sessionId));
+      // Every outstanding reply becomes handled, not merely uncounted: leaving
+      // the flags in place would keep their chips and rails on screen while the
+      // bar claimed zero. The timestamp is a client-side placeholder — the
+      // server's own `handled_at` arrives on the refetch at settle.
+      const handledAt = new Date().toISOString();
+      qc.setQueryData<ChatMessageTriageList>(chatKeys.triage(sessionId), (old) => {
+        const base = old ?? { states: [], open_count: 0 };
+        const states = base.states.map((state) =>
+          state.flagged && !state.handled
+            ? { ...state, flagged: false, flagged_at: undefined, handled: true, handled_at: handledAt }
+            : state,
+        );
+        return { states, open_count: 0 };
+      });
+      syncSessionOpenCount(qc, getCurrentWsId(), sessionId, 0);
+      return { previous, sessionId };
+    },
+    onError: (err, _sessionId, ctx) => {
+      logger.error("handleAllOpenChatMessages.error.rollback", { err });
+      if (ctx?.previous !== undefined) {
+        qc.setQueryData<ChatMessageTriageList>(chatKeys.triage(ctx.sessionId), ctx.previous);
+        syncSessionOpenCount(qc, getCurrentWsId(), ctx.sessionId, ctx.previous.open_count);
+      }
+    },
+    onSettled: (_data, _err, sessionId) => {
+      qc.invalidateQueries({ queryKey: chatKeys.triage(sessionId) });
     },
   });
 }

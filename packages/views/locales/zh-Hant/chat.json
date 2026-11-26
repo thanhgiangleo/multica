@@ -90,7 +90,13 @@
     "quick_actions_heading": "後續提問",
     "quick_actions_aria": "後續提問建議",
     "quick_actions_regenerate": "重新生成建議",
-    "quick_actions_regenerate_failed": "無法重新生成建議，請重試。"
+    "quick_actions_regenerate_failed": "無法重新生成建議，請重試。",
+    "triage_flag": "標記為待處理",
+    "triage_unflag": "取消標記",
+    "triage_handle": "標記為已處理",
+    "triage_needs_action": "待處理",
+    "triage_handled": "已處理",
+    "triage_handled_at": "{{time}} 已處理"
   },
   "session_history": {
     "untitled": "無標題",
@@ -144,7 +150,11 @@
     "history_group": "歷史對話",
     "agent_filter_placeholder": "搜尋智慧體...",
     "agent_needs_runtime": "需繫結執行時",
-    "agent_needs_runtime_hint": "請先繫結執行時，再與該智慧體開始對話"
+    "agent_needs_runtime_hint": "請先繫結執行時，再與該智慧體開始對話",
+    "triage_bar_other": "有 {{count}} 則回覆標記為待處理",
+    "triage_handle_all": "全部標記為已處理",
+    "triage_chip_other": "{{count}} 則待處理",
+    "triage_thread_badge": "{{count}} 則待處理"
   },
   "empty_state": {
     "first_time_title": "和你的智慧體對話",
