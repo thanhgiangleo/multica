@@ -90,6 +90,14 @@ const (
 	EventChatSessionRead     = "chat:session_read"
 	EventChatSessionDeleted  = "chat:session_deleted"
 	EventChatSessionUpdated  = "chat:session_updated"
+	// EventChatMessageTriageChanged carries one user's flag/handle decision on
+	// one reply: flagging ("needs attention"), handling ("done with it"), or
+	// clearing either. Delivered to the session's creator only (publishChat
+	// stamps ChatSessionOwnerID), because triage is a private note about what
+	// THIS reader still owes — it is never another member's business, and it
+	// must not move anyone else's badge. A payload with bulk_cleared means
+	// every outstanding reply in the session changed at once.
+	EventChatMessageTriageChanged = "chat:message_triage"
 
 	// Project events
 	EventProjectCreated         = "project:created"

@@ -90,7 +90,13 @@
     "quick_actions_heading": "后续提问",
     "quick_actions_aria": "后续提问建议",
     "quick_actions_regenerate": "重新生成建议",
-    "quick_actions_regenerate_failed": "无法重新生成建议，请重试。"
+    "quick_actions_regenerate_failed": "无法重新生成建议，请重试。",
+    "triage_flag": "标记为待处理",
+    "triage_unflag": "取消标记",
+    "triage_handle": "标记为已处理",
+    "triage_needs_action": "待处理",
+    "triage_handled": "已处理",
+    "triage_handled_at": "{{time}} 已处理"
   },
   "session_history": {
     "untitled": "无标题",
@@ -144,7 +150,11 @@
     "history_group": "历史对话",
     "agent_filter_placeholder": "搜索智能体...",
     "agent_needs_runtime": "需绑定运行时",
-    "agent_needs_runtime_hint": "请先绑定运行时，再与该智能体开始对话"
+    "agent_needs_runtime_hint": "请先绑定运行时，再与该智能体开始对话",
+    "triage_bar_other": "有 {{count}} 条回复标记为待处理",
+    "triage_handle_all": "全部标记为已处理",
+    "triage_chip_other": "{{count}} 条待处理",
+    "triage_thread_badge": "{{count}} 条待处理"
   },
   "empty_state": {
     "first_time_title": "和你的智能体对话",

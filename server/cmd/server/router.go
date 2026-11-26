@@ -2471,6 +2471,22 @@ func NewRouterWithOptions(pool *pgxpool.Pool, hub *realtime.Hub, bus *events.Bus
 					r.Delete("/queued-tasks", h.ClearQueuedChatTasks)
 					r.Post("/queued-tasks/{taskId}/prioritize", h.PrioritizeQueuedChatTask)
 					r.Post("/read", h.MarkChatSessionRead)
+					// Per-message triage (read-but-unhandled). Flag and handle
+					// are separate decisions on purpose: see
+					// chat_message_triage.go for why one bit cannot express
+					// "read it, have not decided yet".
+					// Human-only: triage is a reader's own note about what they
+					// still owe, so a task-token agent must not be able to write
+					// decisions on its owner's behalf.
+					r.With(handler.RequireHumanActor).Get("/message-triage", h.ListChatMessageTriage)
+					r.With(handler.RequireHumanActor).Post("/message-triage/handle-all", h.HandleAllOpenChatMessages)
+					r.Route("/messages/{messageId}/triage", func(r chi.Router) {
+						r.Use(handler.RequireHumanActor)
+						r.Post("/flag", h.FlagChatMessage)
+						r.Delete("/flag", h.UnflagChatMessage)
+						r.Post("/handle", h.HandleChatMessage)
+						r.Delete("/handle", h.UnhandleChatMessage)
+					})
 					// Deferred-cancellation draft restores (#5219):
 					// creator-only fetch + idempotent consume.
 					r.Get("/draft-restores", h.ListChatDraftRestores)

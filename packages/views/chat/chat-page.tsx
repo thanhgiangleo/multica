@@ -30,6 +30,7 @@ import { ChatInput } from "./components/chat-input";
 import { ChatQueue } from "./components/chat-queue";
 import { ChatThreadList } from "./components/chat-thread-list";
 import { ChatSessionHeader } from "./components/chat-session-header";
+import { ChatTriageBar, ChatTriageProvider } from "./components/message-triage";
 import { EmptyState } from "./components/chat-empty-state";
 import { NewChatButton } from "./components/new-chat-button";
 import { useChatController } from "./components/use-chat-controller";
@@ -388,9 +389,14 @@ export function ChatPage() {
           onArchive={handleArchive}
         />
       )}
+      {/* Sits between the header and the transcript: it counts what the
+          transcript below it is asking the reader to act on, and its bulk
+          action is the one place to discharge the whole batch. */}
+      <ChatTriageBar sessionId={c.activeSessionId} />
       {c.showSkeleton ? (
         <ChatMessageSkeleton />
       ) : c.hasMessages ? (
+        <ChatTriageProvider sessionId={c.activeSessionId}>
         <ChatMessageList
           key={c.activeSessionId}
           messages={c.messages}
@@ -420,6 +426,7 @@ export function ChatPage() {
           quickActionsPendingMessageId={quickActionsPending?.message_id ?? null}
           highlightQuery={chatQuery}
         />
+        </ChatTriageProvider>
       ) : (
         <EmptyState
           agent={c.activeAgent}

@@ -65,6 +65,7 @@ export type WSEventType =
   | "chat:session_read"
   | "chat:session_deleted"
   | "chat:session_updated"
+  | "chat:message_triage"
   | "project:created"
   | "project:updated"
   | "project:deleted"
@@ -526,6 +527,25 @@ export interface ChatSessionDeletedPayload {
   chat_session_id: string;
 }
 
+/**
+ * One reader's triage decision on one reply. Delivered only to the session's
+ * creator, because triage is a private note about what THIS reader still owes.
+ *
+ * `bulk_cleared` means "every outstanding reply in the session changed at
+ * once" (the mark-all action); `chat_message_id` is then empty and a client
+ * should refresh the session's triage list instead of matching one id.
+ */
+export interface ChatMessageTriagePayload {
+  chat_session_id: string;
+  chat_message_id?: string;
+  flagged: boolean;
+  handled: boolean;
+  flagged_at?: string;
+  handled_at?: string;
+  revision?: number;
+  bulk_cleared?: boolean;
+}
+
 export interface ProjectCreatedPayload {
   project: Project;
 }
@@ -642,6 +662,7 @@ export interface WSEventPayloadMap {
   "chat:session_read": ChatSessionReadPayload;
   "chat:session_deleted": ChatSessionDeletedPayload;
   "chat:session_updated": unknown;
+  "chat:message_triage": ChatMessageTriagePayload;
   "project:created": ProjectCreatedPayload;
   "project:updated": ProjectUpdatedPayload;
   "project:deleted": ProjectDeletedPayload;

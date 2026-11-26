@@ -94,7 +94,13 @@
     "quick_actions_heading": "Questions de suivi",
     "quick_actions_aria": "Suggestions pour continuer",
     "quick_actions_regenerate": "Régénérer les suggestions",
-    "quick_actions_regenerate_failed": "Impossible d'actualiser les suggestions. Veuillez réessayer."
+    "quick_actions_regenerate_failed": "Impossible d'actualiser les suggestions. Veuillez réessayer.",
+    "triage_flag": "Marquer comme à traiter",
+    "triage_unflag": "Retirer le marquage",
+    "triage_handle": "Marquer comme traité",
+    "triage_needs_action": "À traiter",
+    "triage_handled": "Traité",
+    "triage_handled_at": "Traité à {{time}}"
   },
   "session_history": {
     "untitled": "Sans titre",
@@ -148,7 +154,13 @@
     "history_group": "Historique des discussions",
     "agent_filter_placeholder": "Rechercher des agents...",
     "agent_needs_runtime": "Runtime requis",
-    "agent_needs_runtime_hint": "Associez un runtime avant de démarrer une discussion avec cet agent"
+    "agent_needs_runtime_hint": "Associez un runtime avant de démarrer une discussion avec cet agent",
+    "triage_bar_one": "{{count}} réponse est marquée comme à traiter",
+    "triage_bar_other": "{{count}} réponses sont marquées comme à traiter",
+    "triage_handle_all": "Tout marquer comme traité",
+    "triage_chip_one": "{{count}} à traiter",
+    "triage_chip_other": "{{count}} à traiter",
+    "triage_thread_badge": "{{count}} à traiter"
   },
   "empty_state": {
     "first_time_title": "Discutez avec vos agents",

@@ -246,6 +246,30 @@ func (h *Handler) ListChatSessions(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "failed to load chat channel metadata")
 		return
 	}
+	// Outstanding-reply counts for every listed session in one round trip —
+	// the thread list renders one badge per row and a per-row query would
+	// scale with the list. Archived sessions are dropped: their triage state is
+	// unreachable behind a read-only view, so a badge there would be a count
+	// the reader cannot act on (same reasoning as forcing unread to 0 in
+	// ListAllChatSessionsByCreator).
+	openCounts, err := h.Queries.CountOpenChatMessageStatesByCreator(r.Context(), db.CountOpenChatMessageStatesByCreatorParams{
+		UserID:      parseUUID(userID),
+		WorkspaceID: parseUUID(workspaceID),
+	})
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to count outstanding chat messages")
+		return
+	}
+	openBySession := make(map[string]int, len(openCounts))
+	for _, row := range openCounts {
+		openBySession[uuidToString(row.ChatSessionID)] = int(row.OpenCount)
+	}
+	for i := range resp {
+		if resp[i].Status == "archived" {
+			continue
+		}
+		resp[i].OpenCount = openBySession[resp[i].ID]
+	}
 	writeJSON(w, http.StatusOK, resp)
 }
 
@@ -761,6 +785,14 @@ func (h *Handler) DeleteChatSession(w http.ResponseWriter, r *http.Request) {
 	// this sweep (see LockChatSessionForTask in chat.sql).
 	if err := qtx.DeleteChatDraftRestoresBySession(r.Context(), session.ID); err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to delete chat session draft restores")
+		return
+	}
+
+	// Same no-FK chore for per-message triage decisions: they are keyed by
+	// chat_session_id, and a deleted conversation's flags are unreachable —
+	// no read path would ever clear them.
+	if err := qtx.DeleteChatMessageUserStatesBySession(r.Context(), session.ID); err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to delete chat session message states")
 		return
 	}
 
@@ -1924,6 +1956,11 @@ type ChatSessionResponse struct {
 	// HasUnread is kept as a convenience (== UnreadCount > 0) for existing consumers.
 	HasUnread   bool             `json:"has_unread"`
 	UnreadCount int              `json:"unread_count"`
+	// OpenCount is how many replies in this session the caller flagged and has
+	// not yet handled — the reader's own work queue, distinct from unread
+	// (which is derived from the read cursor and clears on open). List
+	// endpoints only.
+	OpenCount int `json:"open_count"`
 	LastMessage *ChatLastMessage `json:"last_message"`
 	// Pinned marks a chat the user has stuck to the top of the list. Populated
 	// by list endpoints and by the pin/unpin + single-session responses.

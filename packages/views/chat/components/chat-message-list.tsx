@@ -53,6 +53,14 @@ import { FOLLOW_EDGE_THRESHOLD } from "../../common/task-transcript/transcript-f
 import { LIVE_END_ROW_ATTR, useStickToBottom } from "./stick-to-bottom";
 import { formatElapsedMs } from "../lib/format";
 import {
+  TriageActions,
+  TriageFlagChip,
+  TriageHandledCaption,
+  TriageRail,
+  useHasTriageSession,
+  useMessageTriageState,
+} from "./message-triage";
+import {
   canonicalAnswerText,
   extractCopyText,
   splitTimeline,
@@ -403,9 +411,23 @@ export function ChatMessageList({
         components={LIST_COMPONENTS}
         itemContent={(_, item) => (
           <div
-            className={cn(CHAT_COLUMN, "py-2")}
+            className={cn(
+              // `group/msg` + `relative` are for the triage rail and hover
+              // actions: both hang off the row box, not the message body, so a
+              // tall reply (diagram, long transcript) keeps its marker at the
+              // top edge where the eye lands.
+              "group/msg relative",
+              CHAT_COLUMN,
+              "py-2",
+            )}
             {...(item.key === liveEndKey ? { [LIVE_END_ROW_ATTR]: "" } : {})}
           >
+            {/* Anchored to the ROW, not to the reply body: the rail marks where
+                the row starts, and a reply whose first block is a tall diagram
+                must still show it at the top edge. */}
+            {item.kind === "message" && item.message.role === "assistant" && (
+              <AssistantTriageRail messageId={item.message.id} />
+            )}
             <MessageBubble
               item={item}
               isPending={!!pendingTaskId && item.taskId === pendingTaskId}
@@ -549,6 +571,23 @@ const MessageBubble = memo(function MessageBubble({
     />
   );
 });
+
+/**
+ * The outstanding marker on a persisted reply: a 2px amber rail on the row's
+ * left edge.
+ *
+ * Only the rail lives here. The chip and actions sit in the reply's footer
+ * (MessageFooter), because that strip is already the row's decision area — it
+ * carries the elapsed caption and Copy — and a second floating strip would give
+ * one reply two competing action bars.
+ *
+ * Rendered only once the message is persisted: a live (still streaming) reply
+ * has no id yet, so there is nothing a reader could mark.
+ */
+function AssistantTriageRail({ messageId }: { messageId: string }) {
+  const state = useMessageTriageState(messageId);
+  return state?.flagged && !state.handled ? <TriageRail /> : null;
+}
 
 /**
  * Assistant turn body — renders BOTH the in-flight (live) and the persisted
@@ -908,9 +947,17 @@ function MessageFooter({
   const isNoResponse = message.message_kind === "no_response";
   const copyContent = extractCopyText(message, timeline, transformContent);
   const showCopy = !isPending && !isNoResponse && copyContent.trim().length > 0;
-  if (message.elapsed_ms == null && !showCopy) return null;
+  const triageState = useMessageTriageState(message.id);
+  // Triage exists only inside a chat session — the agent-builder conversation
+  // renders this same footer over a transcript nobody triages, and it supplies
+  // no provider. Without this the footer would mount an empty action group
+  // there and change that surface's spacing for no reason.
+  const hasTriageSession = useHasTriageSession();
+  const showTriage = !isPending && hasTriageSession;
+  if (message.elapsed_ms == null && !showCopy && !showTriage) return null;
   return (
     <div className="flex items-center gap-1.5">
+      {triageState?.flagged && !triageState.handled && <TriageFlagChip />}
       {message.elapsed_ms != null && (
         <ElapsedCaption
           variant={isNoResponse ? "finished" : "replied"}
@@ -919,6 +966,10 @@ function MessageFooter({
       )}
       {showCopy && (
         <MessageCopyButton content={copyContent} />
+      )}
+      {triageState?.handled && <TriageHandledCaption value={triageState.handled_at} />}
+      {showTriage && (
+        <TriageActions messageId={message.id} state={triageState} className="ml-auto" />
       )}
     </div>
   );

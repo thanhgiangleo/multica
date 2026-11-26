@@ -90,7 +90,13 @@
     "quick_actions_heading": "フォローアップ質問",
     "quick_actions_aria": "フォローアップの候補",
     "quick_actions_regenerate": "候補を再生成",
-    "quick_actions_regenerate_failed": "候補を再生成できませんでした。もう一度お試しください。"
+    "quick_actions_regenerate_failed": "候補を再生成できませんでした。もう一度お試しください。",
+    "triage_flag": "要対応としてマーク",
+    "triage_unflag": "マークを解除",
+    "triage_handle": "対応済みにする",
+    "triage_needs_action": "要対応",
+    "triage_handled": "対応済み",
+    "triage_handled_at": "{{time}} に対応済み"
   },
   "session_history": {
     "untitled": "無題",
@@ -144,7 +150,11 @@
     "history_group": "チャット履歴",
     "agent_filter_placeholder": "エージェントを検索...",
     "agent_needs_runtime": "ランタイム未設定",
-    "agent_needs_runtime_hint": "このエージェントとチャットする前にランタイムを設定してください"
+    "agent_needs_runtime_hint": "このエージェントとチャットする前にランタイムを設定してください",
+    "triage_bar_other": "{{count}} 件の返信が要対応になっています",
+    "triage_handle_all": "すべて対応済みにする",
+    "triage_chip_other": "{{count}} 件要対応",
+    "triage_thread_badge": "{{count}} 件要対応"
   },
   "empty_state": {
     "first_time_title": "エージェントとチャット",

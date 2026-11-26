@@ -71,6 +71,7 @@ import { useChatTaskActions } from "./use-chat-task-actions";
 import { useChatInputFocus } from "./use-chat-input-focus";
 import { useChatOpenReveal } from "./use-chat-open-reveal";
 import { ChatWindowMessages } from "./chat-window-messages";
+import { ChatTriageBar, ChatTriageHeaderChip } from "./message-triage";
 import { ChatInput } from "./chat-input";
 import { ChatQueue } from "./chat-queue";
 import { EmptyState } from "./chat-empty-state";
@@ -846,6 +847,7 @@ export function ChatWindow() {
           />
         </div>
         <div className="flex items-center gap-0.5 shrink-0">
+          <ChatTriageHeaderChip sessionId={activeSessionId} />
           {!isMobile && (
             <Tooltip>
               <TooltipTrigger
@@ -885,6 +887,12 @@ export function ChatWindow() {
           </Tooltip>
         </div>
       </div>
+
+      {/* Outstanding-reply bar, between the header and the transcript. Inside
+          AnimatePresence only in the sense that it shares the pane's session:
+          it disappears with the window, and renders nothing when nothing is
+          waiting. */}
+      <ChatTriageBar sessionId={activeSessionId} />
 
       {/* Messages / skeleton / empty state */}
       <AnimatePresence initial={false}>

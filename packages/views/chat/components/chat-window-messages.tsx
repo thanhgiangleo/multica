@@ -9,6 +9,7 @@ import { chatMessagesPageOptions } from "@multica/core/chat/queries";
 import { hideQueuedChatMessages } from "@multica/core/chat/pending";
 import { useRegenerateChatQuickActions } from "@multica/core/chat/mutations";
 import { ChatMessageList, ChatMessageSkeleton } from "./chat-message-list";
+import { ChatTriageProvider } from "./message-triage";
 
 const CHAT_VIRTUOSO_INITIAL_FIRST_ITEM_INDEX = 1_000_000;
 
@@ -74,27 +75,29 @@ export function ChatWindowMessages({
       {showSkeleton ? (
         <ChatMessageSkeleton />
       ) : showList ? (
-        <ChatMessageList
-          key={sessionId}
-          active={isPresent}
-          revealKey={sessionId}
-          onRevealed={onReady}
-          messages={messages}
-          pendingTask={pendingTask}
-          availability={availability}
-          firstItemIndex={messages.length > 0
-            ? CHAT_VIRTUOSO_INITIAL_FIRST_ITEM_INDEX - olderMessageCount
-            : 0}
-          hasOlderMessages={!!hasNextPage}
-          isFetchingOlderMessages={isFetchingNextPage}
-          onLoadOlderMessages={() => void fetchNextPage()}
-          onQuickAction={onQuickAction}
-          quickActionsDisabled={quickActionsDisabled}
-          onRegenerateQuickActions={(message) => sessionId
-            ? regenerateQuickActions.mutateAsync({ sessionId, messageId: message.id })
-            : undefined}
-          quickActionsPendingMessageId={quickActionsPendingMessageId}
-        />
+        <ChatTriageProvider sessionId={sessionId}>
+          <ChatMessageList
+            key={sessionId}
+            active={isPresent}
+            revealKey={sessionId}
+            onRevealed={onReady}
+            messages={messages}
+            pendingTask={pendingTask}
+            availability={availability}
+            firstItemIndex={messages.length > 0
+              ? CHAT_VIRTUOSO_INITIAL_FIRST_ITEM_INDEX - olderMessageCount
+              : 0}
+            hasOlderMessages={!!hasNextPage}
+            isFetchingOlderMessages={isFetchingNextPage}
+            onLoadOlderMessages={() => void fetchNextPage()}
+            onQuickAction={onQuickAction}
+            quickActionsDisabled={quickActionsDisabled}
+            onRegenerateQuickActions={(message) => sessionId
+              ? regenerateQuickActions.mutateAsync({ sessionId, messageId: message.id })
+              : undefined}
+            quickActionsPendingMessageId={quickActionsPendingMessageId}
+          />
+        </ChatTriageProvider>
       ) : children}
     </motion.div>
   );

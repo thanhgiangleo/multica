@@ -29,6 +29,11 @@ vi.mock("../../common/actor-avatar", () => ({
 // about the rename editor, so keep the header's DOM focused on that.
 vi.mock("./chat-usage-widget", () => ({ ChatUsageWidget: () => null }));
 
+// Same reason: the triage chip reads the session's open-reply count through
+// TanStack Query, which this suite does not provide. Its own wiring is covered
+// in message-triage.test.tsx.
+vi.mock("./message-triage", () => ({ ChatTriageHeaderChip: () => null }));
+
 vi.mock("../../navigation", () => ({
   AppLink: ({ children }: { children: React.ReactNode }) => <a>{children}</a>,
 }));

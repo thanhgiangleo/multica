@@ -94,7 +94,13 @@
     "quick_actions_heading": "Follow-up questions",
     "quick_actions_aria": "Suggested follow-ups",
     "quick_actions_regenerate": "Regenerate suggestions",
-    "quick_actions_regenerate_failed": "Couldn't refresh suggestions. Please try again."
+    "quick_actions_regenerate_failed": "Couldn't refresh suggestions. Please try again.",
+    "triage_flag": "Mark as needs action",
+    "triage_unflag": "Remove marker",
+    "triage_handle": "Mark as done",
+    "triage_needs_action": "Needs action",
+    "triage_handled": "Done",
+    "triage_handled_at": "Done {{time}}"
   },
   "session_history": {
     "untitled": "Untitled",
@@ -148,7 +154,13 @@
     "history_group": "Chat history",
     "agent_filter_placeholder": "Search agents...",
     "agent_needs_runtime": "Needs runtime",
-    "agent_needs_runtime_hint": "Bind a runtime before starting a chat with this agent"
+    "agent_needs_runtime_hint": "Bind a runtime before starting a chat with this agent",
+    "triage_bar_one": "{{count}} reply is marked as needing action",
+    "triage_bar_other": "{{count}} replies are marked as needing action",
+    "triage_handle_all": "Mark all done",
+    "triage_chip_one": "{{count}} needs action",
+    "triage_chip_other": "{{count}} needs action",
+    "triage_thread_badge": "{{count}} needs action"
   },
   "empty_state": {
     "first_time_title": "Chat with your agents",
