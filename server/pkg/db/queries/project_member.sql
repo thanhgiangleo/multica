@@ -51,3 +51,21 @@ GROUP BY parent_issue_id;
 -- name: DeleteProjectMembersByWorkspace :exec
 -- No foreign keys by project rule, so workspace teardown cleans up here.
 DELETE FROM project_member WHERE workspace_id = $1;
+
+-- name: ListProjectIDsInWorkspace :many
+-- Keeps only the ids that name a project of this workspace.
+SELECT id FROM project
+WHERE workspace_id = $1 AND id = ANY(sqlc.arg('project_ids')::uuid[]);
+
+-- name: ListProjectMemberGrantsByWorkspace :many
+SELECT user_id, project_id FROM project_member
+WHERE workspace_id = $1
+ORDER BY created_at;
+
+-- name: AddProjectMembers :exec
+-- Bulk grant; the caller clears the member's old grants first, in the same
+-- transaction. A single DELETE+INSERT statement would collide on the primary
+-- key for a project that stays granted.
+INSERT INTO project_member (project_id, user_id, workspace_id, created_by)
+SELECT unnest(sqlc.arg('project_ids')::uuid[]), $1, $2, sqlc.narg('created_by')::uuid
+ON CONFLICT (project_id, user_id) DO NOTHING;

@@ -1410,7 +1410,18 @@
     "invitation_meta": "Envoyée le {{sent}} · Expire le {{expires}}",
     "revoke_invitation_aria": "Révoquer l'invitation de {{email}}",
     "seats_used": "{{used}} sièges utilisés sur {{purchased}}",
-    "manage_seats": "Gérer les sièges"
+    "manage_seats": "Gérer les sièges",
+    "project_access_action": "Accès aux projets…",
+    "project_access_title": "Accès aux projets de {{name}}",
+    "project_access_description": "Choisissez si ce membre voit tout l'espace de travail ou seulement les projets sélectionnés. Les workflows restent partagés.",
+    "project_access_confine": "Limiter à certains projets",
+    "project_access_confine_hint": "Il ne verra que les tickets, discussions et agents des projets ci-dessous, ainsi que ses propres agents.",
+    "project_access_no_projects": "Aucun projet pour l'instant. Créez d'abord un projet.",
+    "project_access_summary": "Limité à : {{projects}}",
+    "project_access_none": "Limité aux projets (aucun accordé)",
+    "project_access_save": "Enregistrer",
+    "project_access_saved": "Accès aux projets mis à jour",
+    "project_access_failed": "Échec de la mise à jour de l'accès aux projets"
   },
   "integrations": {
     "status_connected": "Connecté",

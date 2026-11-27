@@ -1400,7 +1400,18 @@
     "invitation_meta": "{{sent}} 发送 · {{expires}} 过期",
     "revoke_invitation_aria": "撤销发给 {{email}} 的邀请",
     "seats_used": "已用 {{used}} / {{purchased}} 个席位",
-    "manage_seats": "管理席位"
+    "manage_seats": "管理席位",
+    "project_access_action": "项目访问权限…",
+    "project_access_title": "{{name}} 的项目访问权限",
+    "project_access_description": "选择该成员可查看整个工作区，还是仅查看你选定的项目。工作流仍为共享。",
+    "project_access_confine": "限制为指定项目",
+    "project_access_confine_hint": "他们只能看到下列项目中的事项、聊天和智能体，以及自己的智能体。",
+    "project_access_no_projects": "还没有项目，请先创建项目。",
+    "project_access_summary": "仅限：{{projects}}",
+    "project_access_none": "仅限项目（未授予任何项目）",
+    "project_access_save": "保存",
+    "project_access_saved": "已更新项目访问权限",
+    "project_access_failed": "更新项目访问权限失败"
   },
   "integrations": {
     "status_connected": "已连接",

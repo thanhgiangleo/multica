@@ -17,6 +17,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/multica-ai/multica/server/internal/logger"
+	"github.com/multica-ai/multica/server/internal/middleware"
 	"github.com/multica-ai/multica/server/internal/seatcapacity"
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
 	"github.com/multica-ai/multica/server/pkg/protocol"
@@ -348,6 +349,7 @@ func (h *Handler) JoinByShareLink(w http.ResponseWriter, r *http.Request) {
 	// idx_invitation_unique_pending guarantees at most one pending row per
 	// (workspace, email).
 	var settledInvitationID pgtype.UUID
+	var settledInvitation db.WorkspaceInvitation
 	pendingInv, pendingErr := qtx.GetPendingInvitationByEmail(r.Context(), db.GetPendingInvitationByEmailParams{
 		WorkspaceID:  link.WorkspaceID,
 		InviteeEmail: strings.ToLower(user.Email),
@@ -361,6 +363,7 @@ func (h *Handler) JoinByShareLink(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case settleErr == nil:
 			settledInvitationID = settled.ID
+			settledInvitation = settled
 		case errors.Is(settleErr, pgx.ErrNoRows):
 			// Concluded elsewhere in between; its own path released the seat.
 		default:
@@ -387,6 +390,29 @@ func (h *Handler) JoinByShareLink(w http.ResponseWriter, r *http.Request) {
 		}
 		writeError(w, http.StatusInternalServerError, "failed to create membership")
 		return
+	}
+
+	// An email invitation that confined the invitee keeps doing so when they
+	// join through a share link instead: the link must not widen what the
+	// inviter granted.
+	if settledInvitation.AccessScope == middleware.AccessScopeProject && link.Role == "member" {
+		projectIDs, err := h.stillExistingProjects(r.Context(), qtx, link.WorkspaceID, settledInvitation.ProjectIds)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to apply project access")
+			return
+		}
+		if member, err = qtx.SetMemberAccessScope(r.Context(), db.SetMemberAccessScopeParams{
+			UserID:      user.ID,
+			WorkspaceID: link.WorkspaceID,
+			AccessScope: middleware.AccessScopeProject,
+		}); err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to apply project access")
+			return
+		}
+		if err := replaceProjectGrants(r.Context(), qtx, link.WorkspaceID, user.ID, settledInvitation.InviterID, projectIDs); err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to apply project access")
+			return
+		}
 	}
 
 	// Mark onboarded. A failure here must roll the whole join back, otherwise a
@@ -436,6 +462,7 @@ func (h *Handler) JoinByShareLink(w http.ResponseWriter, r *http.Request) {
 	}
 
 	memberResp := h.memberWithUserResponse(member, user)
+	memberResp.ProjectIDs = h.memberProjectIDStrings(r.Context(), member)
 	h.publish(protocol.EventMemberAdded, wsID, "member", userID, map[string]any{
 		"member": memberResp,
 	})

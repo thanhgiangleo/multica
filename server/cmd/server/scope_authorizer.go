@@ -6,6 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/multica-ai/multica/server/internal/middleware"
 	"github.com/multica-ai/multica/server/internal/realtime"
 	"github.com/multica-ai/multica/server/internal/util"
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
@@ -18,6 +19,8 @@ type scopeAuthQuerier interface {
 	GetAgentTask(ctx context.Context, id pgtype.UUID) (db.AgentTaskQueue, error)
 	GetIssue(ctx context.Context, id pgtype.UUID) (db.Issue, error)
 	GetChatSession(ctx context.Context, id pgtype.UUID) (db.ChatSession, error)
+	GetMemberByUserAndWorkspace(ctx context.Context, arg db.GetMemberByUserAndWorkspaceParams) (db.Member, error)
+	ListProjectMemberProjectIDs(ctx context.Context, arg db.ListProjectMemberProjectIDsParams) ([]pgtype.UUID, error)
 }
 
 // dbScopeAuthorizer implements realtime.ScopeAuthorizer for the per-task and
@@ -44,6 +47,41 @@ func scopeLookupErr(err error) (bool, error) {
 	return false, err
 }
 
+// issueVisibleTo applies the project confinement of a restricted member to a
+// task's issue. An unrestricted member sees every issue of the workspace.
+func (a *dbScopeAuthorizer) issueVisibleTo(ctx context.Context, userID string, issue db.Issue) (bool, error) {
+	uidUUID, err := util.ParseUUID(userID)
+	if err != nil {
+		return false, nil
+	}
+	member, err := a.q.GetMemberByUserAndWorkspace(ctx, db.GetMemberByUserAndWorkspaceParams{
+		UserID:      uidUUID,
+		WorkspaceID: issue.WorkspaceID,
+	})
+	if err != nil {
+		return scopeLookupErr(err)
+	}
+	if !middleware.IsRestrictedMember(member) {
+		return true, nil
+	}
+	if !issue.ProjectID.Valid {
+		return false, nil
+	}
+	granted, err := a.q.ListProjectMemberProjectIDs(ctx, db.ListProjectMemberProjectIDsParams{
+		UserID:      member.UserID,
+		WorkspaceID: member.WorkspaceID,
+	})
+	if err != nil {
+		return false, err
+	}
+	for _, id := range granted {
+		if id == issue.ProjectID {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 func (a *dbScopeAuthorizer) AuthorizeScope(ctx context.Context, userID, workspaceID, scopeType, scopeID string) (bool, error) {
 	if workspaceID == "" || scopeID == "" {
 		return false, nil
@@ -68,7 +106,10 @@ func (a *dbScopeAuthorizer) AuthorizeScope(ctx context.Context, userID, workspac
 			if err != nil {
 				return scopeLookupErr(err)
 			}
-			return issue.WorkspaceID == wsUUID, nil
+			if issue.WorkspaceID != wsUUID {
+				return false, nil
+			}
+			return a.issueVisibleTo(ctx, userID, issue)
 		}
 		// Chat tasks: only the chat session's creator may subscribe, mirroring
 		// the HTTP layer's creator-only access on chat resources.

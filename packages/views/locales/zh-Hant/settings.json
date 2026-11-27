@@ -1400,7 +1400,18 @@
     "invitation_meta": "{{sent}} 傳送 · {{expires}} 過期",
     "revoke_invitation_aria": "撤銷發給 {{email}} 的邀請",
     "seats_used": "已用 {{used}} / {{purchased}} 個席位",
-    "manage_seats": "管理席位"
+    "manage_seats": "管理席位",
+    "project_access_action": "專案存取權限…",
+    "project_access_title": "{{name}} 的專案存取權限",
+    "project_access_description": "選擇該成員可檢視整個工作區，還是僅檢視你選定的專案。工作流程仍為共用。",
+    "project_access_confine": "限制為指定專案",
+    "project_access_confine_hint": "他們只能看到下列專案中的事項、聊天和智慧代理，以及自己的智慧代理。",
+    "project_access_no_projects": "尚無專案，請先建立專案。",
+    "project_access_summary": "僅限：{{projects}}",
+    "project_access_none": "僅限專案（未授予任何專案）",
+    "project_access_save": "儲存",
+    "project_access_saved": "已更新專案存取權限",
+    "project_access_failed": "更新專案存取權限失敗"
   },
   "integrations": {
     "status_connected": "已連線",

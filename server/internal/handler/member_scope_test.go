@@ -266,3 +266,47 @@ func TestMemberAllowedToViewAgentAs_RestrictedVsPlain(t *testing.T) {
 		})
 	}
 }
+
+// A confined member's roster holds only themselves, people sharing a granted
+// project, and owners/admins — with emails withheld for everyone but themselves.
+func TestRestrictedMember_ListMembersIsLimitedToProjectMates(t *testing.T) {
+	f := newScopeFixture(t)
+	stamp := fmt.Sprint(time.Now().UnixNano())
+	mateID := dbfx.User(t, "Project Mate", "mate-"+stamp+"@example.test")
+	dbfx.Member(t, testWorkspaceID, mateID, "member")
+	strangerID := dbfx.User(t, "Stranger", "stranger-"+stamp+"@example.test")
+	dbfx.Member(t, testWorkspaceID, strangerID, "member")
+	dbfx.Exec(t, `INSERT INTO project_member (project_id, user_id, workspace_id) VALUES ($1, $2, $3)`,
+		f.inProject, mateID, testWorkspaceID)
+	t.Cleanup(func() {
+		_, _ = testPool.Exec(t.Context(), `DELETE FROM project_member WHERE user_id = $1`, parseUUID(mateID))
+	})
+
+	req := testutil.WithURLParams(f.as("GET", "/api/workspaces/"+testWorkspaceID+"/members", nil), "id", testWorkspaceID)
+	var list []MemberWithUserResponse
+	testutil.Call(t, testHandler.ListMembersWithUser, req).Want(http.StatusOK).JSON(&list)
+
+	seen := map[string]MemberWithUserResponse{}
+	for _, m := range list {
+		seen[m.UserID] = m
+	}
+	if _, ok := seen[f.memberID]; !ok {
+		t.Fatal("confined member must see themselves")
+	}
+	if m, ok := seen[mateID]; !ok {
+		t.Fatal("project mate missing")
+	} else if m.Email != "" {
+		t.Fatalf("mate email leaked: %q", m.Email)
+	}
+	if _, ok := seen[strangerID]; ok {
+		t.Fatal("member outside the shared project is listed")
+	}
+	if seen[f.memberID].Email == "" {
+		t.Fatal("a member should still see their own email")
+	}
+	for _, m := range list {
+		if m.Role == "member" && m.UserID != f.memberID && m.UserID != mateID {
+			t.Fatalf("unrelated plain member listed: %+v", m)
+		}
+	}
+}

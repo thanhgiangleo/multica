@@ -16,6 +16,16 @@ const (
 	// connected to another workspace. Joined at connect time only; clients
 	// cannot subscribe to it.
 	ScopeWorkspaceMember = "workspace_member"
+	// ScopeProject holds the connections of project-scoped members granted
+	// that project (scope id = project id). A project-scoped member never joins
+	// ScopeWorkspace, so everything they receive is routed here or to
+	// ScopeWorkspaceShared. Joined at connect time only; clients cannot
+	// subscribe to it.
+	ScopeProject = "project"
+	// ScopeWorkspaceShared holds project-scoped members' connections to one
+	// workspace (scope id = workspace id), for events every member may see
+	// regardless of project, such as status and workflow catalogs.
+	ScopeWorkspaceShared = "workspace_shared"
 	// ScopeDaemonRuntime routes daemon wakeup frames through the Redis relay.
 	// It is consumed by the daemon WebSocket hub, not by browser clients.
 	ScopeDaemonRuntime = "daemon_runtime"

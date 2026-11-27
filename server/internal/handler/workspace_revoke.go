@@ -260,6 +260,14 @@ func (h *Handler) revokeAndRemoveMember(ctx context.Context, workspaceID, userID
 	if err := qtx.DeleteMember(ctx, memberID); err != nil {
 		return empty, err
 	}
+	// No foreign keys: the member's project grants go with the membership, so a
+	// later re-invite cannot inherit them.
+	if err := qtx.DeleteProjectMembersByUser(ctx, db.DeleteProjectMembersByUserParams{
+		UserID:      userID,
+		WorkspaceID: workspaceID,
+	}); err != nil {
+		return empty, err
+	}
 
 	if err := tx.Commit(ctx); err != nil {
 		return empty, err

@@ -28,7 +28,10 @@ func (h *Hub) snapshotMemberRemoval(workspaceID, userID string) memberRemovalJob
 // Removal signals are advisory invalidations. Their database revalidation
 // must never block a Redis shard reader, even when this queue is saturated.
 // Content writers independently enforce fresh primary-database membership.
-func (h *Hub) queueMemberRemoval(workspaceID string, raw []byte, eventID string) bool {
+//
+// notifyPeers is false when the same frame also travels through
+// ScopeWorkspace, so unrestricted peers hear about the removal once.
+func (h *Hub) queueMemberRemoval(workspaceID string, raw []byte, eventID string, notifyPeers bool) bool {
 	userID, removal := parseMemberRemoval(workspaceID, raw)
 	if !removal {
 		return false
@@ -43,7 +46,9 @@ func (h *Hub) queueMemberRemoval(workspaceID string, raw []byte, eventID string)
 	// that invalidation in reader order, independently of lookup latency or
 	// queue overflow. Exclude the target: its client would navigate away even
 	// if the removal is stale and it has already rejoined.
-	h.broadcastToScope(ScopeWorkspace, workspaceID, raw, eventID, userID)
+	if notifyPeers {
+		h.broadcastToScope(ScopeWorkspace, workspaceID, raw, eventID, userID)
+	}
 	if len(job.clients) == 0 {
 		return true
 	}

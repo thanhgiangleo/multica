@@ -2636,6 +2636,34 @@ func (mc *membershipChecker) IsMember(ctx context.Context, userID, workspaceID s
 	return err == nil, err
 }
 
+// Access reports whether userID is confined to granted projects in workspaceID,
+// and which. The socket joins project rooms instead of the workspace room, so a
+// failed lookup must reject the connection rather than guess.
+func (mc *membershipChecker) Access(ctx context.Context, userID, workspaceID string) (bool, []string, error) {
+	member, err := mc.queries.GetMemberByUserAndWorkspace(ctx, db.GetMemberByUserAndWorkspaceParams{
+		UserID:      parseUUID(userID),
+		WorkspaceID: parseUUID(workspaceID),
+	})
+	if err != nil {
+		return false, nil, err
+	}
+	if !middleware.IsRestrictedMember(member) {
+		return false, nil, nil
+	}
+	ids, err := mc.queries.ListProjectMemberProjectIDs(ctx, db.ListProjectMemberProjectIDsParams{
+		UserID:      member.UserID,
+		WorkspaceID: member.WorkspaceID,
+	})
+	if err != nil {
+		return false, nil, err
+	}
+	projectIDs := make([]string, 0, len(ids))
+	for _, id := range ids {
+		projectIDs = append(projectIDs, util.UUIDToString(id))
+	}
+	return true, projectIDs, nil
+}
+
 func (mc *membershipChecker) Members(ctx context.Context, identities []realtime.MembershipIdentity) (map[realtime.MembershipIdentity]bool, error) {
 	params := db.GetRealtimeMembershipsParams{}
 	for _, identity := range identities {

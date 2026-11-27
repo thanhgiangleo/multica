@@ -49,8 +49,12 @@ func TestRestrictedRouteAllowed(t *testing.T) {
 		{post, "/api/labels", false},
 
 		// Whole-workspace surfaces stay closed until opened on purpose.
-		{get, "/api/workspaces/ws1/members", false},
+		{get, "/api/workspaces/ws1/members", true},
 		{get, "/api/workspaces/ws1/invitations", false},
+		// A confined member cannot lift their own confinement.
+		{http.MethodPatch, "/api/workspaces/ws1/members/m1", false},
+		{post, "/api/workspaces/ws1/members", false},
+		{del, "/api/workspaces/ws1/members/m1", false},
 		{get, "/api/inbox", false},
 		{get, "/api/dashboard/usage", false},
 		{get, "/api/squads", false},

@@ -4232,6 +4232,7 @@ func (h *Handler) UpdateIssue(w http.ResponseWriter, r *http.Request) {
 		"description_changed": descriptionChanged,
 		"title_changed":       titleChanged,
 		"prev_title":          prevIssue.Title,
+		"prev_project_id":     uuidToPtr(prevIssue.ProjectID),
 		"prev_assignee_type":  textToPtr(prevIssue.AssigneeType),
 		"prev_assignee_id":    uuidToPtr(prevIssue.AssigneeID),
 		"prev_status":         prevIssue.Status,
@@ -5032,6 +5033,7 @@ func (h *Handler) BatchUpdateIssues(w http.ResponseWriter, r *http.Request) {
 			"priority_changed":           priorityChanged,
 			"project_changed":            projectChanged,
 			"prev_status":                prevIssue.Status,
+			"prev_project_id":            uuidToPtr(prevIssue.ProjectID),
 			"duplicate_of_issue_id":      liveDuplicateMark(issue.Status, issue.DuplicateOfIssueID),
 			"prev_duplicate_of_issue_id": liveDuplicateMark(prevIssue.Status, prevIssue.DuplicateOfIssueID),
 		}

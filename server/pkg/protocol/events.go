@@ -59,6 +59,11 @@ const (
 	EventMemberAdded   = "member:added"
 	EventMemberUpdated = "member:updated"
 	EventMemberRemoved = "member:removed"
+	// EventMemberAccessChanged tells the realtime hubs to drop a member's
+	// sockets after their access scope or project grants changed. Rooms are
+	// joined at connect time, so the client reconnects into the right ones. It
+	// is consumed by the hub and never forwarded to clients.
+	EventMemberAccessChanged = "member:access_changed"
 
 	// Subscriber events
 	EventSubscriberAdded   = "subscriber:added"

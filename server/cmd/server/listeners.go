@@ -35,7 +35,7 @@ import (
 // inherits the same cost silently. Keeping the list declarative puts the
 // internal/external payload boundary in one reviewable place.
 var internalOnlyPayloadKeys = map[string][]string{
-	protocol.EventIssueUpdated: {"prev_description", "prev_title"},
+	protocol.EventIssueUpdated: {"prev_description", "prev_title", "prev_project_id"},
 	// task:failed error text is consumed synchronously by channel outbounds.
 	// It may contain provider/runtime detail that belongs in the originating
 	// chat transcript, not in the workspace-wide realtime fanout.
@@ -91,7 +91,11 @@ func isChatPrivateEvent(e events.Event) bool {
 // for a Redis-backed relay or a feature-flagged dual-write implementation
 // without touching any of the event listeners below. This is Phase 0 of the
 // horizontal-scaling plan tracked in MUL-1138.
-func registerListeners(bus *events.Bus, b realtime.Broadcaster) {
+func registerListeners(bus *events.Bus, b realtime.Broadcaster, options ...listenerOption) {
+	var opts listenerOptions
+	for _, apply := range options {
+		apply(&opts)
+	}
 	// Personal events should NOT be broadcast to the whole workspace.
 	personalEvents := map[string]bool{
 		protocol.EventInboxNew:           true,
@@ -242,8 +246,26 @@ func registerListeners(bus *events.Bus, b realtime.Broadcaster) {
 		b.SendToUser(userID, data, e.WorkspaceID)
 	})
 
+	// member:access_changed is a control frame for the hubs, never client
+	// content. It goes to both workspace rooms so the member's sockets are
+	// reset whichever one they sit in, on whichever node holds them.
+	bus.Subscribe(protocol.EventMemberAccessChanged, func(e events.Event) {
+		if e.WorkspaceID == "" {
+			return
+		}
+		data, err := json.Marshal(map[string]any{"type": e.Type, "payload": e.Payload, "actor_id": e.ActorID, "actor_type": e.ActorType})
+		if err != nil {
+			return
+		}
+		b.BroadcastToScope(realtime.ScopeWorkspace, e.WorkspaceID, data)
+		b.BroadcastToScope(realtime.ScopeWorkspaceShared, e.WorkspaceID, data)
+	})
+
 	// SubscribeAll handles workspace-broadcast for non-personal events.
 	bus.SubscribeAll(func(e events.Event) {
+		if e.Type == protocol.EventMemberAccessChanged {
+			return
+		}
 		// Skip personal events — they are handled by type-specific listeners above.
 		if personalEvents[e.Type] {
 			return
@@ -305,6 +327,7 @@ func registerListeners(bus *events.Bus, b realtime.Broadcaster) {
 		if e.WorkspaceID != "" {
 			realtime.M.RecordEvent(e.Type)
 			b.BroadcastToWorkspace(e.WorkspaceID, data)
+			routeRestricted(b, e, data, opts)
 		} else if strings.HasPrefix(e.Type, "daemon:") {
 			realtime.M.RecordEvent(e.Type)
 			b.Broadcast(data)

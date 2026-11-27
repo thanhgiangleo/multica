@@ -1805,6 +1805,8 @@ type WorkspaceInvitation struct {
 	CreatedAt     pgtype.Timestamptz `json:"created_at"`
 	UpdatedAt     pgtype.Timestamptz `json:"updated_at"`
 	ExpiresAt     pgtype.Timestamptz `json:"expires_at"`
+	AccessScope   string             `json:"access_scope"`
+	ProjectIds    []pgtype.UUID      `json:"project_ids"`
 }
 
 type WorkspaceMcpServer struct {

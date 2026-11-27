@@ -43,6 +43,32 @@ func (q *Queries) AddProjectMember(ctx context.Context, arg AddProjectMemberPara
 	return i, err
 }
 
+const addProjectMembers = `-- name: AddProjectMembers :exec
+INSERT INTO project_member (project_id, user_id, workspace_id, created_by)
+SELECT unnest($3::uuid[]), $1, $2, $4::uuid
+ON CONFLICT (project_id, user_id) DO NOTHING
+`
+
+type AddProjectMembersParams struct {
+	UserID      pgtype.UUID   `json:"user_id"`
+	WorkspaceID pgtype.UUID   `json:"workspace_id"`
+	ProjectIds  []pgtype.UUID `json:"project_ids"`
+	CreatedBy   pgtype.UUID   `json:"created_by"`
+}
+
+// Bulk grant; the caller clears the member's old grants first, in the same
+// transaction. A single DELETE+INSERT statement would collide on the primary
+// key for a project that stays granted.
+func (q *Queries) AddProjectMembers(ctx context.Context, arg AddProjectMembersParams) error {
+	_, err := q.db.Exec(ctx, addProjectMembers,
+		arg.UserID,
+		arg.WorkspaceID,
+		arg.ProjectIds,
+		arg.CreatedBy,
+	)
+	return err
+}
+
 const childIssueProgressInProjects = `-- name: ChildIssueProgressInProjects :many
 SELECT parent_issue_id,
        COUNT(*)::bigint AS total,
@@ -143,6 +169,37 @@ func (q *Queries) GetIssueProjectID(ctx context.Context, arg GetIssueProjectIDPa
 	return project_id, err
 }
 
+const listProjectIDsInWorkspace = `-- name: ListProjectIDsInWorkspace :many
+SELECT id FROM project
+WHERE workspace_id = $1 AND id = ANY($2::uuid[])
+`
+
+type ListProjectIDsInWorkspaceParams struct {
+	WorkspaceID pgtype.UUID   `json:"workspace_id"`
+	ProjectIds  []pgtype.UUID `json:"project_ids"`
+}
+
+// Keeps only the ids that name a project of this workspace.
+func (q *Queries) ListProjectIDsInWorkspace(ctx context.Context, arg ListProjectIDsInWorkspaceParams) ([]pgtype.UUID, error) {
+	rows, err := q.db.Query(ctx, listProjectIDsInWorkspace, arg.WorkspaceID, arg.ProjectIds)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []pgtype.UUID{}
+	for rows.Next() {
+		var id pgtype.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listProjectMateUserIDs = `-- name: ListProjectMateUserIDs :many
 SELECT DISTINCT user_id FROM project_member
 WHERE workspace_id = $1 AND project_id = ANY($2::uuid[])
@@ -166,6 +223,37 @@ func (q *Queries) ListProjectMateUserIDs(ctx context.Context, arg ListProjectMat
 			return nil, err
 		}
 		items = append(items, user_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listProjectMemberGrantsByWorkspace = `-- name: ListProjectMemberGrantsByWorkspace :many
+SELECT user_id, project_id FROM project_member
+WHERE workspace_id = $1
+ORDER BY created_at
+`
+
+type ListProjectMemberGrantsByWorkspaceRow struct {
+	UserID    pgtype.UUID `json:"user_id"`
+	ProjectID pgtype.UUID `json:"project_id"`
+}
+
+func (q *Queries) ListProjectMemberGrantsByWorkspace(ctx context.Context, workspaceID pgtype.UUID) ([]ListProjectMemberGrantsByWorkspaceRow, error) {
+	rows, err := q.db.Query(ctx, listProjectMemberGrantsByWorkspace, workspaceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListProjectMemberGrantsByWorkspaceRow{}
+	for rows.Next() {
+		var i ListProjectMemberGrantsByWorkspaceRow
+		if err := rows.Scan(&i.UserID, &i.ProjectID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

@@ -51,10 +51,10 @@ func restrictedRouteAllowed(method, path string) bool {
 	case "runtimes":
 		return read && len(segs) == 2
 	case "workspaces":
-		// Only the workspace itself. The member list carries every member's
-		// name and email, so it stays closed until it can be limited to people
-		// who share a project.
-		return read && len(segs) == 3
+		// The workspace itself, and the member list, which the handler limits
+		// to people who share a project (plus owners and admins, without
+		// emails) so avatars and names resolve without exposing the roster.
+		return read && (len(segs) == 3 || (len(segs) == 4 && segs[3] == "members"))
 	}
 	return false
 }

@@ -163,7 +163,7 @@ func (q *Queries) ListMembers(ctx context.Context, workspaceID pgtype.UUID) ([]M
 }
 
 const listMembersWithUser = `-- name: ListMembersWithUser :many
-SELECT m.id, m.workspace_id, m.user_id, m.role, m.created_at,
+SELECT m.id, m.workspace_id, m.user_id, m.role, m.created_at, m.access_scope,
        u.name as user_name, u.email as user_email, u.avatar_url as user_avatar_url
 FROM member m
 JOIN "user" u ON u.id = m.user_id
@@ -177,6 +177,7 @@ type ListMembersWithUserRow struct {
 	UserID        pgtype.UUID        `json:"user_id"`
 	Role          string             `json:"role"`
 	CreatedAt     pgtype.Timestamptz `json:"created_at"`
+	AccessScope   string             `json:"access_scope"`
 	UserName      string             `json:"user_name"`
 	UserEmail     string             `json:"user_email"`
 	UserAvatarUrl pgtype.Text        `json:"user_avatar_url"`
@@ -197,6 +198,7 @@ func (q *Queries) ListMembersWithUser(ctx context.Context, workspaceID pgtype.UU
 			&i.UserID,
 			&i.Role,
 			&i.CreatedAt,
+			&i.AccessScope,
 			&i.UserName,
 			&i.UserEmail,
 			&i.UserAvatarUrl,
