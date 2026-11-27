@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/multica-ai/multica/server/internal/middleware"
 	"github.com/multica-ai/multica/server/internal/util"
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
 )
@@ -107,8 +108,10 @@ func (h *Handler) invokeAgentDecision(ctx context.Context, agent db.Agent, actor
 	workspaceBroad := actorType == "agent" || actorType == "system"
 	isWorkspaceMember := false
 	if effectiveUser != "" {
-		if _, err := h.getWorkspaceMember(ctx, effectiveUser, workspaceID); err == nil {
-			isWorkspaceMember = true
+		if m, err := h.getWorkspaceMember(ctx, effectiveUser, workspaceID); err == nil {
+			// A project-scoped member is not part of the workspace-wide audience:
+			// only a target naming them personally admits them.
+			isWorkspaceMember = !middleware.IsRestrictedMember(m)
 		}
 	}
 
@@ -163,7 +166,7 @@ func (h *Handler) canAccessPrivateAgent(ctx context.Context, agent db.Agent, act
 	if err != nil {
 		return false
 	}
-	return memberHitsInvocationTargets(targets, actorID)
+	return memberHitsInvocationTargets(targetsVisibleToMember(targets, member), actorID)
 }
 
 // memberHitsInvocationTargets is the pure predicate deciding whether a regular
@@ -189,6 +192,21 @@ func memberHitsInvocationTargets(targets []db.AgentInvocationTarget, userID stri
 // list endpoint avoids an N+1. Workspace owner/admin and the agent owner see
 // everything; a regular member sees a public_to agent only when on its
 // allow-list, and never sees other members' private agents.
+func memberAllowedToViewAgentAs(agent db.Agent, targets []db.AgentInvocationTarget, member db.Member) bool {
+	if middleware.IsRestrictedMember(member) {
+		// Not even a workspace admin-style bypass: a restricted member sees only
+		// agents they own or that name them personally.
+		if uuidToString(agent.OwnerID) == uuidToString(member.UserID) {
+			return true
+		}
+		if agent.PermissionMode != "public_to" {
+			return false
+		}
+		return memberHitsInvocationTargets(targetsVisibleToMember(targets, member), uuidToString(member.UserID))
+	}
+	return memberAllowedToViewAgent(agent, targets, uuidToString(member.UserID), member.Role)
+}
+
 func memberAllowedToViewAgent(agent db.Agent, targets []db.AgentInvocationTarget, userID, role string) bool {
 	if roleAllowed(role, "owner", "admin") {
 		return true
@@ -307,10 +325,11 @@ func (h *Handler) accessibleAgentIDs(ctx context.Context, workspaceID, actorType
 	if !ok {
 		return nil, false
 	}
+	viewer, viewerKnown := h.viewerMember(ctx, actorType, actorID, workspaceID, role)
 	allowed := make(map[string]struct{}, len(agents))
 	for _, a := range agents {
 		if actorType == "member" {
-			if !memberAllowedToViewAgent(a, targetsByAgent[uuidToString(a.ID)], actorID, role) {
+			if !viewerKnown || !memberAllowedToViewAgentAs(a, targetsByAgent[uuidToString(a.ID)], viewer) {
 				continue
 			}
 		}
@@ -356,6 +375,7 @@ func (h *Handler) restrictedAgentIDs(ctx context.Context, workspaceID, actorType
 	}
 
 	// Whether per-agent visibility can restrict anything for this actor at all.
+	viewer, viewerKnown := h.viewerMember(ctx, actorType, actorID, workspaceID, role)
 	judgeUserAgents := actorType == "member" && !roleAllowed(role, "owner", "admin")
 	var targetsByAgent map[string][]db.AgentInvocationTarget
 	if judgeUserAgents {
@@ -369,7 +389,7 @@ func (h *Handler) restrictedAgentIDs(ctx context.Context, workspaceID, actorType
 	for _, a := range agents {
 		if a.Kind == "user" {
 			if !judgeUserAgents ||
-				memberAllowedToViewAgent(a, targetsByAgent[uuidToString(a.ID)], actorID, role) {
+				(viewerKnown && memberAllowedToViewAgentAs(a, targetsByAgent[uuidToString(a.ID)], viewer)) {
 				continue
 			}
 		}
@@ -413,4 +433,20 @@ func (h *Handler) canEnqueueSquadLeader(ctx context.Context, leaderID pgtype.UUI
 		return false
 	}
 	return h.canInvokeAgent(ctx, agent, actorType, actorID, originatorUserID, workspaceID)
+}
+
+// viewerMember loads the workspace member behind a member actor so the view
+// gates can see its access scope. The role argument the aggregation helpers
+// already carry cannot express that. known=false (lookup failed) must fail
+// closed; for a non-member actor it is irrelevant.
+func (h *Handler) viewerMember(ctx context.Context, actorType, actorID, workspaceID, role string) (db.Member, bool) {
+	if actorType != "member" {
+		return db.Member{}, true
+	}
+	m, err := h.getWorkspaceMember(ctx, actorID, workspaceID)
+	if err != nil {
+		return db.Member{}, false
+	}
+	m.Role = role
+	return m, true
 }

@@ -1339,6 +1339,13 @@ func (h *Handler) DeleteWorkspace(w http.ResponseWriter, r *http.Request) {
 			},
 		},
 		{
+			// project_member names projects and users by value only.
+			name: "delete project members",
+			run: func() error {
+				return qtx.DeleteProjectMembersByWorkspace(ctx, requester.WorkspaceID)
+			},
+		},
+		{
 			name: "delete autopilot children",
 			run:  func() error { return qtx.DeleteWorkspaceAutopilotChildren(ctx, requester.WorkspaceID) },
 		},

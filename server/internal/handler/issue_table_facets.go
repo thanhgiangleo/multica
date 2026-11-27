@@ -328,7 +328,7 @@ func (h *Handler) issueTableWorkingAgentIDs(
 	if !ok {
 		return nil, false
 	}
-	actorType, actorID := h.resolveActor(r, requestUserID(r), workspaceID)
+	actorType, _ := h.resolveActor(r, requestUserID(r), workspaceID)
 	agents, err := h.Queries.ListAgents(r.Context(), workspaceUUID)
 	if err != nil {
 		writeIssueTableQueryFailure(w, r, "failed to resolve agent access")
@@ -341,7 +341,7 @@ func (h *Handler) issueTableWorkingAgentIDs(
 	}
 	ids := make([]pgtype.UUID, 0, len(agents))
 	for _, agent := range agents {
-		if actorType == "member" && !memberAllowedToViewAgent(agent, targetsByAgent[uuidToString(agent.ID)], actorID, member.Role) {
+		if actorType == "member" && !memberAllowedToViewAgentAs(agent, targetsByAgent[uuidToString(agent.ID)], member) {
 			continue
 		}
 		ids = append(ids, agent.ID)

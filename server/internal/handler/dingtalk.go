@@ -117,7 +117,7 @@ func (h *Handler) dingtalkAgentVisibility(
 	}
 	for _, agent := range agents {
 		agentID := uuidToString(agent.ID)
-		if memberAllowedToViewAgent(agent, targetsByAgent[agentID], userID, member.Role) {
+		if memberAllowedToViewAgentAs(agent, targetsByAgent[agentID], member) {
 			visible[agentID] = struct{}{}
 		}
 	}

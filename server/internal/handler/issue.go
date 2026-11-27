@@ -801,6 +801,12 @@ type searchResult struct {
 // trades the title, description, and comment content GIN fast paths for one
 // predictable pass over each relation within the selected workspace.
 func buildSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, includeClosed bool, terminalStatusKeys []string) (string, []any) {
+	return buildScopedSearchQuery(phrase, terms, queryNum, hasNum, includeClosed, terminalStatusKeys, nil)
+}
+
+// buildScopedSearchQuery is buildSearchQuery confined to projectScope when it
+// is non-nil. A nil scope is the unrestricted workspace search.
+func buildScopedSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, includeClosed bool, terminalStatusKeys []string, projectScope []pgtype.UUID) (string, []any) {
 	// Lowercase in Go so SQL only needs LOWER() on the column side.
 	phrase = strings.ToLower(phrase)
 	for i, term := range terms {
@@ -836,6 +842,13 @@ func buildSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, 
 		// Negate only known terminal keys so an unknown legacy key remains
 		// searchable instead of disappearing from the default result set.
 		terminalStatusesParam = nextArg(terminalStatusKeys)
+	}
+
+	// Allocated before limit/offset: the caller addresses those two as the
+	// last two args.
+	scopeParam := ""
+	if projectScope != nil {
+		scopeParam = nextArg(projectScope)
 	}
 
 	limitParam := nextArg(nil)
@@ -880,6 +893,9 @@ func buildSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, 
 	}
 
 	issueWhere := "i.workspace_id = " + wsParam
+	if scopeParam != "" {
+		issueWhere += fmt.Sprintf(" AND i.project_id = ANY(%s::uuid[])", scopeParam)
+	}
 	if terminalStatusesParam != "" {
 		issueWhere += fmt.Sprintf(" AND NOT (i.status = ANY(%s::text[]))", terminalStatusesParam)
 	}
@@ -1086,6 +1102,14 @@ func buildSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, 
 		LIMIT %s OFFSET %s
 	)`, limitParam, offsetParam)
 
+	// Comment matches name issues by id alone, so the final join must repeat
+	// the project scope or an out-of-scope issue could surface through a
+	// comment that mentions the search term.
+	finalScope := ""
+	if scopeParam != "" {
+		finalScope = fmt.Sprintf(" AND i.project_id = ANY(%s::uuid[])", scopeParam)
+	}
+
 	query := fmt.Sprintf(`WITH %s,
 	%s,
 	%s,
@@ -1098,7 +1122,7 @@ func buildSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, 
 		pc.match_source,
 		COALESCE(c.content, '') AS matched_comment_content
 	FROM page_candidates pc
-	JOIN issue i ON i.id = pc.issue_id AND i.workspace_id = %s
+	JOIN issue i ON i.id = pc.issue_id AND i.workspace_id = %s%s
 	LEFT JOIN comment c ON c.id = pc.snippet_comment_id AND c.workspace_id = %s
 	ORDER BY pc.cancelled_rank, pc.relevance_rank, pc.status_rank, pc.updated_at DESC, pc.issue_id ASC`,
 		issueMatchesCTE,
@@ -1106,6 +1130,7 @@ func buildSearchQuery(phrase string, terms []string, queryNum int, hasNum bool, 
 		rankedCandidatesCTE,
 		pageCandidatesCTE,
 		wsParam,
+		finalScope,
 		wsParam,
 	)
 
@@ -1160,7 +1185,15 @@ func (h *Handler) SearchIssues(w http.ResponseWriter, r *http.Request) {
 		terminalStatusKeys = resolvedKeys
 	}
 
-	sqlQuery, args := buildSearchQuery(q, terms, queryNum, hasNum, includeClosed, terminalStatusKeys)
+	searchScope, scopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !scopeOK {
+		return
+	}
+	var projectScope []pgtype.UUID
+	if searchScope.restricted {
+		projectScope = searchScope.projectScopeArg()
+	}
+	sqlQuery, args := buildScopedSearchQuery(q, terms, queryNum, hasNum, includeClosed, terminalStatusKeys, projectScope)
 	// Fill placeholder args: $4 = workspace_id, last two = limit, offset
 	args[3] = wsUUID
 	args[len(args)-2] = limit
@@ -1552,6 +1585,11 @@ func (h *Handler) ListIssues(w http.ResponseWriter, r *http.Request) {
 	addArg := func(v any) string {
 		args = append(args, v)
 		return "$" + strconv.Itoa(len(args))
+	}
+	if scope, ok := h.scopedMemberOrDeny(w, r, workspaceID); !ok {
+		return
+	} else if scope.restricted {
+		where = append(where, fmt.Sprintf("i.project_id = ANY(%s::uuid[])", addArg(scope.projectScopeArg())))
 	}
 	if len(statusCategoriesFilter) > 0 {
 		// Expanded to concrete status keys rather than filtered through
@@ -2043,6 +2081,11 @@ func (h *Handler) ListGroupedIssues(w http.ResponseWriter, r *http.Request) {
 	addArg := func(v any) string {
 		args = append(args, v)
 		return "$" + strconv.Itoa(len(args))
+	}
+	if scope, ok := h.scopedMemberOrDeny(w, r, workspaceID); !ok {
+		return
+	} else if scope.restricted {
+		where = append(where, fmt.Sprintf("i.project_id = ANY(%s::uuid[])", addArg(scope.projectScopeArg())))
 	}
 
 	statuses := splitCommaParam(r.URL.Query().Get("statuses"))
@@ -2623,6 +2666,19 @@ func (h *Handler) ListChildrenByParents(w http.ResponseWriter, r *http.Request) 
 		writeError(w, http.StatusInternalServerError, "failed to list child issues")
 		return
 	}
+	scope, scopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !scopeOK {
+		return
+	}
+	if scope.restricted {
+		visible := children[:0]
+		for _, child := range children {
+			if scope.allowsProject(child.ProjectID) {
+				visible = append(visible, child)
+			}
+		}
+		children = visible
+	}
 	prefix := h.getIssuePrefix(r.Context(), wsUUID)
 	ids := make([]pgtype.UUID, len(children))
 	for i, child := range children {
@@ -2662,10 +2718,27 @@ func (h *Handler) ChildIssueProgress(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "failed to resolve status categories")
 		return
 	}
-	rows, err := h.Queries.ChildIssueProgress(r.Context(), db.ChildIssueProgressParams{
-		WorkspaceID:        wsUUID,
-		TerminalStatusKeys: terminalStatusKeys,
-	})
+	scope, scopeOK := h.scopedMemberOrDeny(w, r, wsID)
+	if !scopeOK {
+		return
+	}
+	var rows []db.ChildIssueProgressRow
+	if scope.restricted {
+		scoped, scopedErr := h.Queries.ChildIssueProgressInProjects(r.Context(), db.ChildIssueProgressInProjectsParams{
+			WorkspaceID:        wsUUID,
+			TerminalStatusKeys: terminalStatusKeys,
+			ProjectIds:         scope.projectScopeArg(),
+		})
+		err = scopedErr
+		for _, row := range scoped {
+			rows = append(rows, db.ChildIssueProgressRow(row))
+		}
+	} else {
+		rows, err = h.Queries.ChildIssueProgress(r.Context(), db.ChildIssueProgressParams{
+			WorkspaceID:        wsUUID,
+			TerminalStatusKeys: terminalStatusKeys,
+		})
+	}
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to get child issue progress")
 		return
@@ -3284,6 +3357,18 @@ func (h *Handler) CreateIssue(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		projectID = id
+	}
+	if !projectID.Valid && parentIssueID.Valid {
+		// A sub-issue inherits its parent's project.
+		if parent, perr := h.Queries.GetIssueInWorkspace(r.Context(), db.GetIssueInWorkspaceParams{
+			ID: parentIssueID, WorkspaceID: wsUUID,
+		}); perr == nil {
+			if h.denyIssueOutOfScope(w, r, workspaceID, parent) {
+				return
+			}
+		}
+	} else if h.denyProjectOutOfScope(w, r, workspaceID, projectID) {
+		return
 	}
 
 	// Project workflow (MUL-7420). A new issue in a project on a named
@@ -3971,6 +4056,9 @@ func (h *Handler) UpdateIssue(w http.ResponseWriter, r *http.Request) {
 			if !ok {
 				return
 			}
+			if h.denyProjectOutOfScope(w, r, uuidToString(prevIssue.WorkspaceID), projectUUID) {
+				return
+			}
 			if _, err := h.Queries.GetProjectInWorkspace(r.Context(), db.GetProjectInWorkspaceParams{
 				ID:          projectUUID,
 				WorkspaceID: prevIssue.WorkspaceID,
@@ -3986,6 +4074,11 @@ func (h *Handler) UpdateIssue(w http.ResponseWriter, r *http.Request) {
 			}
 			params.ProjectID = projectUUID
 		} else {
+			// Clearing the project would move the issue out of a restricted
+			// member's reach, so it is refused for them.
+			if h.denyProjectOutOfScope(w, r, uuidToString(prevIssue.WorkspaceID), pgtype.UUID{}) {
+				return
+			}
 			params.ProjectID = pgtype.UUID{Valid: false}
 		}
 	}
@@ -4682,6 +4775,9 @@ func (h *Handler) BatchUpdateIssues(w http.ResponseWriter, r *http.Request) {
 		if !ok {
 			return
 		}
+		if h.denyProjectOutOfScope(w, r, workspaceID, projectUUID) {
+			return
+		}
 		if _, err := h.Queries.GetProjectInWorkspace(r.Context(), db.GetProjectInWorkspaceParams{
 			ID:          projectUUID,
 			WorkspaceID: wsUUID,
@@ -4706,6 +4802,10 @@ func (h *Handler) BatchUpdateIssues(w http.ResponseWriter, r *http.Request) {
 	// once after the loop against the final state (MUL-4155), not per child
 	// against a mid-batch snapshot.
 	var changedParents []pgtype.UUID
+	batchScope, batchScopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !batchScopeOK {
+		return
+	}
 	for _, issueID := range req.IssueIDs {
 		issueUUID, err := util.ParseUUID(issueID)
 		if err != nil {
@@ -4716,6 +4816,9 @@ func (h *Handler) BatchUpdateIssues(w http.ResponseWriter, r *http.Request) {
 			WorkspaceID: wsUUID,
 		})
 		if err != nil {
+			continue
+		}
+		if !batchScope.allowsProject(prevIssue.ProjectID) {
 			continue
 		}
 
@@ -4996,6 +5099,10 @@ func (h *Handler) BatchDeleteIssues(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
+	deleteScope, scopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !scopeOK {
+		return
+	}
 	issues := make([]db.Issue, 0, len(req.IssueIDs))
 	excludedIDs := make([]pgtype.UUID, 0, len(req.IssueIDs))
 	seenIssueIDs := make(map[pgtype.UUID]struct{}, len(req.IssueIDs))
@@ -5012,6 +5119,9 @@ func (h *Handler) BatchDeleteIssues(w http.ResponseWriter, r *http.Request) {
 			WorkspaceID: wsUUID,
 		})
 		if err != nil {
+			continue
+		}
+		if !deleteScope.allowsProject(issue.ProjectID) {
 			continue
 		}
 

@@ -446,6 +446,13 @@ func (h *Handler) compileIssueTableQuery(w http.ResponseWriter, r *http.Request,
 		args = append(args, value)
 		return "$" + strconv.Itoa(len(args))
 	}
+	tableScope, scopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !scopeOK {
+		return issueTableSQL{}, false
+	}
+	if tableScope.restricted {
+		where = append(where, fmt.Sprintf("i.project_id = ANY(%s::uuid[])", addArg(tableScope.projectScopeArg())))
+	}
 
 	// Any non-empty status KEY, not just the 7 built-ins. A status filter names
 	// the exact statuses the user picked, and since MUL-6243 those can be custom
