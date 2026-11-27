@@ -7,6 +7,7 @@ import { BILLING_WORKSPACE_SUBSCRIPTIONS_FLAG } from "@multica/core/feature-flag
 import { renderWithI18n } from "../../test/i18n";
 
 const mockCreateMember = vi.hoisted(() => vi.fn());
+const mockUpdateMember = vi.hoisted(() => vi.fn());
 // The URL the settings router holds; `setSearch` stands in for navigation.
 const url = vi.hoisted(() => {
   const listeners = new Set<() => void>();
@@ -27,6 +28,7 @@ const data = vi.hoisted(() => ({
   members: [] as Array<Record<string, unknown>>,
   invitations: [] as Array<Record<string, unknown>>,
   shareLinks: [] as Array<Record<string, unknown>>,
+  projects: [] as Array<Record<string, unknown>>,
   summary: null as Record<string, unknown> | null,
 }));
 
@@ -36,6 +38,7 @@ vi.mock("@tanstack/react-query", () => ({
     const key = JSON.stringify(opts.queryKey);
     if (key.includes("invitations")) return { data: data.invitations };
     if (key.includes("share-links")) return { data: data.shareLinks };
+    if (key.includes("projects")) return { data: data.projects };
     if (key.includes("members")) return { data: data.members };
     return { data: data.summary };
   },
@@ -57,7 +60,7 @@ vi.mock("@multica/core/paths", () => ({
 }));
 vi.mock("@multica/core/api", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@multica/core/api")>()),
-  api: { createMember: mockCreateMember },
+  api: { createMember: mockCreateMember, updateMember: mockUpdateMember },
 }));
 vi.mock("@multica/core/auth", () => {
   const state = { user: { id: "user-1" } };
@@ -103,6 +106,10 @@ const member = (id: string, name: string, role: string) => ({
 beforeEach(() => {
   vi.clearAllMocks();
   url.set("tab=members");
+  data.projects = [
+    { id: "proj-1", title: "ZBS Innovation Workflow" },
+    { id: "proj-2", title: "Other" },
+  ];
   data.members = [
     member("user-1", "Ada Lovelace", "owner"),
     member("user-2", "Grace Hopper", "admin"),
@@ -213,6 +220,53 @@ describe("MembersTab", () => {
       }),
     );
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  });
+
+  it("invites a member confined to the ticked projects", async () => {
+    mockCreateMember.mockResolvedValue({});
+    const user = userEvent.setup();
+    renderWithI18n(<MembersTab />);
+
+    await user.click(screen.getByRole("button", { name: "Invite member" }));
+    const dialog = await screen.findByRole("dialog", { name: "Invite member" });
+    await user.type(within(dialog).getByRole("textbox", { name: "Email" }), "newbie@acme.dev");
+    await user.click(within(dialog).getByRole("checkbox", { name: /Limit to specific projects/ }));
+    // Confinement with no project granted would lock the invitee out entirely.
+    expect(within(dialog).getByRole("button", { name: "Invite" })).toBeDisabled();
+    await user.click(within(dialog).getByRole("checkbox", { name: /ZBS Innovation Workflow/ }));
+    await user.click(within(dialog).getByRole("button", { name: "Invite" }));
+
+    await waitFor(() =>
+      expect(mockCreateMember).toHaveBeenCalledWith("ws-1", {
+        email: "newbie@acme.dev",
+        role: "member",
+        access_scope: "project",
+        project_ids: ["proj-1"],
+      }),
+    );
+  });
+
+  it("edits a member's project access and can lift it", async () => {
+    mockUpdateMember.mockResolvedValue({});
+    data.members = [
+      member("user-1", "Ada Lovelace", "owner"),
+      { ...member("user-3", "Alan Turing", "member"), access_scope: "project", project_ids: ["proj-1"] },
+    ];
+    const user = userEvent.setup();
+    renderWithI18n(<MembersTab />);
+
+    expect(screen.getByText("Limited to: ZBS Innovation Workflow")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Alan Turing/ }));
+    await user.click(await screen.findByRole("menuitem", { name: /Project access/ }));
+    const dialog = await screen.findByRole("dialog", { name: /Project access for Alan Turing/ });
+    await user.click(within(dialog).getByRole("checkbox", { name: /Limit to specific projects/ }));
+    await user.click(within(dialog).getByRole("button", { name: "Save" }));
+
+    await waitFor(() =>
+      expect(mockUpdateMember).toHaveBeenCalledWith("ws-1", "m-user-3", {
+        access_scope: "workspace",
+      }),
+    );
   });
 
   it("keeps the invite dialog open when sending fails", async () => {

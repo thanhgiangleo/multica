@@ -684,6 +684,7 @@ func newWorkspaceMemberInviteTestCmd() *cobra.Command {
 	cmd.Flags().String("workspace-id", "", "")
 	cmd.Flags().String("profile", "", "")
 	cmd.Flags().String("role", "member", "")
+	cmd.Flags().String("projects", "", "")
 	cmd.Flags().String("output", "json", "")
 	return cmd
 }
@@ -796,5 +797,148 @@ func TestRunWorkspaceMemberInviteRejectsUnknownRole(t *testing.T) {
 	_ = cmd.Flags().Set("role", "superuser")
 	if err := runWorkspaceMemberInvite(cmd, []string{"alice@example.com"}); err == nil {
 		t.Fatal("expected error for unknown --role, got nil")
+	}
+}
+
+func newWorkspaceMemberUpdateTestCmd() *cobra.Command {
+	cmd := &cobra.Command{Use: "update"}
+	cmd.Flags().String("server-url", "", "")
+	cmd.Flags().String("workspace-id", "", "")
+	cmd.Flags().String("profile", "", "")
+	cmd.Flags().String("role", "", "")
+	cmd.Flags().String("projects", "", "")
+	cmd.Flags().Bool("all-projects", false, "")
+	cmd.Flags().String("output", "json", "")
+	return cmd
+}
+
+// memberAccessServer fakes the three endpoints `member update --projects` uses
+// and records what the PATCH carried.
+func memberAccessServer(t *testing.T, gotBody *map[string]any, gotPath *string) *httptest.Server {
+	t.Helper()
+	const projectID = "11111111-2222-3333-4444-555555555555"
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/api/workspaces/workspace-123/members":
+			_ = json.NewEncoder(w).Encode([]map[string]any{
+				{"id": "member-row-1", "user_id": "user-1", "email": "dev@example.com", "role": "member", "access_scope": "workspace", "project_ids": []string{}},
+			})
+		case r.Method == http.MethodGet && r.URL.Path == "/api/projects":
+			_ = json.NewEncoder(w).Encode(map[string]any{"projects": []map[string]any{{"id": projectID, "title": "ZBS Innovation Workflow", "status": "planned"}}})
+		case r.Method == http.MethodPatch:
+			*gotPath = r.URL.Path
+			_ = json.NewDecoder(r.Body).Decode(gotBody)
+			_ = json.NewEncoder(w).Encode(map[string]any{"email": "dev@example.com", "role": "member", "access_scope": "project", "project_ids": []string{projectID}})
+		default:
+			t.Errorf("unexpected request %s %s", r.Method, r.URL.Path)
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}))
+}
+
+func TestRunWorkspaceMemberUpdateConfinesToProjects(t *testing.T) {
+	redirectTestHome(t, t.TempDir())
+	t.Setenv("MULTICA_TOKEN", "test-token")
+	t.Setenv("MULTICA_WORKSPACE_ID", "workspace-123")
+	var body map[string]any
+	var path string
+	srv := memberAccessServer(t, &body, &path)
+	defer srv.Close()
+	t.Setenv("MULTICA_SERVER_URL", srv.URL)
+
+	cmd := newWorkspaceMemberUpdateTestCmd()
+	_ = cmd.Flags().Set("projects", "ZBS Innovation Workflow")
+	if err := runWorkspaceMemberUpdate(cmd, []string{"DEV@example.com"}); err != nil {
+		t.Fatalf("runWorkspaceMemberUpdate: %v", err)
+	}
+	if path != "/api/workspaces/workspace-123/members/member-row-1" {
+		t.Fatalf("path = %q", path)
+	}
+	if body["access_scope"] != "project" {
+		t.Fatalf("access_scope = %v, want project", body["access_scope"])
+	}
+	ids, _ := body["project_ids"].([]any)
+	if len(ids) != 1 || ids[0] != "11111111-2222-3333-4444-555555555555" {
+		t.Fatalf("project_ids = %v, want the resolved id", body["project_ids"])
+	}
+}
+
+func TestRunWorkspaceMemberUpdateAllProjectsLiftsConfinement(t *testing.T) {
+	redirectTestHome(t, t.TempDir())
+	t.Setenv("MULTICA_TOKEN", "test-token")
+	t.Setenv("MULTICA_WORKSPACE_ID", "workspace-123")
+	var body map[string]any
+	var path string
+	srv := memberAccessServer(t, &body, &path)
+	defer srv.Close()
+	t.Setenv("MULTICA_SERVER_URL", srv.URL)
+
+	cmd := newWorkspaceMemberUpdateTestCmd()
+	_ = cmd.Flags().Set("all-projects", "true")
+	if err := runWorkspaceMemberUpdate(cmd, []string{"user-1"}); err != nil {
+		t.Fatalf("runWorkspaceMemberUpdate: %v", err)
+	}
+	if body["access_scope"] != "workspace" {
+		t.Fatalf("access_scope = %v, want workspace", body["access_scope"])
+	}
+	if _, has := body["project_ids"]; has {
+		t.Fatalf("project_ids sent with --all-projects: %v", body)
+	}
+}
+
+func TestRunWorkspaceMemberUpdateRejectsBadFlagCombos(t *testing.T) {
+	redirectTestHome(t, t.TempDir())
+	t.Setenv("MULTICA_TOKEN", "test-token")
+	t.Setenv("MULTICA_WORKSPACE_ID", "workspace-123")
+	for name, set := range map[string]map[string]string{
+		"nothing to change":         {},
+		"projects and all-projects": {"projects": "x", "all-projects": "true"},
+		"owner role":                {"role": "owner"},
+		"unknown role":              {"role": "boss"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			cmd := newWorkspaceMemberUpdateTestCmd()
+			for k, v := range set {
+				_ = cmd.Flags().Set(k, v)
+			}
+			if err := runWorkspaceMemberUpdate(cmd, []string{"user-1"}); err == nil {
+				t.Fatal("expected an error")
+			}
+		})
+	}
+}
+
+func TestRunWorkspaceMemberInviteSendsProjectScope(t *testing.T) {
+	redirectTestHome(t, t.TempDir())
+	t.Setenv("MULTICA_TOKEN", "test-token")
+	t.Setenv("MULTICA_WORKSPACE_ID", "workspace-123")
+	var got map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if r.Method == http.MethodGet {
+			_ = json.NewEncoder(w).Encode(map[string]any{"projects": []map[string]any{{"id": "11111111-2222-3333-4444-555555555555", "title": "Flow", "status": "planned"}}})
+			return
+		}
+		_ = json.NewDecoder(r.Body).Decode(&got)
+		_ = json.NewEncoder(w).Encode(map[string]any{"invitee_email": "a@b.co", "role": "member", "status": "pending"})
+	}))
+	defer srv.Close()
+	t.Setenv("MULTICA_SERVER_URL", srv.URL)
+
+	cmd := newWorkspaceMemberInviteTestCmd()
+	_ = cmd.Flags().Set("projects", "Flow")
+	if err := runWorkspaceMemberInvite(cmd, []string{"a@b.co"}); err != nil {
+		t.Fatal(err)
+	}
+	if got["access_scope"] != "project" {
+		t.Fatalf("body = %v", got)
+	}
+
+	cmd = newWorkspaceMemberInviteTestCmd()
+	_ = cmd.Flags().Set("role", "admin")
+	_ = cmd.Flags().Set("projects", "Flow")
+	if err := runWorkspaceMemberInvite(cmd, []string{"a@b.co"}); err == nil {
+		t.Fatal("--projects with --role admin must be rejected")
 	}
 }

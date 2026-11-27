@@ -1225,7 +1225,7 @@ func (h *Handler) ListAgents(w http.ResponseWriter, r *http.Request) {
 	// are workspace owner/admin, and a public_to agent only when on its
 	// invocation allow-list. Targets are batch-loaded to avoid an N+1 and
 	// reused to enrich each response's invocation_targets.
-	actorType, actorID := h.resolveActor(r, userID, workspaceID)
+	actorType, _ := h.resolveActor(r, userID, workspaceID)
 	targetsByAgent, ok := h.loadInvocationTargetsByAgent(r.Context(), agents)
 	if !ok {
 		writeError(w, http.StatusInternalServerError, "failed to load agent invocation targets")
@@ -1235,7 +1235,7 @@ func (h *Handler) ListAgents(w http.ResponseWriter, r *http.Request) {
 	for _, a := range agents {
 		targets := targetsByAgent[uuidToString(a.ID)]
 		if actorType == "member" {
-			if !memberAllowedToViewAgent(a, targets, actorID, member.Role) {
+			if !memberAllowedToViewAgentAs(a, targets, member) {
 				continue
 			}
 		}

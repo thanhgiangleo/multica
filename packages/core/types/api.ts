@@ -1,6 +1,6 @@
 import type { Issue, IssueMetadata, IssueStatus, IssueStatusCategory, IssuePriority, IssueAssigneeType } from "./issue";
 import type { IssuePropertyValues, PropertyFilterValue } from "./property";
-import type { MemberRole } from "./workspace";
+import type { MemberAccessScope, MemberRole } from "./workspace";
 import type { Project, ProjectStatus } from "./project";
 
 // Issue API
@@ -648,10 +648,16 @@ export interface UpdateMeRequest {
 export interface CreateMemberRequest {
   email: string;
   role?: MemberRole;
+  /** "project" confines the invitee to `project_ids` (role member only). */
+  access_scope?: MemberAccessScope;
+  project_ids?: string[];
 }
 
 export interface UpdateMemberRequest {
-  role: MemberRole;
+  role?: MemberRole;
+  /** "project" confines the member to `project_ids`; "workspace" lifts it. */
+  access_scope?: MemberAccessScope;
+  project_ids?: string[];
 }
 
 // Personal Access Tokens

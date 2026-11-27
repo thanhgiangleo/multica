@@ -1064,6 +1064,23 @@ func (h *Handler) isWorkspaceEntity(ctx context.Context, userType, userID, works
 }
 
 func (h *Handler) loadIssueForUser(w http.ResponseWriter, r *http.Request, issueID string) (db.Issue, bool) {
+	issue, ok := h.loadIssueInWorkspace(w, r, issueID)
+	if !ok {
+		return db.Issue{}, false
+	}
+	scope, ok := h.scopedMemberOrDeny(w, r, uuidToString(issue.WorkspaceID))
+	if !ok {
+		return db.Issue{}, false
+	}
+	if !scope.allowsProject(issue.ProjectID) {
+		// Indistinguishable from a missing issue, so ids cannot be probed.
+		writeError(w, http.StatusNotFound, "issue not found")
+		return db.Issue{}, false
+	}
+	return issue, true
+}
+
+func (h *Handler) loadIssueInWorkspace(w http.ResponseWriter, r *http.Request, issueID string) (db.Issue, bool) {
 	if _, ok := requireUserID(w, r); !ok {
 		return db.Issue{}, false
 	}

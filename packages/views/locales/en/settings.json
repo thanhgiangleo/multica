@@ -1410,7 +1410,18 @@
     "invitation_meta": "Sent {{sent}} · Expires {{expires}}",
     "revoke_invitation_aria": "Revoke invitation for {{email}}",
     "seats_used": "{{used}} of {{purchased}} seats used",
-    "manage_seats": "Manage seats"
+    "manage_seats": "Manage seats",
+    "project_access_action": "Project access…",
+    "project_access_title": "Project access for {{name}}",
+    "project_access_description": "Choose whether this member sees the whole workspace or only the projects you pick. Workflows stay shared.",
+    "project_access_confine": "Limit to specific projects",
+    "project_access_confine_hint": "They will only see issues, chats and agents in the projects below, plus their own agents.",
+    "project_access_no_projects": "No projects yet. Create a project first.",
+    "project_access_summary": "Limited to: {{projects}}",
+    "project_access_none": "Limited to projects (none granted)",
+    "project_access_save": "Save",
+    "project_access_saved": "Project access updated",
+    "project_access_failed": "Failed to update project access"
   },
   "integrations": {
     "status_connected": "Connected",

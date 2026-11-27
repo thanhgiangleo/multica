@@ -1400,7 +1400,18 @@
     "invitation_meta": "{{sent}} に送信 · {{expires}} に期限切れ",
     "revoke_invitation_aria": "{{email}} への招待を取り消す",
     "seats_used": "{{purchased}} 席中 {{used}} 席を使用",
-    "manage_seats": "席を管理"
+    "manage_seats": "席を管理",
+    "project_access_action": "プロジェクトアクセス…",
+    "project_access_title": "{{name}} のプロジェクトアクセス",
+    "project_access_description": "このメンバーにワークスペース全体を見せるか、選んだプロジェクトだけを見せるかを選びます。ワークフローは共有されたままです。",
+    "project_access_confine": "特定のプロジェクトに限定",
+    "project_access_confine_hint": "下のプロジェクト内のイシュー、チャット、エージェントと、自分のエージェントのみ表示されます。",
+    "project_access_no_projects": "プロジェクトがありません。先にプロジェクトを作成してください。",
+    "project_access_summary": "限定: {{projects}}",
+    "project_access_none": "プロジェクトに限定（付与なし）",
+    "project_access_save": "保存",
+    "project_access_saved": "プロジェクトアクセスを更新しました",
+    "project_access_failed": "プロジェクトアクセスの更新に失敗しました"
   },
   "integrations": {
     "status_connected": "接続済み",

@@ -260,6 +260,10 @@ func buildMiddleware(queries *db.Queries, resolve workspaceResolver, roles []str
 				}
 			}
 
+			if IsRestrictedMember(member) && !authorizeRestrictedMember(w, r, queries, member) {
+				return
+			}
+
 			ctx := SetMemberContext(r.Context(), workspaceID, member)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

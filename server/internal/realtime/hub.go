@@ -31,6 +31,13 @@ type MembershipIdentity struct {
 	UserID      string
 }
 
+// AccessResolver is an optional capability of a MembershipChecker. It reports
+// whether the member is confined to the projects it was granted, and which
+// ones. Without it every member is treated as unrestricted.
+type AccessResolver interface {
+	Access(ctx context.Context, userID, workspaceID string) (restricted bool, projectIDs []string, err error)
+}
+
 // SlugResolver translates a workspace slug to its UUID.
 type SlugResolver func(ctx context.Context, slug string) (workspaceID string, err error)
 
@@ -232,8 +239,13 @@ type Client struct {
 	send        chan []byte
 	userID      string
 	workspaceID string
-	writeMu     sync.Mutex // serializes application writes and the final removal notice
-	stopped     atomic.Bool
+	// restricted connections join project rooms instead of the workspace room.
+	// Both fields are fixed for the life of the connection; a change of scope
+	// ends the connection so the client reconnects with a fresh view.
+	restricted bool
+	projectIDs []string
+	writeMu    sync.Mutex // serializes application writes and the final removal notice
+	stopped    atomic.Bool
 
 	// sendMu guards sendClosed so a late inbound-response or fanout send
 	// can never write to the closed send channel. closeSend flips
@@ -513,7 +525,13 @@ func (h *Hub) BroadcastToScopeDedup(scopeType, scopeID string, message []byte, e
 	}
 	// Both the local fast path and every relay backend converge here. Removal
 	// invalidations reach peers immediately; target connections are revalidated.
-	if scopeType == ScopeWorkspace && h.queueMemberRemoval(scopeID, message, eventID) {
+	if (scopeType == ScopeWorkspace || scopeType == ScopeWorkspaceShared) && h.consumeAccessChange(scopeID, message) {
+		return
+	}
+	if scopeType == ScopeWorkspace && h.queueMemberRemoval(scopeID, message, eventID, true) {
+		return
+	}
+	if scopeType == ScopeWorkspaceShared && h.queueMemberRemoval(scopeID, message, eventID, false) {
 		return
 	}
 	h.broadcastToScope(scopeType, scopeID, message, eventID, "")
@@ -903,12 +921,20 @@ func HandleWebSocket(hub *Hub, mc MembershipChecker, pr PATResolver, resolveSlug
 		"client_os", clientOS,
 	)
 
+	restricted, projectIDs, accessErr := resolveAccess(mc, userID, workspaceID)
+	if accessErr != nil {
+		writeWSAuthErrorAndClose(conn, []byte(`{"error":"membership lookup failed"}`), "workspace_id", workspaceID)
+		return
+	}
+
 	client := &Client{
 		hub:         hub,
 		conn:        conn,
 		send:        make(chan []byte, 256),
 		userID:      userID,
 		workspaceID: workspaceID,
+		restricted:  restricted,
+		projectIDs:  projectIDs,
 	}
 	hub.register <- client
 
@@ -1000,6 +1026,20 @@ func (c *Client) handleSubscribe(scope, id string) {
 	case ScopeWorkspace, ScopeUser:
 		// Implicit scopes — only allowed if it matches the connection identity.
 		if (scope == ScopeWorkspace && id != c.workspaceID) || (scope == ScopeUser && id != c.userID) {
+			M.SubscribeDeniedTotal(scope).Add(1)
+			c.sendJSON(map[string]any{
+				"type": "subscribe_error",
+				"payload": map[string]string{
+					"scope": scope,
+					"id":    id,
+					"error": "forbidden",
+				},
+			})
+			return
+		}
+		// A project-scoped connection must never join the workspace room: it
+		// carries every project's events.
+		if c.restricted && scope == ScopeWorkspace {
 			M.SubscribeDeniedTotal(scope).Add(1)
 			c.sendJSON(map[string]any{
 				"type": "subscribe_error",

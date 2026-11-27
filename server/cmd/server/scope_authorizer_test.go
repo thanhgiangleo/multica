@@ -17,6 +17,8 @@ type fakeScopeQuerier struct {
 	tasks    map[[16]byte]db.AgentTaskQueue
 	issues   map[[16]byte]db.Issue
 	sessions map[[16]byte]db.ChatSession
+	members  map[[16]byte]db.Member
+	grants   map[[16]byte][]pgtype.UUID
 }
 
 func (f *fakeScopeQuerier) GetAgentTask(_ context.Context, id pgtype.UUID) (db.AgentTaskQueue, error) {
@@ -36,6 +38,19 @@ func (f *fakeScopeQuerier) GetChatSession(_ context.Context, id pgtype.UUID) (db
 		return s, nil
 	}
 	return db.ChatSession{}, pgx.ErrNoRows
+}
+
+// Plain members: every existing test keeps today's behavior.
+func (f *fakeScopeQuerier) GetMemberByUserAndWorkspace(_ context.Context, arg db.GetMemberByUserAndWorkspaceParams) (db.Member, error) {
+	if f.members != nil {
+		if m, ok := f.members[arg.UserID.Bytes]; ok {
+			return m, nil
+		}
+	}
+	return db.Member{UserID: arg.UserID, WorkspaceID: arg.WorkspaceID, Role: "member", AccessScope: "workspace"}, nil
+}
+func (f *fakeScopeQuerier) ListProjectMemberProjectIDs(_ context.Context, arg db.ListProjectMemberProjectIDsParams) ([]pgtype.UUID, error) {
+	return f.grants[arg.UserID.Bytes], nil
 }
 
 func mustUUID(t *testing.T) (string, pgtype.UUID) {
@@ -202,6 +217,13 @@ func (failingScopeQuerier) GetChatSession(context.Context, pgtype.UUID) (db.Chat
 	return db.ChatSession{}, errors.New("connection reset by peer")
 }
 
+func (failingScopeQuerier) GetMemberByUserAndWorkspace(context.Context, db.GetMemberByUserAndWorkspaceParams) (db.Member, error) {
+	return db.Member{}, errors.New("connection reset by peer")
+}
+func (failingScopeQuerier) ListProjectMemberProjectIDs(context.Context, db.ListProjectMemberProjectIDsParams) ([]pgtype.UUID, error) {
+	return nil, errors.New("connection reset by peer")
+}
+
 // errOnInnerQuerier succeeds for GetAgentTask (so the task path reaches its
 // inner lookups) but fails GetIssue / GetChatSession with a non-ErrNoRows
 // error. This isolates the inner lookup points from the outer GetAgentTask.
@@ -217,6 +239,13 @@ func (*errOnInnerQuerier) GetIssue(context.Context, pgtype.UUID) (db.Issue, erro
 }
 func (*errOnInnerQuerier) GetChatSession(context.Context, pgtype.UUID) (db.ChatSession, error) {
 	return db.ChatSession{}, errors.New("connection reset by peer")
+}
+
+func (*errOnInnerQuerier) GetMemberByUserAndWorkspace(context.Context, db.GetMemberByUserAndWorkspaceParams) (db.Member, error) {
+	return db.Member{}, errors.New("connection reset by peer")
+}
+func (*errOnInnerQuerier) ListProjectMemberProjectIDs(context.Context, db.ListProjectMemberProjectIDsParams) ([]pgtype.UUID, error) {
+	return nil, errors.New("connection reset by peer")
 }
 
 // TestScopeAuthorizer_DoesNotSwallowQueryErrors pins #6037: a real database
@@ -278,5 +307,50 @@ func TestScopeAuthorizer_MissingResourceIsPlainDenial(t *testing.T) {
 	}
 	if ok, err := a.AuthorizeScope(ctx, userStr, wsStr, realtime.ScopeChat, missingChat); err != nil || ok {
 		t.Fatalf("missing chat session must be a plain denial: ok=%v err=%v", ok, err)
+	}
+}
+
+// A project-scoped member may follow a run only on an issue of a project they
+// were granted; a plain member keeps workspace-wide access.
+func TestScopeAuthorizer_TaskScopeHonoursProjectConfinement(t *testing.T) {
+	wsStr, wsUUID := mustUUID(t)
+	userStr, userUUID := mustUUID(t)
+	taskStr, taskUUID := mustUUID(t)
+	issueID, issueUUID := mustUUID(t)
+	_ = issueID
+	_, grantedProject := mustUUID(t)
+	_, otherProject := mustUUID(t)
+
+	build := func(issueProject pgtype.UUID, restricted bool) *dbScopeAuthorizer {
+		q := &fakeScopeQuerier{
+			tasks:  map[[16]byte]db.AgentTaskQueue{taskUUID.Bytes: {ID: taskUUID, IssueID: issueUUID}},
+			issues: map[[16]byte]db.Issue{issueUUID.Bytes: {ID: issueUUID, WorkspaceID: wsUUID, ProjectID: issueProject}},
+			grants: map[[16]byte][]pgtype.UUID{userUUID.Bytes: {grantedProject}},
+		}
+		if restricted {
+			q.members = map[[16]byte]db.Member{userUUID.Bytes: {UserID: userUUID, WorkspaceID: wsUUID, Role: "member", AccessScope: "project"}}
+		}
+		return newScopeAuthorizer(q)
+	}
+	ctx := context.Background()
+	cases := []struct {
+		name       string
+		project    pgtype.UUID
+		restricted bool
+		want       bool
+	}{
+		{"plain member, any issue", otherProject, false, true},
+		{"plain member, issue with no project", pgtype.UUID{}, false, true},
+		{"restricted, granted project", grantedProject, true, true},
+		{"restricted, other project", otherProject, true, false},
+		{"restricted, issue with no project", pgtype.UUID{}, true, false},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			ok, err := build(tc.project, tc.restricted).AuthorizeScope(ctx, userStr, wsStr, realtime.ScopeTask, taskStr)
+			if err != nil || ok != tc.want {
+				t.Fatalf("AuthorizeScope = %v, %v; want %v", ok, err, tc.want)
+			}
+		})
 	}
 }

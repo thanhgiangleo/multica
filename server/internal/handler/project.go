@@ -164,6 +164,19 @@ func (h *Handler) ListProjects(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "failed to list projects")
 		return
 	}
+	listScope, scopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !scopeOK {
+		return
+	}
+	if listScope.restricted {
+		visible := projects[:0]
+		for _, p := range projects {
+			if listScope.allowsProject(p.ID) {
+				visible = append(visible, p)
+			}
+		}
+		projects = visible
+	}
 
 	// Batch-fetch issue stats and resource counts for all projects
 	statsMap := make(map[string]db.GetProjectIssueStatsRow)
@@ -220,6 +233,9 @@ func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		writeError(w, http.StatusNotFound, "project not found")
+		return
+	}
+	if h.denyProjectOutOfScope(w, r, workspaceID, project.ID) {
 		return
 	}
 	resp := projectToResponse(project)
@@ -677,6 +693,13 @@ func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "failed to delete project views")
 		return
 	}
+	if err := qtx.DeleteProjectMembersByProject(r.Context(), db.DeleteProjectMembersByProjectParams{
+		ProjectID:   project.ID,
+		WorkspaceID: project.WorkspaceID,
+	}); err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to delete project grants")
+		return
+	}
 	if err := qtx.DeleteProject(r.Context(), db.DeleteProjectParams{
 		ID:          project.ID,
 		WorkspaceID: project.WorkspaceID,
@@ -930,6 +953,21 @@ func (h *Handler) SearchProjects(w http.ResponseWriter, r *http.Request) {
 	}
 	if writeSearchCancellation(w, r, ctx.Err()) {
 		return
+	}
+	// Projects are few, so the grant is applied to the page rather than woven
+	// into the ranked query. A restricted member can see a short page.
+	searchScope, scopeOK := h.scopedMemberOrDeny(w, r, workspaceID)
+	if !scopeOK {
+		return
+	}
+	if searchScope.restricted {
+		visible := results[:0]
+		for _, row := range results {
+			if searchScope.allowsProject(row.project.ID) {
+				visible = append(visible, row)
+			}
+		}
+		results = visible
 	}
 
 	// Batch-fetch issue stats and resource counts

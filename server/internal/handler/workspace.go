@@ -20,6 +20,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/issuestatus"
 	"github.com/multica-ai/multica/server/internal/logger"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
+	"github.com/multica-ai/multica/server/internal/middleware"
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
 	"github.com/multica-ai/multica/server/pkg/protocol"
 )
@@ -520,14 +521,18 @@ func (h *Handler) ListMembers(w http.ResponseWriter, r *http.Request) {
 }
 
 type MemberWithUserResponse struct {
-	ID          string  `json:"id"`
-	WorkspaceID string  `json:"workspace_id"`
-	UserID      string  `json:"user_id"`
-	Role        string  `json:"role"`
-	CreatedAt   string  `json:"created_at"`
-	Name        string  `json:"name"`
-	Email       string  `json:"email"`
-	AvatarURL   *string `json:"avatar_url"`
+	ID          string `json:"id"`
+	WorkspaceID string `json:"workspace_id"`
+	UserID      string `json:"user_id"`
+	Role        string `json:"role"`
+	// AccessScope is "workspace" or "project". ProjectIDs lists the projects a
+	// "project" member may work in; it is always an array.
+	AccessScope string   `json:"access_scope"`
+	ProjectIDs  []string `json:"project_ids"`
+	CreatedAt   string   `json:"created_at"`
+	Name        string   `json:"name"`
+	Email       string   `json:"email"`
+	AvatarURL   *string  `json:"avatar_url"`
 }
 
 func (h *Handler) ListMembersWithUser(w http.ResponseWriter, r *http.Request) {
@@ -543,18 +548,52 @@ func (h *Handler) ListMembersWithUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := make([]MemberWithUserResponse, len(members))
-	for i, m := range members {
-		resp[i] = MemberWithUserResponse{
+	grants, err := h.Queries.ListProjectMemberGrantsByWorkspace(r.Context(), wsUUID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to list members")
+		return
+	}
+	projectsByUser := make(map[string][]string, len(grants))
+	for _, g := range grants {
+		uid := uuidToString(g.UserID)
+		projectsByUser[uid] = append(projectsByUser[uid], uuidToString(g.ProjectID))
+	}
+
+	viewer, ok := h.workspaceMember(w, r, workspaceID)
+	if !ok {
+		return
+	}
+	visible := h.visibleMemberFilter(r.Context(), viewer)
+	if visible == nil {
+		writeError(w, http.StatusInternalServerError, "failed to list members")
+		return
+	}
+
+	resp := make([]MemberWithUserResponse, 0, len(members))
+	for _, m := range members {
+		if !visible(m.UserID, m.Role) {
+			continue
+		}
+		projectIDs := []string{}
+		if m.AccessScope == middleware.AccessScopeProject {
+			projectIDs = append(projectIDs, projectsByUser[uuidToString(m.UserID)]...)
+		}
+		email := m.UserEmail
+		if middleware.IsRestrictedMember(viewer) && m.UserID != viewer.UserID {
+			email = ""
+		}
+		resp = append(resp, MemberWithUserResponse{
 			ID:          uuidToString(m.ID),
 			WorkspaceID: uuidToString(m.WorkspaceID),
 			UserID:      uuidToString(m.UserID),
 			Role:        m.Role,
+			AccessScope: m.AccessScope,
+			ProjectIDs:  projectIDs,
 			CreatedAt:   timestampToString(m.CreatedAt),
 			Name:        m.UserName,
-			Email:       m.UserEmail,
+			Email:       email,
 			AvatarURL:   h.resolveAvatarURLPtr(textToPtr(m.UserAvatarUrl)),
-		}
+		})
 	}
 
 	writeJSON(w, http.StatusOK, resp)
@@ -563,6 +602,10 @@ func (h *Handler) ListMembersWithUser(w http.ResponseWriter, r *http.Request) {
 type CreateMemberRequest struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
+	// AccessScope "project" confines the invitee to ProjectIDs once they
+	// accept. Omitted means the whole workspace.
+	AccessScope string   `json:"access_scope"`
+	ProjectIDs  []string `json:"project_ids"`
 }
 
 func (h *Handler) memberWithUserResponse(member db.Member, user db.User) MemberWithUserResponse {
@@ -571,6 +614,8 @@ func (h *Handler) memberWithUserResponse(member db.Member, user db.User) MemberW
 		WorkspaceID: uuidToString(member.WorkspaceID),
 		UserID:      uuidToString(member.UserID),
 		Role:        member.Role,
+		AccessScope: member.AccessScope,
+		ProjectIDs:  []string{},
 		CreatedAt:   timestampToString(member.CreatedAt),
 		Name:        user.Name,
 		Email:       user.Email,
@@ -594,6 +639,10 @@ func normalizeMemberRole(role string) (string, bool) {
 
 type UpdateMemberRequest struct {
 	Role string `json:"role"`
+	// AccessScope and ProjectIDs change what a plain member may reach. Either
+	// may be sent without Role; ProjectIDs replaces the member's grants.
+	AccessScope *string   `json:"access_scope"`
+	ProjectIDs  *[]string `json:"project_ids"`
 }
 
 func (h *Handler) UpdateMember(w http.ResponseWriter, r *http.Request) {
@@ -619,16 +668,22 @@ func (h *Handler) UpdateMember(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
-	if strings.TrimSpace(req.Role) == "" {
+	changingAccess := req.AccessScope != nil || req.ProjectIDs != nil
+	if strings.TrimSpace(req.Role) == "" && !changingAccess {
 		writeError(w, http.StatusBadRequest, "role is required")
 		return
 	}
 
-	role, valid := normalizeMemberRole(req.Role)
-	if !valid {
-		writeError(w, http.StatusBadRequest, "invalid member role")
-		return
+	role := target.Role
+	if strings.TrimSpace(req.Role) != "" {
+		normalized, valid := normalizeMemberRole(req.Role)
+		if !valid {
+			writeError(w, http.StatusBadRequest, "invalid member role")
+			return
+		}
+		role = normalized
 	}
+	roleChanged := role != target.Role
 
 	if (target.Role == "owner" || role == "owner") && requester.Role != "owner" {
 		writeError(w, http.StatusForbidden, "insufficient permissions")
@@ -647,11 +702,70 @@ func (h *Handler) UpdateMember(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	updatedMember, err := h.Queries.UpdateMemberRole(r.Context(), db.UpdateMemberRoleParams{
-		ID:   target.ID,
-		Role: role,
-	})
+	// Work out the scope the member ends up with. Leaving "member" always
+	// drops the confinement: owners and admins are never restricted.
+	var grant *accessGrant
+	switch {
+	case changingAccess:
+		scope := target.AccessScope
+		if req.AccessScope != nil {
+			scope = *req.AccessScope
+		}
+		var projectIDs []string
+		if req.ProjectIDs != nil {
+			projectIDs = *req.ProjectIDs
+		} else if scope == middleware.AccessScopeProject && target.AccessScope == middleware.AccessScopeProject {
+			projectIDs = h.memberProjectIDStrings(r.Context(), target)
+		}
+		resolved, status, msg := h.resolveAccessGrant(r.Context(), target.WorkspaceID, role, scope, projectIDs)
+		if status != 0 {
+			writeError(w, status, msg)
+			return
+		}
+		grant = &resolved
+	case roleChanged && role != "member" && target.AccessScope == middleware.AccessScopeProject:
+		grant = &accessGrant{scope: "workspace"}
+	}
+
+	tx, err := h.TxStarter.Begin(r.Context())
 	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to update member")
+		return
+	}
+	defer tx.Rollback(r.Context())
+	qtx := h.Queries.WithTx(tx)
+
+	updatedMember := target
+	if roleChanged {
+		updatedMember, err = qtx.UpdateMemberRole(r.Context(), db.UpdateMemberRoleParams{
+			ID:   target.ID,
+			Role: role,
+		})
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to update member")
+			return
+		}
+	}
+	if grant != nil {
+		updatedMember, err = qtx.SetMemberAccessScope(r.Context(), db.SetMemberAccessScopeParams{
+			UserID:      target.UserID,
+			WorkspaceID: target.WorkspaceID,
+			AccessScope: grant.scope,
+		})
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to update member")
+			return
+		}
+		projectIDs := grant.projectIDs
+		if grant.scope != middleware.AccessScopeProject {
+			projectIDs = []pgtype.UUID{}
+		}
+		if err := replaceProjectGrants(r.Context(), qtx, target.WorkspaceID, target.UserID, requester.UserID, projectIDs); err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to update member")
+			return
+		}
+	}
+	if err := tx.Commit(r.Context()); err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to update member")
 		return
 	}
@@ -665,11 +779,16 @@ func (h *Handler) UpdateMember(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID := requestUserID(r)
+	resp := h.memberWithUserResponse(updatedMember, user)
+	resp.ProjectIDs = h.memberProjectIDStrings(r.Context(), updatedMember)
 	h.publish(protocol.EventMemberUpdated, uuidToString(requester.WorkspaceID), "member", userID, map[string]any{
-		"member": h.memberWithUserResponse(updatedMember, user),
+		"member": resp,
 	})
+	if grant != nil {
+		h.publishMemberAccessChanged(uuidToString(target.WorkspaceID), uuidToString(target.UserID), userID)
+	}
 
-	writeJSON(w, http.StatusOK, h.memberWithUserResponse(updatedMember, user))
+	writeJSON(w, http.StatusOK, resp)
 }
 
 func (h *Handler) DeleteMember(w http.ResponseWriter, r *http.Request) {
@@ -1336,6 +1455,13 @@ func (h *Handler) DeleteWorkspace(w http.ResponseWriter, r *http.Request) {
 			name: "delete issue workflows",
 			run: func() error {
 				return qtx.DeleteIssueWorkflowsForWorkspace(ctx, requester.WorkspaceID)
+			},
+		},
+		{
+			// project_member names projects and users by value only.
+			name: "delete project members",
+			run: func() error {
+				return qtx.DeleteProjectMembersByWorkspace(ctx, requester.WorkspaceID)
 			},
 		},
 		{

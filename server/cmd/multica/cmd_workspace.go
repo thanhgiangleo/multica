@@ -76,6 +76,18 @@ var workspaceMemberInviteCmd = &cobra.Command{
 	RunE: runWorkspaceMemberInvite,
 }
 
+var workspaceMemberUpdateCmd = &cobra.Command{
+	Use:   "update <user-id|email> [workspace-id|slug|prefix]",
+	Short: "Change a member's role or project access",
+	Long: "Changes a member's role and/or which projects they may work in. " +
+		"'--projects a,b' confines a plain member to those projects (ids, id " +
+		"prefixes or exact titles) and replaces any earlier grant; " +
+		"'--all-projects' lifts the confinement. Only members can be " +
+		"confined — owners and admins always see the whole workspace.",
+	Args: cobra.RangeArgs(1, 2),
+	RunE: runWorkspaceMemberUpdate,
+}
+
 var workspaceUpdateCmd = &cobra.Command{
 	Use:   "update [workspace-id|slug|prefix]",
 	Short: "Update workspace metadata (admin/owner only)",
@@ -163,6 +175,7 @@ func init() {
 	workspaceCmd.AddCommand(workspaceMemberCmd)
 	workspaceMemberCmd.AddCommand(workspaceMemberListCmd)
 	workspaceMemberCmd.AddCommand(workspaceMemberInviteCmd)
+	workspaceMemberCmd.AddCommand(workspaceMemberUpdateCmd)
 	workspaceCmd.AddCommand(workspaceUpdateCmd)
 	workspaceCmd.AddCommand(workspaceSwitchCmd)
 	workspaceCmd.AddCommand(workspaceMcpCmd)
@@ -184,7 +197,12 @@ func init() {
 	workspaceGetCmd.Flags().String("output", "json", "Output format: table or json")
 	workspaceMemberListCmd.Flags().String("output", "table", "Output format: table or json")
 	workspaceMemberInviteCmd.Flags().String("role", "member", "Member role to grant: member or admin (owner is not allowed)")
+	workspaceMemberInviteCmd.Flags().String("projects", "", "Confine the invitee to these projects (comma-separated ids, prefixes or titles); only for role member")
 	workspaceMemberInviteCmd.Flags().String("output", "table", "Output format: table or json")
+	workspaceMemberUpdateCmd.Flags().String("role", "", "New role: member or admin")
+	workspaceMemberUpdateCmd.Flags().String("projects", "", "Confine the member to these projects (comma-separated ids, prefixes or titles); replaces the current grant")
+	workspaceMemberUpdateCmd.Flags().Bool("all-projects", false, "Lift the project confinement: the member sees the whole workspace")
+	workspaceMemberUpdateCmd.Flags().String("output", "table", "Output format: table or json")
 
 	workspaceUpdateCmd.Flags().String("name", "", "New workspace name")
 	workspaceUpdateCmd.Flags().String("description", "", "New description (decodes \\n, \\r, \\t, \\\\; pipe via --description-stdin to preserve literal backslashes)")
@@ -810,7 +828,7 @@ func runWorkspaceMembers(cmd *cobra.Command, args []string) error {
 		return cli.PrintJSON(os.Stdout, members)
 	}
 
-	headers := []string{"USER ID", "NAME", "EMAIL", "ROLE"}
+	headers := []string{"USER ID", "NAME", "EMAIL", "ROLE", "ACCESS"}
 	rows := make([][]string, 0, len(members))
 	for _, m := range members {
 		rows = append(rows, []string{
@@ -818,6 +836,7 @@ func runWorkspaceMembers(cmd *cobra.Command, args []string) error {
 			strVal(m, "name"),
 			strVal(m, "email"),
 			strVal(m, "role"),
+			memberAccessLabel(m),
 		})
 	}
 	cli.PrintTable(os.Stdout, headers, rows)
@@ -863,6 +882,17 @@ func runWorkspaceMemberInvite(cmd *cobra.Command, args []string) error {
 	defer cancel()
 
 	body := map[string]any{"email": email, "role": role}
+	if raw, _ := cmd.Flags().GetString("projects"); strings.TrimSpace(raw) != "" {
+		if role != "member" {
+			return fmt.Errorf("--projects only applies to role member")
+		}
+		ids, err := resolveProjectList(ctx, client, raw)
+		if err != nil {
+			return err
+		}
+		body["access_scope"] = "project"
+		body["project_ids"] = ids
+	}
 	var inv map[string]any
 	if err := client.PostJSON(ctx, "/api/workspaces/"+wsID+"/members", body, &inv); err != nil {
 		return fmt.Errorf("invite member: %w", err)
@@ -875,5 +905,138 @@ func runWorkspaceMemberInvite(cmd *cobra.Command, args []string) error {
 
 	fmt.Fprintf(os.Stdout, "Invitation sent to %s (role: %s, status: %s)\n",
 		strVal(inv, "invitee_email"), strVal(inv, "role"), strVal(inv, "status"))
+	return nil
+}
+
+// memberAccessLabel renders a member's reach: "workspace" or "N project(s)".
+func memberAccessLabel(m map[string]any) string {
+	if strVal(m, "access_scope") != "project" {
+		return "workspace"
+	}
+	ids, _ := m["project_ids"].([]any)
+	if len(ids) == 1 {
+		return "1 project"
+	}
+	return fmt.Sprintf("%d projects", len(ids))
+}
+
+// resolveProjectList turns "a,b" into project ids. Each entry is an exact
+// title (case-insensitive) or, failing that, an id or id prefix like every
+// other command accepts. A title shared by two projects is refused rather than
+// guessed, because the result decides what a member may see.
+func resolveProjectList(ctx context.Context, client *cli.APIClient, raw string) ([]string, error) {
+	candidates, err := fetchProjectCandidates(ctx, client)
+	if err != nil {
+		return nil, fmt.Errorf("list projects: %w", err)
+	}
+	var ids []string
+	for _, part := range strings.Split(raw, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		var byTitle []string
+		for _, c := range candidates {
+			if strings.EqualFold(c.Display, part) {
+				byTitle = append(byTitle, c.ID)
+			}
+		}
+		switch {
+		case len(byTitle) == 1:
+			ids = append(ids, byTitle[0])
+			continue
+		case len(byTitle) > 1:
+			return nil, fmt.Errorf("%d projects are titled %q; pass an id instead", len(byTitle), part)
+		}
+		resolved, err := resolveProjectID(ctx, client, part)
+		if err != nil {
+			return nil, fmt.Errorf("project %q: %w", part, err)
+		}
+		ids = append(ids, resolved.ID)
+	}
+	if len(ids) == 0 {
+		return nil, fmt.Errorf("--projects needs at least one project")
+	}
+	return ids, nil
+}
+
+func runWorkspaceMemberUpdate(cmd *cobra.Command, args []string) error {
+	who := strings.TrimSpace(args[0])
+	if who == "" {
+		return fmt.Errorf("user id or email is required")
+	}
+	role, _ := cmd.Flags().GetString("role")
+	role = strings.ToLower(strings.TrimSpace(role))
+	projects, _ := cmd.Flags().GetString("projects")
+	allProjects, _ := cmd.Flags().GetBool("all-projects")
+	switch role {
+	case "", "member", "admin":
+	case "owner":
+		return fmt.Errorf("cannot change a role to owner here; use --role member or --role admin")
+	default:
+		return fmt.Errorf("invalid --role %q; expected member or admin", role)
+	}
+	if strings.TrimSpace(projects) != "" && allProjects {
+		return fmt.Errorf("--projects and --all-projects are mutually exclusive")
+	}
+	if role == "" && strings.TrimSpace(projects) == "" && !allProjects {
+		return fmt.Errorf("nothing to change: pass --role, --projects or --all-projects")
+	}
+
+	wsID, err := resolveWorkspaceArg(cmd, args[1:])
+	if err != nil {
+		return err
+	}
+	if wsID == "" {
+		return fmt.Errorf("workspace ID is required: pass an id/slug/prefix as argument or set MULTICA_WORKSPACE_ID")
+	}
+	client, err := newAPIClient(cmd)
+	if err != nil {
+		return err
+	}
+	ctx, cancel := cli.APIContext(context.Background())
+	defer cancel()
+
+	var members []map[string]any
+	if err := client.GetJSON(ctx, "/api/workspaces/"+wsID+"/members", &members); err != nil {
+		return fmt.Errorf("list members: %w", err)
+	}
+	var memberID string
+	for _, m := range members {
+		if strings.EqualFold(strVal(m, "user_id"), who) || strings.EqualFold(strVal(m, "email"), who) {
+			memberID = strVal(m, "id")
+			break
+		}
+	}
+	if memberID == "" {
+		return fmt.Errorf("no member matches %q in this workspace", who)
+	}
+
+	body := map[string]any{}
+	if role != "" {
+		body["role"] = role
+	}
+	if strings.TrimSpace(projects) != "" {
+		ids, err := resolveProjectList(ctx, client, projects)
+		if err != nil {
+			return err
+		}
+		body["access_scope"] = "project"
+		body["project_ids"] = ids
+	}
+	if allProjects {
+		body["access_scope"] = "workspace"
+	}
+
+	var updated map[string]any
+	if err := client.PatchJSON(ctx, "/api/workspaces/"+wsID+"/members/"+memberID, body, &updated); err != nil {
+		return fmt.Errorf("update member: %w", err)
+	}
+	output, _ := cmd.Flags().GetString("output")
+	if output == "json" {
+		return cli.PrintJSON(os.Stdout, updated)
+	}
+	fmt.Fprintf(os.Stdout, "Updated %s (role: %s, access: %s)\n",
+		strVal(updated, "email"), strVal(updated, "role"), memberAccessLabel(updated))
 	return nil
 }

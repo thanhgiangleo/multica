@@ -81,11 +81,18 @@ export interface User {
   updated_at: string;
 }
 
+/** "workspace" sees everything; "project" is confined to `project_ids`. */
+export type MemberAccessScope = "workspace" | "project";
+
 export interface MemberWithUser {
   id: string;
   workspace_id: string;
   user_id: string;
   role: MemberRole;
+  /** Absent on older servers, which means workspace-wide. */
+  access_scope?: MemberAccessScope;
+  /** Projects a confined member may work in. */
+  project_ids?: string[];
   created_at: string;
   name: string;
   email: string;
@@ -99,6 +106,8 @@ export interface Invitation {
   invitee_email: string;
   invitee_user_id: string | null;
   role: MemberRole;
+  access_scope?: MemberAccessScope;
+  project_ids?: string[];
   status: "pending" | "accepted" | "declined" | "expired";
   created_at: string;
   updated_at: string;

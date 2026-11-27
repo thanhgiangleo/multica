@@ -1135,7 +1135,18 @@
     "invitation_meta": "{{sent}} 발송 · {{expires}} 만료",
     "revoke_invitation_aria": "{{email}}에 보낸 초대 취소",
     "seats_used": "{{purchased}}석 중 {{used}}석 사용",
-    "manage_seats": "좌석 관리"
+    "manage_seats": "좌석 관리",
+    "project_access_action": "프로젝트 접근…",
+    "project_access_title": "{{name}}의 프로젝트 접근",
+    "project_access_description": "이 멤버가 워크스페이스 전체를 볼지, 선택한 프로젝트만 볼지 정합니다. 워크플로는 계속 공유됩니다.",
+    "project_access_confine": "특정 프로젝트로 제한",
+    "project_access_confine_hint": "아래 프로젝트의 이슈, 채팅, 에이전트와 본인의 에이전트만 볼 수 있습니다.",
+    "project_access_no_projects": "프로젝트가 없습니다. 먼저 프로젝트를 만드세요.",
+    "project_access_summary": "제한: {{projects}}",
+    "project_access_none": "프로젝트로 제한됨(부여된 항목 없음)",
+    "project_access_save": "저장",
+    "project_access_saved": "프로젝트 접근을 업데이트했습니다",
+    "project_access_failed": "프로젝트 접근 업데이트에 실패했습니다"
   },
   "lark": {
     "section_title": "Lark",

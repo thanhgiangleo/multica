@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"log/slog"
@@ -15,6 +16,7 @@ import (
 	"github.com/multica-ai/multica/server/internal/analytics"
 	"github.com/multica-ai/multica/server/internal/logger"
 	obsmetrics "github.com/multica-ai/multica/server/internal/metrics"
+	"github.com/multica-ai/multica/server/internal/middleware"
 	"github.com/multica-ai/multica/server/internal/seatcapacity"
 	db "github.com/multica-ai/multica/server/pkg/db/generated"
 	"github.com/multica-ai/multica/server/pkg/protocol"
@@ -32,6 +34,9 @@ type InvitationResponse struct {
 	CreatedAt     string  `json:"created_at"`
 	UpdatedAt     string  `json:"updated_at"`
 	ExpiresAt     string  `json:"expires_at"`
+	// AccessScope / ProjectIDs describe the confinement applied on accept.
+	AccessScope string   `json:"access_scope"`
+	ProjectIDs  []string `json:"project_ids"`
 	// Enriched fields (present in list responses).
 	InviterName   string `json:"inviter_name,omitempty"`
 	InviterEmail  string `json:"inviter_email,omitempty"`
@@ -50,7 +55,25 @@ func invitationToResponse(inv db.WorkspaceInvitation) InvitationResponse {
 		CreatedAt:     timestampToString(inv.CreatedAt),
 		UpdatedAt:     timestampToString(inv.UpdatedAt),
 		ExpiresAt:     timestampToString(inv.ExpiresAt),
+		AccessScope:   inv.AccessScope,
+		ProjectIDs:    uuidSliceToStrings(inv.ProjectIds),
 	}
+}
+
+// nonNilUUIDs keeps the NOT NULL project_ids column away from a nil slice.
+func nonNilUUIDs(ids []pgtype.UUID) []pgtype.UUID {
+	if ids == nil {
+		return []pgtype.UUID{}
+	}
+	return ids
+}
+
+func uuidSliceToStrings(ids []pgtype.UUID) []string {
+	out := make([]string, 0, len(ids))
+	for _, id := range ids {
+		out = append(out, uuidToString(id))
+	}
+	return out
 }
 
 // CreateInvitation replaces the old "instant-add" CreateMember flow.
@@ -82,6 +105,11 @@ func (h *Handler) CreateInvitation(w http.ResponseWriter, r *http.Request) {
 	}
 	if role == "owner" {
 		writeError(w, http.StatusBadRequest, "cannot invite as owner")
+		return
+	}
+	grant, status, msg := h.resolveAccessGrant(r.Context(), requester.WorkspaceID, role, req.AccessScope, req.ProjectIDs)
+	if status != 0 {
+		writeError(w, status, msg)
 		return
 	}
 
@@ -168,7 +196,9 @@ func (h *Handler) CreateInvitation(w http.ResponseWriter, r *http.Request) {
 	createParams := db.CreateInvitationParams{
 		ID: uuidToPG(invitationID), WorkspaceID: requester.WorkspaceID, InviterID: requester.UserID,
 		InviteeEmail: email, InviteeUserID: inviteeUserID, Role: role,
-		ExpiresAt: pgtype.Timestamptz{Time: expiresAt, Valid: true},
+		ExpiresAt:   pgtype.Timestamptz{Time: expiresAt, Valid: true},
+		AccessScope: grant.scope,
+		ProjectIds:  nonNilUUIDs(grant.projectIDs),
 	}
 	var inv db.WorkspaceInvitation
 	if h.seatCapacityEnabled() {
@@ -275,6 +305,8 @@ func (h *Handler) ListWorkspaceInvitations(w http.ResponseWriter, r *http.Reques
 			CreatedAt:     timestampToString(row.CreatedAt),
 			UpdatedAt:     timestampToString(row.UpdatedAt),
 			ExpiresAt:     timestampToString(row.ExpiresAt),
+			AccessScope:   row.AccessScope,
+			ProjectIDs:    uuidSliceToStrings(row.ProjectIds),
 			InviterName:   row.InviterName,
 			InviterEmail:  row.InviterEmail,
 		}
@@ -428,6 +460,8 @@ func (h *Handler) ListMyInvitations(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:     timestampToString(row.CreatedAt),
 			UpdatedAt:     timestampToString(row.UpdatedAt),
 			ExpiresAt:     timestampToString(row.ExpiresAt),
+			AccessScope:   row.AccessScope,
+			ProjectIDs:    uuidSliceToStrings(row.ProjectIds),
 			WorkspaceName: row.WorkspaceName,
 			InviterName:   row.InviterName,
 			InviterEmail:  row.InviterEmail,
@@ -541,6 +575,27 @@ func (h *Handler) AcceptInvitation(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "failed to create membership")
 		return
 	}
+	// The scope is set in the same transaction as the membership, so there is
+	// no moment where a confined invitee is a workspace-wide member.
+	if accepted.AccessScope == middleware.AccessScopeProject && accepted.Role == "member" {
+		projectIDs, err := h.stillExistingProjects(r.Context(), qtx, accepted.WorkspaceID, accepted.ProjectIds)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to apply project access")
+			return
+		}
+		if member, err = qtx.SetMemberAccessScope(r.Context(), db.SetMemberAccessScopeParams{
+			UserID:      user.ID,
+			WorkspaceID: accepted.WorkspaceID,
+			AccessScope: middleware.AccessScopeProject,
+		}); err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to apply project access")
+			return
+		}
+		if err := replaceProjectGrants(r.Context(), qtx, accepted.WorkspaceID, user.ID, accepted.InviterID, projectIDs); err != nil {
+			writeError(w, http.StatusInternalServerError, "failed to apply project access")
+			return
+		}
+	}
 
 	// Accepting an invite marks the invitee as onboarded. The web /
 	// desktop workspace layout has a hard onboarded_at gate; without
@@ -576,6 +631,7 @@ func (h *Handler) AcceptInvitation(w http.ResponseWriter, r *http.Request) {
 
 	wsID := uuidToString(accepted.WorkspaceID)
 	memberResp := h.memberWithUserResponse(member, user)
+	memberResp.ProjectIDs = h.memberProjectIDStrings(r.Context(), member)
 
 	// Broadcast member:added so existing clients update their member lists.
 	eventPayload := map[string]any{"member": memberResp}
@@ -696,4 +752,17 @@ func (h *Handler) DeclineInvitation(w http.ResponseWriter, r *http.Request) {
 	})
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// stillExistingProjects drops invited projects deleted between the invitation
+// and its acceptance. The confinement then holds with fewer projects, never
+// widens.
+func (h *Handler) stillExistingProjects(ctx context.Context, q *db.Queries, workspaceID pgtype.UUID, ids []pgtype.UUID) ([]pgtype.UUID, error) {
+	if len(ids) == 0 {
+		return []pgtype.UUID{}, nil
+	}
+	return q.ListProjectIDsInWorkspace(ctx, db.ListProjectIDsInWorkspaceParams{
+		WorkspaceID: workspaceID,
+		ProjectIds:  ids,
+	})
 }

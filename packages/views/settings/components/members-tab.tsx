@@ -5,6 +5,7 @@ import {
   Check,
   Copy,
   Crown,
+  Folder,
   Link,
   Loader2,
   Mail,
@@ -23,6 +24,7 @@ import type {
   Invitation,
   MemberRole,
   MemberWithUser,
+  Project,
   PurchaseWorkspaceSeatsRequest,
   ShareLink,
   WorkspaceSeatPurchasePreview,
@@ -31,6 +33,7 @@ import { Input } from "@multica/ui/components/ui/input";
 import { Button } from "@multica/ui/components/ui/button";
 import { IconButton } from "@multica/ui/components/common/icon-button";
 import { Label } from "@multica/ui/components/ui/label";
+import { Checkbox } from "@multica/ui/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -80,6 +83,7 @@ import { useWorkspaceId } from "@multica/core/hooks";
 import { useFeatureEnabled } from "@multica/core/config";
 import { BILLING_WORKSPACE_SUBSCRIPTIONS_FLAG } from "@multica/core/feature-flags";
 import { useCurrentWorkspace } from "@multica/core/paths";
+import { projectListOptions } from "@multica/core/projects/queries";
 import {
   invitationListOptions,
   memberListOptions,
@@ -169,6 +173,54 @@ function useRoleLabels() {
   } as const;
 }
 
+/** Checklist of workspace projects, used to confine a member to a few of them. */
+function ProjectScopePicker({
+  projects,
+  value,
+  onChange,
+  disabled,
+}: {
+  projects: Project[];
+  value: string[];
+  onChange: (next: string[]) => void;
+  disabled?: boolean;
+}) {
+  const { t } = useT("settings");
+  if (projects.length === 0) {
+    return (
+      <p className="text-caption text-muted-foreground">
+        {t(($) => $.members.project_access_no_projects)}
+      </p>
+    );
+  }
+  return (
+    <div className="max-h-48 space-y-1 overflow-y-auto rounded-md border p-2">
+      {projects.map((project) => {
+        const checked = value.includes(project.id);
+        return (
+          <label
+            key={project.id}
+            className="flex cursor-pointer items-center gap-2 rounded px-1.5 py-1 text-body hover:bg-accent"
+          >
+            <Checkbox
+              checked={checked}
+              disabled={disabled}
+              onCheckedChange={(next) =>
+                onChange(
+                  next
+                    ? [...value, project.id]
+                    : value.filter((id) => id !== project.id),
+                )
+              }
+            />
+            <span className="truncate">{project.title}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
+}
+
 function MemberRow({
   member,
   canManage,
@@ -176,10 +228,15 @@ function MemberRow({
   ownerCount,
   isSelf,
   busy,
+  projectTitles,
   onRoleChange,
+  onEditProjects,
   onRemove,
 }: {
   member: MemberWithUser;
+  /** id -> title, to name a confined member's projects. */
+  projectTitles: Map<string, string>;
+  onEditProjects: () => void;
   canManage: boolean;
   canManageOwners: boolean;
   /** Total number of owners in this workspace — needed to gate demoting the
@@ -198,7 +255,12 @@ function MemberRow({
   const canEditRole = canManage && !isSelf && (member.role !== "owner" || canManageOwners);
   const canRemove = canManage && !isSelf && (member.role !== "owner" || canManageOwners);
   const isLastOwner = member.role === "owner" && ownerCount <= 1;
-  const showMenu = canEditRole || canRemove;
+  const confined = member.access_scope === "project";
+  const canEditProjects = canManage && !isSelf && member.role === "member";
+  const showMenu = canEditRole || canRemove || canEditProjects;
+  const confinedTitles = (member.project_ids ?? [])
+    .map((id) => projectTitles.get(id))
+    .filter((title): title is string => Boolean(title));
 
   return (
     <div className="flex items-center gap-3 px-4 py-3">
@@ -213,6 +275,15 @@ function MemberRow({
           ) : null}
         </div>
         <div className="truncate text-caption text-muted-foreground">{member.email}</div>
+        {confined ? (
+          <div className="mt-0.5 truncate text-caption text-muted-foreground">
+            {confinedTitles.length > 0
+              ? t(($) => $.members.project_access_summary, {
+                  projects: confinedTitles.join(", "),
+                })
+              : t(($) => $.members.project_access_none)}
+          </div>
+        ) : null}
       </div>
       <span className="hidden w-32 shrink-0 text-caption tabular-nums text-muted-foreground md:block">
         {t(($) => $.members.joined, {
@@ -284,7 +355,13 @@ function MemberRow({
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
             )}
-            {canEditRole && canRemove && <DropdownMenuSeparator />}
+            {canEditProjects && (
+              <DropdownMenuItem onClick={onEditProjects}>
+                <Folder className="h-3.5 w-3.5" />
+                {t(($) => $.members.project_access_action)}
+              </DropdownMenuItem>
+            )}
+            {(canEditRole || canEditProjects) && canRemove && <DropdownMenuSeparator />}
             {canRemove && (
               <DropdownMenuItem variant="destructive" onClick={onRemove}>
                 <UserMinus className="h-3.5 w-3.5" />
@@ -419,6 +496,8 @@ export function MembersTab() {
   const navigation = useOptionalNavigation();
   const { data: members = [] } = useQuery(memberListOptions(wsId));
   const { data: invitations = [] } = useQuery(invitationListOptions(wsId));
+  const { data: projects = [] } = useQuery(projectListOptions(wsId));
+  const projectTitles = new Map(projects.map((p) => [p.id, p.title]));
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [shareLinkOpen, setShareLinkOpen] = useState(false);
@@ -448,6 +527,14 @@ export function MembersTab() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<MemberRole>("member");
   const [inviteLoading, setInviteLoading] = useState(false);
+  // Project confinement for the invitee; empty list + off means workspace-wide.
+  const [inviteConfined, setInviteConfined] = useState(false);
+  const [inviteProjectIds, setInviteProjectIds] = useState<string[]>([]);
+  // Member whose project access is being edited, with the draft selection.
+  const [accessMember, setAccessMember] = useState<MemberWithUser | null>(null);
+  const [accessConfined, setAccessConfined] = useState(false);
+  const [accessProjectIds, setAccessProjectIds] = useState<string[]>([]);
+  const [accessSaving, setAccessSaving] = useState(false);
   const [inviteSeatPurchase, setInviteSeatPurchase] =
     useState<InviteSeatPurchase | null>(null);
   const dispatchedInvitePurchaseKey = useRef<string | null>(null);
@@ -499,15 +586,24 @@ export function MembersTab() {
   const sendInvitation = useCallback(
     async (email: string, role: MemberRole) => {
       if (!workspace) return;
-      await api.createMember(workspace.id, { email, role });
+      const confine = role === "member" && inviteConfined;
+      await api.createMember(workspace.id, {
+        email,
+        role,
+        ...(confine
+          ? { access_scope: "project" as const, project_ids: inviteProjectIds }
+          : {}),
+      });
       setInviteEmail("");
       setInviteRole("member");
+      setInviteConfined(false);
+      setInviteProjectIds([]);
       await qc.invalidateQueries({
         queryKey: workspaceKeys.invitations(wsId),
       });
       toast.success(t(($) => $.members.toast_invitation_sent));
     },
-    [qc, t, workspace, wsId],
+    [qc, t, workspace, wsId, inviteConfined, inviteProjectIds],
   );
 
   const handleInviteMember = async () => {
@@ -796,6 +892,33 @@ export function MembersTab() {
     }
   };
 
+  const openAccessEditor = (member: MemberWithUser) => {
+    setAccessMember(member);
+    setAccessConfined(member.access_scope === "project");
+    setAccessProjectIds(member.project_ids ?? []);
+  };
+
+  const handleSaveAccess = async () => {
+    if (!workspace || !accessMember) return;
+    setAccessSaving(true);
+    try {
+      await api.updateMember(
+        workspace.id,
+        accessMember.id,
+        accessConfined
+          ? { access_scope: "project", project_ids: accessProjectIds }
+          : { access_scope: "workspace" },
+      );
+      qc.invalidateQueries({ queryKey: workspaceKeys.members(wsId) });
+      toast.success(t(($) => $.members.project_access_saved));
+      setAccessMember(null);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : t(($) => $.members.project_access_failed));
+    } finally {
+      setAccessSaving(false);
+    }
+  };
+
   const handleRemoveMember = (member: MemberWithUser) => {
     if (!workspace) return;
     setConfirmAction({
@@ -971,6 +1094,8 @@ export function MembersTab() {
                     ownerCount={ownerCount}
                     isSelf={m.user_id === user?.id}
                     busy={memberActionId === m.id}
+                    projectTitles={projectTitles}
+                    onEditProjects={() => openAccessEditor(m)}
                     onRoleChange={(role) => handleRoleChange(m.id, role)}
                     onRemove={() => handleRemoveMember(m)}
                   />
@@ -1072,6 +1197,29 @@ export function MembersTab() {
                 </SelectContent>
               </Select>
             </div>
+            {inviteRole === "member" ? (
+              <div className="space-y-2">
+                <label className="flex cursor-pointer items-start gap-2">
+                  <Checkbox
+                    checked={inviteConfined}
+                    onCheckedChange={(next) => setInviteConfined(Boolean(next))}
+                  />
+                  <span className="flex flex-col">
+                    <span className="text-body">{t(($) => $.members.project_access_confine)}</span>
+                    <span className="text-caption text-muted-foreground">
+                      {t(($) => $.members.project_access_confine_hint)}
+                    </span>
+                  </span>
+                </label>
+                {inviteConfined ? (
+                  <ProjectScopePicker
+                    projects={projects}
+                    value={inviteProjectIds}
+                    onChange={setInviteProjectIds}
+                  />
+                ) : null}
+              </div>
+            ) : null}
             <DialogFooter>
               <Button
                 type="button"
@@ -1083,13 +1231,72 @@ export function MembersTab() {
               </Button>
               <Button
                 type="submit"
-                disabled={inviteLoading || !inviteEmail.trim()}
+                disabled={
+                  inviteLoading ||
+                  !inviteEmail.trim() ||
+                  (inviteRole === "member" && inviteConfined && inviteProjectIds.length === 0)
+                }
                 aria-busy={inviteLoading || undefined}
               >
                 {inviteLoading ? t(($) => $.members.inviting) : t(($) => $.members.invite_button)}
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={accessMember !== null}
+        onOpenChange={(open) => {
+          if (!open && !accessSaving) setAccessMember(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {t(($) => $.members.project_access_title, { name: accessMember?.name ?? "" })}
+            </DialogTitle>
+            <DialogDescription>{t(($) => $.members.project_access_description)}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <label className="flex cursor-pointer items-start gap-2">
+              <Checkbox
+                checked={accessConfined}
+                onCheckedChange={(next) => setAccessConfined(Boolean(next))}
+              />
+              <span className="flex flex-col">
+                <span className="text-body">{t(($) => $.members.project_access_confine)}</span>
+                <span className="text-caption text-muted-foreground">
+                  {t(($) => $.members.project_access_confine_hint)}
+                </span>
+              </span>
+            </label>
+            {accessConfined ? (
+              <ProjectScopePicker
+                projects={projects}
+                value={accessProjectIds}
+                onChange={setAccessProjectIds}
+                disabled={accessSaving}
+              />
+            ) : null}
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setAccessMember(null)}
+              disabled={accessSaving}
+            >
+              {t(($) => $.members.confirm_cancel)}
+            </Button>
+            <Button
+              onClick={() => void handleSaveAccess()}
+              disabled={accessSaving || (accessConfined && accessProjectIds.length === 0)}
+              aria-busy={accessSaving || undefined}
+            >
+              {t(($) => $.members.project_access_save)}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 

@@ -38,6 +38,22 @@ func checkMembership(checker MembershipChecker, userID, workspaceID string) (boo
 	return member, err
 }
 
+// resolveAccess fails closed: a lookup error must reject the connection, never
+// fall back to the unrestricted workspace room.
+func resolveAccess(checker MembershipChecker, userID, workspaceID string) (bool, []string, error) {
+	resolver, ok := checker.(AccessResolver)
+	if !ok {
+		return false, nil, nil
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), membershipLookupTimeout)
+	defer cancel()
+	restricted, projectIDs, err := resolver.Access(ctx, userID, workspaceID)
+	if err != nil {
+		slog.Warn("ws access lookup failed", "user_id", userID, "workspace_id", workspaceID, "error", err)
+	}
+	return restricted, projectIDs, err
+}
+
 func (h *Hub) registerClient(client *Client) {
 	// Keep the Hub event loop free of database waits. A connection whose
 	// handshake raced revocation is denied by its first content write.
@@ -53,7 +69,14 @@ func (h *Hub) registerClient(client *Client) {
 	h.mu.Unlock()
 	M.ConnectsTotal.Add(1)
 	M.ActiveConnections.Add(1)
-	h.subscribe(client, ScopeWorkspace, client.workspaceID)
+	if client.restricted {
+		h.subscribe(client, ScopeWorkspaceShared, client.workspaceID)
+		for _, projectID := range client.projectIDs {
+			h.subscribe(client, ScopeProject, projectID)
+		}
+	} else {
+		h.subscribe(client, ScopeWorkspace, client.workspaceID)
+	}
 	h.subscribe(client, ScopeUser, client.userID)
 	if client.workspaceID != "" && client.userID != "" {
 		h.subscribe(client, ScopeWorkspaceMember, WorkspaceMemberScopeID(client.workspaceID, client.userID))
@@ -78,6 +101,41 @@ func (h *Hub) DisconnectMember(workspaceID, userID, memberID string) {
 	}
 	job.notice = notice
 	h.disconnectMember(job)
+}
+
+// ResetMemberConnections closes userID's sockets to workspaceID without a
+// removal notice. Call it after the member's access scope or project grants
+// change: rooms are joined at connect time, so the client has to reconnect to
+// be placed in the right ones. Peers are not told anything.
+func (h *Hub) ResetMemberConnections(workspaceID, userID string) {
+	if h == nil || workspaceID == "" || userID == "" {
+		return
+	}
+	job := h.snapshotMemberRemoval(workspaceID, userID)
+	for _, client := range job.clients {
+		h.stopClient(client, nil, time.Time{})
+	}
+}
+
+// consumeAccessChange handles the member:access_changed control frame. It
+// reports whether message was one, in which case it must not reach clients.
+// Routing it through the scopes every node already consumes is what lets a
+// grant change made on one node reset a socket held by another.
+func (h *Hub) consumeAccessChange(workspaceID string, message []byte) bool {
+	if !bytes.Contains(message, []byte("access_changed")) {
+		return false
+	}
+	var frame struct {
+		Type    string `json:"type"`
+		Payload struct {
+			UserID string `json:"user_id"`
+		} `json:"payload"`
+	}
+	if json.Unmarshal(message, &frame) != nil || frame.Type != "member:access_changed" {
+		return false
+	}
+	h.ResetMemberConnections(workspaceID, frame.Payload.UserID)
+	return true
 }
 
 // Only confirmed removals send the target a notice; stale signals are ignored
